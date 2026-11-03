@@ -1,0 +1,27 @@
+{
+  "name": "cebu-marathon-tacloban-registration",
+  "version": "1.0.0",
+  "description": "Cebulandmasters Cebu Marathon 2027 Community Run Tacloban Leg Registration System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "migrate:atlas": "node scripts/migrate-to-atlas.js"
+  },
+  "keywords": [
+    "marathon",
+    "registration",
+    "tacloban",
+    "cebu-marathon",
+    "running"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5",
+    "qrcode": "^1.5.4"
+  }
+}
