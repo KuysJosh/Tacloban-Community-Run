@@ -789,21 +789,50 @@
 
     /* Highlighting the Full Collection Banner */
     .clubs-banner-highlight-frame {
-      background: linear-gradient(135deg, rgba(13, 42, 156, 0.75), rgba(5, 15, 69, 0.95));
+      background: linear-gradient(135deg, rgba(13, 42, 156, 0.82), rgba(5, 15, 69, 0.96));
       border: 1.5px solid var(--line-highlight);
-      border-radius: 8px;
-      padding: 24px 20px;
+      border-radius: 12px;
+      padding: 28px 32px;
       margin-bottom: 35px;
-      text-align: center;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 35px rgba(56, 189, 248, 0.15);
+      box-shadow: 0 16px 42px rgba(0, 0, 0, 0.65), 0 0 35px rgba(56, 189, 248, 0.2);
+      position: relative;
     }
 
-    .clubs-banner-highlight-frame img {
-      max-width: 100%;
-      height: auto;
-      max-height: 120px;
+    .clubs-banner-logos-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(20px, 3.8vw, 48px);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .banner-club-item {
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform .25s ease;
+      padding: 4px;
+    }
+
+    .banner-club-item:hover {
+      transform: translateY(-6px) scale(1.15);
+    }
+
+    .banner-club-item img {
+      width: auto;
+      height: 104px;
+      max-width: 135px;
       object-fit: contain;
-      filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.7));
+      filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.75));
+      transition: all .25s ease;
+    }
+
+    .banner-club-item:hover img {
+      filter: drop-shadow(0 10px 26px rgba(56, 248, 184, 0.65));
     }
 
     /* 7 Individual Club Cards Grid */
@@ -830,11 +859,11 @@
     }
 
     .club-feature-card img {
-      width: 76px;
-      height: 76px;
+      width: 86px;
+      height: 86px;
       object-fit: contain;
       margin-bottom: 12px;
-      filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.6));
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
       transition: transform .25s ease;
     }
 
@@ -1721,6 +1750,20 @@
       .reg-layout {
         grid-template-columns: 1fr;
       }
+
+      .clubs-banner-highlight-frame {
+        padding: 22px 20px;
+        margin-bottom: 26px;
+      }
+
+      .clubs-banner-logos-row {
+        gap: clamp(14px, 2.5vw, 28px);
+      }
+
+      .banner-club-item img {
+        height: 84px;
+        max-width: 108px;
+      }
     }
 
     @media (max-width: 640px) {
@@ -2032,13 +2075,42 @@
       }
 
       .clubs-banner-highlight-frame {
-        padding: 12px 8px;
-        margin-bottom: 18px;
-        border-radius: 8px;
+        padding: 16px 12px;
+        margin-bottom: 20px;
+        border-radius: 10px;
       }
 
-      .clubs-banner-highlight-frame img {
-        max-height: 60px;
+      .clubs-banner-logos-row {
+        overflow-x: auto;
+        justify-content: flex-start;
+        gap: 20px;
+        padding-bottom: 8px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .clubs-banner-logos-row::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      .clubs-banner-logos-row::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+      }
+
+      .clubs-banner-logos-row::-webkit-scrollbar-thumb {
+        background: var(--line-highlight);
+        border-radius: 4px;
+      }
+
+      .banner-club-item {
+        flex: 0 0 auto;
+        scroll-snap-align: center;
+      }
+
+      .banner-club-item img {
+        height: 74px;
+        max-width: 95px;
       }
 
       .clubs-highlight-grid {
@@ -2410,7 +2482,7 @@
                 <path
                   d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z" />
               </svg>
-              <span>Sunday, November 15, 2026 &bull; Gun Start 04:30 AM</span>
+              <span>Sunday, November 15, 2026 &bull; Check-in 03:30 AM &bull; Run Start 04:00 AM</span>
             </div>
 
           </div>
@@ -2437,7 +2509,7 @@
           <div class="rc-info-box">
             <div class="rc-status-pill open" id="schedBadge16">● OPEN FOR REGISTRATION</div>
             <div class="rc-date-line">November 15 &bull; Sunday</div>
-            <div class="rc-meta-line">Gun Start <b>04:30 AM</b> &bull; Coastal Bypass Kickoff</div>
+            <div class="rc-meta-line">Check-in <b>03:30 AM</b> &bull; Run Start <b>04:00 AM</b> &bull; Coastal Bypass Kickoff</div>
           </div>
           <div class="rc-btn-col">
             <span class="btn-join-schedule" id="schedBtn16">Join 16K &gt;</span>
@@ -2450,7 +2522,7 @@
           <div class="rc-info-box">
             <div class="rc-status-pill locked" id="schedBadge21">🔒 OPENS AFTER 16 KM (NOV 15)</div>
             <div class="rc-date-line">November 28 &bull; Saturday</div>
-            <div class="rc-meta-line">Gun Start <b>04:00 AM</b> &bull; Half Marathon Challenge</div>
+            <div class="rc-meta-line">Check-in <b>03:00 AM</b> &bull; Run Start <b>03:30 AM</b> &bull; Half Marathon Challenge</div>
           </div>
           <div class="rc-btn-col">
             <span class="btn-join-schedule btn-locked" id="schedBtn21">Locked 🔒</span>
@@ -2463,7 +2535,7 @@
           <div class="rc-info-box">
             <div class="rc-status-pill locked" id="schedBadge26">🔒 OPENS AFTER 21 KM (NOV 28)</div>
             <div class="rc-date-line">December 5 &bull; Saturday</div>
-            <div class="rc-meta-line">Gun Start <b>03:30 AM</b> &bull; Ultra Training Distance</div>
+            <div class="rc-meta-line">Check-in <b>02:30 AM</b> &bull; Run Start <b>03:00 AM</b> &bull; Ultra Training Distance</div>
           </div>
           <div class="rc-btn-col">
             <span class="btn-join-schedule btn-locked" id="schedBtn26">Locked 🔒</span>
@@ -2476,7 +2548,7 @@
           <div class="rc-info-box">
             <div class="rc-status-pill locked" id="schedBadge32">🔒 OPENS AFTER 26 KM (DEC 5)</div>
             <div class="rc-date-line">December 19 &bull; Saturday</div>
-            <div class="rc-meta-line">Gun Start <b>03:00 AM</b> &bull; Peak LSD Grand Finale</div>
+            <div class="rc-meta-line">Check-in <b>02:00 AM</b> &bull; Run Start <b>02:30 AM</b> &bull; Peak LSD Grand Finale</div>
           </div>
           <div class="rc-btn-col">
             <span class="btn-join-schedule btn-locked" id="schedBtn32">Locked 🔒</span>
@@ -2496,9 +2568,31 @@
         <p>Proudly leading the progressive community long runs in preparation for the Cebu Marathon 2027.</p>
       </div>
 
-      <!-- Highlighting the Full Collection Banner -->
+      <!-- Highlighting the Full Collection Banner (Maximized & Spaced) -->
       <div class="clubs-banner-highlight-frame">
-        <img src="Tacloban Running Clubs Logo Collection.png" alt="Tacloban Running Clubs Collection Banner">
+        <div class="clubs-banner-logos-row">
+          <div class="banner-club-item" onclick="preselectClub('Tacloban Bypass Running Club')" title="Tacloban Bypass Running Club">
+            <img src="clubs/club_tbrc.png" alt="TBRC Logo">
+          </div>
+          <div class="banner-club-item" onclick="preselectClub('Tacloban Grandstand Runners')" title="Tacloban Grandstand Runners">
+            <img src="clubs/club_tgr.png" alt="TGR Logo">
+          </div>
+          <div class="banner-club-item" onclick="preselectClub('Tacloban Runners Club')" title="Tacloban Runners Club">
+            <img src="clubs/club_trc.png" alt="TRC Logo">
+          </div>
+          <div class="banner-club-item" onclick="preselectClub('Motion Runners')" title="Motion Runners">
+            <img src="clubs/club_motion.png" alt="Motion Runners Logo">
+          </div>
+          <div class="banner-club-item" onclick="preselectClub('One Stride Tacloban')" title="One Stride Tacloban">
+            <img src="clubs/club_ost.png" alt="OST Logo">
+          </div>
+          <div class="banner-club-item" onclick="preselectClub('Alangalang Runners Club')" title="Alangalang Runners Club">
+            <img src="clubs/club_alangalang.png" alt="Alangalang Runners Logo">
+          </div>
+          <div class="banner-club-item" onclick="preselectClub('Santa Fe Runners')" title="Santa Fe Runners">
+            <img src="clubs/club_santafe.png" alt="Santa Fe Runners Logo">
+          </div>
+        </div>
       </div>
 
       <!-- 7 Individual Club Cards Grid with Logos -->
@@ -2833,7 +2927,7 @@
             <h3>Your Selected Leg</h3>
             <div class="sum-dist" id="sidebarDist">16 KM</div>
             <p id="sidebarDate" style="color:#cbd5e1;margin-top:6px;font-weight:600;">Sunday, November 15, 2026</p>
-            <p id="sidebarGun" style="color:var(--gold);font-size:13px;margin-top:4px;">Gun Start: 04:30 AM</p>
+            <p id="sidebarGun" style="color:var(--gold);font-size:13px;margin-top:4px;">Check-in: 03:30 AM &bull; Run Start: 04:00 AM</p>
           </div>
 
           <div class="sidebar-panel">
@@ -2950,8 +3044,8 @@
             shoulder. Never encroach into active vehicle travel lanes.</li>
           <li><strong>Face Oncoming Traffic:</strong> On road segments without sidewalks or outer dividers, runners must
             run on the left side facing oncoming vehicular traffic to maintain clear visual awareness of motorists.</li>
-          <li><strong>High-Visibility &amp; Pre-Dawn Running:</strong> Gun starts are scheduled between <strong>03:00 AM
-              and 04:30 AM</strong> in low-light conditions. Runners are strongly urged to wear reflective apparel,
+          <li><strong>High-Visibility &amp; Pre-Dawn Running:</strong> Run starts are scheduled between <strong>02:30 AM
+              and 04:00 AM</strong> in low-light conditions. Runners are strongly urged to wear reflective apparel,
             headlamps, or flashing LED blinkers.</li>
           <li><strong>Intersections &amp; Traffic Signals:</strong> Obey all traffic signals, pedestrian crossing laws,
             and club volunteer marshal directions. Always look both ways before crossing junctions.</li>
@@ -3010,10 +3104,10 @@
   <script>
     (function () {
       var legInfo = {
-        "16": { title: "16 KM", date: "Sunday, November 15, 2026", gun: "04:30 AM" },
-        "21": { title: "21 KM", date: "Saturday, November 28, 2026", gun: "04:00 AM" },
-        "26": { title: "26 KM", date: "Saturday, December 5, 2026", gun: "03:30 AM" },
-        "32": { title: "32 KM", date: "Saturday, December 19, 2026", gun: "03:00 AM" }
+        "16": { title: "16 KM", date: "Sunday, November 15, 2026", checkIn: "03:30 AM", gun: "04:00 AM" },
+        "21": { title: "21 KM", date: "Saturday, November 28, 2026", checkIn: "03:00 AM", gun: "03:30 AM" },
+        "26": { title: "26 KM", date: "Saturday, December 5, 2026", checkIn: "02:30 AM", gun: "03:00 AM" },
+        "32": { title: "32 KM", date: "Saturday, December 19, 2026", checkIn: "02:00 AM", gun: "02:30 AM" }
       };
 
       var CLUB_LOGOS = {
@@ -3028,10 +3122,10 @@
 
       // ── LIVE COUNTDOWN TO NEXT UPCOMING RUN ──
       var RUN_LEGS = [
-        { dist: "16 KM", time: new Date("2026-11-15T04:30:00+08:00").getTime(), desc: "Sunday, November 15, 2026 • Gun Start 04:30 AM" },
-        { dist: "21 KM", time: new Date("2026-11-28T04:00:00+08:00").getTime(), desc: "Saturday, November 28, 2026 • Gun Start 04:00 AM" },
-        { dist: "26 KM", time: new Date("2026-12-05T03:30:00+08:00").getTime(), desc: "Saturday, December 5, 2026 • Gun Start 03:30 AM" },
-        { dist: "32 KM", time: new Date("2026-12-19T03:00:00+08:00").getTime(), desc: "Saturday, December 19, 2026 • Gun Start 03:00 AM" }
+        { dist: "16 KM", time: new Date("2026-11-15T04:00:00+08:00").getTime(), desc: "Sunday, November 15, 2026 • Check-in 03:30 AM • Run Start 04:00 AM" },
+        { dist: "21 KM", time: new Date("2026-11-28T03:30:00+08:00").getTime(), desc: "Saturday, November 28, 2026 • Check-in 03:00 AM • Run Start 03:30 AM" },
+        { dist: "26 KM", time: new Date("2026-12-05T03:00:00+08:00").getTime(), desc: "Saturday, December 5, 2026 • Check-in 02:30 AM • Run Start 03:00 AM" },
+        { dist: "32 KM", time: new Date("2026-12-19T02:30:00+08:00").getTime(), desc: "Saturday, December 19, 2026 • Check-in 02:00 AM • Run Start 02:30 AM" }
       ];
 
       function tickCountdown() {
@@ -3082,10 +3176,10 @@
 
       // ── PROGRESSIVE RACE SCHEDULE CONFIG ──
       var LEGS_CONFIG = [
-        { dist: "16", title: "16 KM", date: "Sunday, November 15, 2026", gun: "04:30 AM", conclude: new Date("2026-11-15T11:00:00+08:00").getTime() },
-        { dist: "21", title: "21 KM", date: "Saturday, November 28, 2026", gun: "04:00 AM", conclude: new Date("2026-11-28T11:00:00+08:00").getTime() },
-        { dist: "26", title: "26 KM", date: "Saturday, December 5, 2026", gun: "03:30 AM", conclude: new Date("2026-12-05T11:00:00+08:00").getTime() },
-        { dist: "32", title: "32 KM", date: "Saturday, December 19, 2026", gun: "03:00 AM", conclude: new Date("2026-12-19T11:00:00+08:00").getTime() }
+        { dist: "16", title: "16 KM", date: "Sunday, November 15, 2026", checkIn: "03:30 AM", gun: "04:00 AM", conclude: new Date("2026-11-15T11:00:00+08:00").getTime() },
+        { dist: "21", title: "21 KM", date: "Saturday, November 28, 2026", checkIn: "03:00 AM", gun: "03:30 AM", conclude: new Date("2026-11-28T11:00:00+08:00").getTime() },
+        { dist: "26", title: "26 KM", date: "Saturday, December 5, 2026", checkIn: "02:30 AM", gun: "03:00 AM", conclude: new Date("2026-12-05T11:00:00+08:00").getTime() },
+        { dist: "32", title: "32 KM", date: "Saturday, December 19, 2026", checkIn: "02:00 AM", gun: "02:30 AM", conclude: new Date("2026-12-19T11:00:00+08:00").getTime() }
       ];
 
       function getFrontendLegStatus(distVal) {
@@ -3281,7 +3375,7 @@
           var item = legInfo[checked.value];
           document.getElementById('sidebarDist').textContent = item.title;
           document.getElementById('sidebarDate').textContent = item.date;
-          document.getElementById('sidebarGun').textContent = 'Gun Start: ' + item.gun;
+          document.getElementById('sidebarGun').textContent = 'Check-in: ' + item.checkIn + ' • Run Start: ' + item.gun;
         }
       }
       document.querySelectorAll('input[name="dist"]').forEach(function (r) {

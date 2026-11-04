@@ -789,21 +789,50 @@
 
     /* Highlighting the Full Collection Banner */
     .clubs-banner-highlight-frame {
-      background: linear-gradient(135deg, rgba(13, 42, 156, 0.75), rgba(5, 15, 69, 0.95));
+      background: linear-gradient(135deg, rgba(13, 42, 156, 0.82), rgba(5, 15, 69, 0.96));
       border: 1.5px solid var(--line-highlight);
-      border-radius: 8px;
-      padding: 24px 20px;
+      border-radius: 12px;
+      padding: 28px 32px;
       margin-bottom: 35px;
-      text-align: center;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 35px rgba(56, 189, 248, 0.15);
+      box-shadow: 0 16px 42px rgba(0, 0, 0, 0.65), 0 0 35px rgba(56, 189, 248, 0.2);
+      position: relative;
     }
 
-    .clubs-banner-highlight-frame img {
-      max-width: 100%;
-      height: auto;
-      max-height: 120px;
+    .clubs-banner-logos-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(20px, 3.8vw, 48px);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .banner-club-item {
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform .25s ease;
+      padding: 4px;
+    }
+
+    .banner-club-item:hover {
+      transform: translateY(-6px) scale(1.15);
+    }
+
+    .banner-club-item img {
+      width: auto;
+      height: 104px;
+      max-width: 135px;
       object-fit: contain;
-      filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.7));
+      filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.75));
+      transition: all .25s ease;
+    }
+
+    .banner-club-item:hover img {
+      filter: drop-shadow(0 10px 26px rgba(56, 248, 184, 0.65));
     }
 
     /* 7 Individual Club Cards Grid */
@@ -830,11 +859,11 @@
     }
 
     .club-feature-card img {
-      width: 76px;
-      height: 76px;
+      width: 86px;
+      height: 86px;
       object-fit: contain;
       margin-bottom: 12px;
-      filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.6));
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
       transition: transform .25s ease;
     }
 
@@ -1525,8 +1554,15 @@
     }
 
     @keyframes modalSlideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     .waiver-header {
@@ -1563,10 +1599,12 @@
     .waiver-scroll-body::-webkit-scrollbar {
       width: 6px;
     }
+
     .waiver-scroll-body::-webkit-scrollbar-track {
       background: rgba(255, 255, 255, 0.05);
       border-radius: 4px;
     }
+
     .waiver-scroll-body::-webkit-scrollbar-thumb {
       background: var(--line-highlight);
       border-radius: 4px;
@@ -1711,6 +1749,20 @@
 
       .reg-layout {
         grid-template-columns: 1fr;
+      }
+
+      .clubs-banner-highlight-frame {
+        padding: 22px 20px;
+        margin-bottom: 26px;
+      }
+
+      .clubs-banner-logos-row {
+        gap: clamp(14px, 2.5vw, 28px);
+      }
+
+      .banner-club-item img {
+        height: 84px;
+        max-width: 108px;
       }
     }
 
@@ -2023,13 +2075,42 @@
       }
 
       .clubs-banner-highlight-frame {
-        padding: 12px 8px;
-        margin-bottom: 18px;
-        border-radius: 8px;
+        padding: 16px 12px;
+        margin-bottom: 20px;
+        border-radius: 10px;
       }
 
-      .clubs-banner-highlight-frame img {
-        max-height: 60px;
+      .clubs-banner-logos-row {
+        overflow-x: auto;
+        justify-content: flex-start;
+        gap: 20px;
+        padding-bottom: 8px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .clubs-banner-logos-row::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      .clubs-banner-logos-row::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+      }
+
+      .clubs-banner-logos-row::-webkit-scrollbar-thumb {
+        background: var(--line-highlight);
+        border-radius: 4px;
+      }
+
+      .banner-club-item {
+        flex: 0 0 auto;
+        scroll-snap-align: center;
+      }
+
+      .banner-club-item img {
+        height: 74px;
+        max-width: 95px;
       }
 
       .clubs-highlight-grid {
@@ -2487,9 +2568,31 @@
         <p>Proudly leading the progressive community long runs in preparation for the Cebu Marathon 2027.</p>
       </div>
 
-      <!-- Highlighting the Full Collection Banner -->
+      <!-- Highlighting the Full Collection Banner (Maximized & Spaced) -->
       <div class="clubs-banner-highlight-frame">
-        <img src="Tacloban Running Clubs Logo Collection.png" alt="Tacloban Running Clubs Collection Banner">
+        <div class="clubs-banner-logos-row">
+          <div class="banner-club-item" onclick="preselectClub('Tacloban Bypass Running Club')" title="Tacloban Bypass Running Club">
+            <img src="clubs/club_tbrc.png" alt="TBRC Logo">
+          </div>
+          <div class="banner-club-item" onclick="preselectClub('Tacloban Grandstand Runners')" title="Tacloban Grandstand Runners">
+            <img src="clubs/club_tgr.png" alt="TGR Logo">
+          </div>
+          <div class="banner-club-item" onclick="preselectClub('Tacloban Runners Club')" title="Tacloban Runners Club">
+            <img src="clubs/club_trc.png" alt="TRC Logo">
+          </div>
+          <div class="banner-club-item" onclick="preselectClub('Motion Runners')" title="Motion Runners">
+            <img src="clubs/club_motion.png" alt="Motion Runners Logo">
+          </div>
+          <div class="banner-club-item" onclick="preselectClub('One Stride Tacloban')" title="One Stride Tacloban">
+            <img src="clubs/club_ost.png" alt="OST Logo">
+          </div>
+          <div class="banner-club-item" onclick="preselectClub('Alangalang Runners Club')" title="Alangalang Runners Club">
+            <img src="clubs/club_alangalang.png" alt="Alangalang Runners Logo">
+          </div>
+          <div class="banner-club-item" onclick="preselectClub('Santa Fe Runners')" title="Santa Fe Runners">
+            <img src="clubs/club_santafe.png" alt="Santa Fe Runners Logo">
+          </div>
+        </div>
       </div>
 
       <!-- 7 Individual Club Cards Grid with Logos -->
@@ -2563,10 +2666,12 @@
             <span>⏳</span> <span>STATUS: PENDING ADMIN VERIFICATION</span>
           </div>
           <p class="pending-banner-text">
-            Your registration details and Cebu Marathon 2027 photo proof have been successfully received. An event marshal will verify your attached photo proof before final approval of your official run pass.
+            Your registration details and Cebu Marathon 2027 photo proof have been successfully received. An event
+            marshal will verify your attached photo proof before final approval of your official run pass.
           </p>
           <div class="pending-banner-tip">
-            💡 <em>Tip: You can use the <strong>"Find My Pass"</strong> button at any time to check if your status has been verified by the admin!</em>
+            💡 <em>Tip: You can use the <strong>"Find My Pass"</strong> button at any time to check if your status has
+              been verified by the admin!</em>
           </div>
         </div>
 
@@ -2616,7 +2721,8 @@
 
         <div class="pass-action-btns">
           <button type="button" class="btn-hero-reg" style="font-size:16px;padding:10px 24px;"
-            onclick="downloadPassPng()"><span id="downloadPassBtnText">📥 Download Run Pass (Pending Review)</span></button>
+            onclick="downloadPassPng()"><span id="downloadPassBtnText">📥 Download Run Pass (Pending
+              Review)</span></button>
           <button type="button" class="btn-hero-pass" style="font-size:16px;padding:10px 24px;"
             onclick="window.print()"><span>🖨️ Print Pass</span></button>
           <button type="button" class="btn-hero-reg"
@@ -2788,10 +2894,12 @@
               <div style="flex:1;">
                 <span id="waiverText" style="line-height:1.45;color:var(--mut);font-size:13.5px;display:block;">
                   I certify that I am registered for the Cebu Marathon 2027 and that the attached photo proof is
-                  authentic. I accept the <strong style="color:var(--mint);text-decoration:underline;">event waiver and road safety rules</strong>.
+                  authentic. I accept the <strong style="color:var(--mint);text-decoration:underline;">event waiver and
+                    road safety rules</strong>.
                 </span>
                 <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
-                  <span style="font-size:11px;color:var(--gold);font-weight:700;background:rgba(255,190,26,0.12);border:1px solid rgba(255,190,26,0.3);border-radius:4px;padding:2px 8px;display:inline-flex;align-items:center;gap:4px;">
+                  <span
+                    style="font-size:11px;color:var(--gold);font-weight:700;background:rgba(255,190,26,0.12);border:1px solid rgba(255,190,26,0.3);border-radius:4px;padding:2px 8px;display:inline-flex;align-items:center;gap:4px;">
                     ⚠️ Click to View Safety &amp; Non-Liability Waiver
                   </span>
                 </div>
@@ -2904,7 +3012,8 @@
         <div class="waiver-tag-pill">
           <span>⚠️ Safety Protocol &amp; Legal Release</span>
         </div>
-        <h3 style="font-size:24px;color:#ffffff;line-height:1.2;margin:0 0 4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.5px;">
+        <h3
+          style="font-size:24px;color:#ffffff;line-height:1.2;margin:0 0 4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.5px;">
           Community Run Waiver &amp; Road Safety Agreement
         </h3>
         <p style="color:var(--mut);font-size:13px;margin:0;">
@@ -2931,34 +3040,53 @@
           <span>🛡️</span> 1. Safety As Priority &amp; Road Rules
         </div>
         <ul class="waiver-list">
-          <li><strong>Stay on Designated Road Shoulders:</strong> Always run along the outermost curb, sidewalk, or road shoulder. Never encroach into active vehicle travel lanes.</li>
-          <li><strong>Face Oncoming Traffic:</strong> On road segments without sidewalks or outer dividers, runners must run on the left side facing oncoming vehicular traffic to maintain clear visual awareness of motorists.</li>
-          <li><strong>High-Visibility &amp; Pre-Dawn Running:</strong> Gun starts are scheduled between <strong>02:30 AM and 04:00 AM</strong> (Check-in begins as early as 02:00 AM) in low-light conditions. Runners are strongly urged to wear reflective apparel, headlamps, or flashing LED blinkers.</li>
-          <li><strong>Intersections &amp; Traffic Signals:</strong> Obey all traffic signals, pedestrian crossing laws, and club volunteer marshal directions. Always look both ways before crossing junctions.</li>
-          <li><strong>Auditory Awareness:</strong> If listening to audio devices, keep the volume low or use bone-conduction / single earbud headsets so sirens, horns, traffic, and marshal instructions remain clearly audible.</li>
+          <li><strong>Stay on Designated Road Shoulders:</strong> Always run along the outermost curb, sidewalk, or road
+            shoulder. Never encroach into active vehicle travel lanes.</li>
+          <li><strong>Face Oncoming Traffic:</strong> On road segments without sidewalks or outer dividers, runners must
+            run on the left side facing oncoming vehicular traffic to maintain clear visual awareness of motorists.</li>
+          <li><strong>High-Visibility &amp; Pre-Dawn Running:</strong> Run starts are scheduled between <strong>02:30 AM
+              and 04:00 AM</strong> in low-light conditions. Runners are strongly urged to wear reflective apparel,
+            headlamps, or flashing LED blinkers.</li>
+          <li><strong>Intersections &amp; Traffic Signals:</strong> Obey all traffic signals, pedestrian crossing laws,
+            and club volunteer marshal directions. Always look both ways before crossing junctions.</li>
+          <li><strong>Auditory Awareness:</strong> If listening to audio devices, keep the volume low or use
+            bone-conduction / single earbud headsets so sirens, horns, traffic, and marshal instructions remain clearly
+            audible.</li>
         </ul>
 
         <div class="waiver-section-title">
           <span>⚖️</span> 2. Non-Liability &amp; Assumption of Inherent Risk
         </div>
         <ul class="waiver-list">
-          <li><strong>Inherent Risks:</strong> You acknowledge that long-distance endurance running on public highways involves inherent risks including, but not limited to, vehicular collisions, road surface hazards, slips, falls, heat exhaustion, and dehydration.</li>
-          <li><strong>Waiver &amp; Release of Liability:</strong> In consideration of participating in this free training run, you hereby voluntarily assume all risks and release, discharge, and hold harmless the organizing volunteers, lead running clubs (Tacloban Bypass Running Club, Tacloban Grandstand Runners, TRC Running Club, Motion Runners, One Stride Tacloban, Alangalang Runners Club, Santa Fe Runners), Cebu Landmasters, and Cebu Marathon organizers from <strong>ANY AND ALL CLAIMS, LIABILITIES, ACCIDENTS, INJURIES, FATALITIES, OR PROPERTY LOSS</strong> occurring prior to, during, or after the run.</li>
+          <li><strong>Inherent Risks:</strong> You acknowledge that long-distance endurance running on public highways
+            involves inherent risks including, but not limited to, vehicular collisions, road surface hazards, slips,
+            falls, heat exhaustion, and dehydration.</li>
+          <li><strong>Waiver &amp; Release of Liability:</strong> In consideration of participating in this free
+            training run, you hereby voluntarily assume all risks and release, discharge, and hold harmless the
+            organizing volunteers, lead running clubs (Tacloban Bypass Running Club, Tacloban Grandstand Runners, TRC
+            Running Club, Motion Runners, One Stride Tacloban, Alangalang Runners Club, Santa Fe Runners), Cebu
+            Landmasters, and Cebu Marathon organizers from <strong>ANY AND ALL CLAIMS, LIABILITIES, ACCIDENTS, INJURIES,
+              FATALITIES, OR PROPERTY LOSS</strong> occurring prior to, during, or after the run.</li>
         </ul>
 
         <div class="waiver-section-title">
           <span>❤️</span> 3. Physical Fitness &amp; Personal Responsibility
         </div>
         <ul class="waiver-list">
-          <li><strong>Medical Fitness:</strong> You affirm that you are physically fit, healthy, and adequately trained to undertake the progressive distance (16K, 21K, 26K, or 32K) you selected.</li>
-          <li><strong>Self-Sufficiency &amp; Hydration:</strong> While participating running clubs may provide community hydration stops, runners are encouraged to carry personal hydration vests, bottles, and fuel. If you experience dizziness, chest pain, or distress, stop running immediately and notify a companion or marshal.</li>
+          <li><strong>Medical Fitness:</strong> You affirm that you are physically fit, healthy, and adequately trained
+            to undertake the progressive distance (16K, 21K, 26K, or 32K) you selected.</li>
+          <li><strong>Self-Sufficiency &amp; Hydration:</strong> While participating running clubs may provide community
+            hydration stops, runners are encouraged to carry personal hydration vests, bottles, and fuel. If you
+            experience dizziness, chest pain, or distress, stop running immediately and notify a companion or marshal.
+          </li>
         </ul>
 
         <div class="waiver-section-title">
           <span>🎫</span> 4. Cebu Marathon 2027 Authenticity
         </div>
         <p style="margin:0 0 4px;font-size:13px;">
-          You certify that you are registered for the Cebu Marathon 2027 and that your uploaded proof of registration is authentic and truthful.
+          You certify that you are registered for the Cebu Marathon 2027 and that your uploaded proof of registration is
+          authentic and truthful.
         </p>
       </div>
 
@@ -3247,7 +3375,7 @@
           var item = legInfo[checked.value];
           document.getElementById('sidebarDist').textContent = item.title;
           document.getElementById('sidebarDate').textContent = item.date;
-          document.getElementById('sidebarGun').textContent = 'Check-in: ' + (item.checkIn || 'TBA') + ' • Run Start: ' + item.gun;
+          document.getElementById('sidebarGun').textContent = 'Check-in: ' + item.checkIn + ' • Run Start: ' + item.gun;
         }
       }
       document.querySelectorAll('input[name="dist"]').forEach(function (r) {
@@ -3570,7 +3698,7 @@
           var html = '';
           data.registrations.forEach(function (item) {
             var isVer = Boolean(item.cebuProofVerified);
-            var statusPill = isVer 
+            var statusPill = isVer
               ? '<span style="display:inline-block;padding:2px 7px;font-size:11px;font-weight:700;border-radius:10px;background:rgba(56,248,184,0.15);color:var(--mint);border:1px solid rgba(56,248,184,0.3);margin-left:6px;">✓ Verified</span>'
               : '<span style="display:inline-block;padding:2px 7px;font-size:11px;font-weight:700;border-radius:10px;background:rgba(255,190,26,0.15);color:var(--gold);border:1px solid rgba(255,190,26,0.3);margin-left:6px;">⏳ Pending Verification</span>';
 
