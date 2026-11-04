@@ -44,7 +44,8 @@ const EVENT_INFO = {
       distance: "16 KM",
       date: "November 15, 2026",
       dayOfWeek: "SUNDAY",
-      gunTime: "04:30 AM",
+      checkInTime: "03:30 AM",
+      gunTime: "04:00 AM",
       cutOffTime: "3.5 Hours",
       elevation: "Rolling Hills & Scenic Coastal Bypass",
       description: "Kickoff leg exploring the scenic Tacloban bypass with early morning breeze.",
@@ -55,7 +56,8 @@ const EVENT_INFO = {
       distance: "21 KM",
       date: "November 28, 2026",
       dayOfWeek: "SATURDAY",
-      gunTime: "04:00 AM",
+      checkInTime: "03:00 AM",
+      gunTime: "03:30 AM",
       cutOffTime: "4.0 Hours",
       elevation: "Flat to Moderate Incline",
       description: "Half marathon challenge through Tacloban grandstand corridors.",
@@ -66,7 +68,8 @@ const EVENT_INFO = {
       distance: "26 KM",
       date: "December 5, 2026",
       dayOfWeek: "SATURDAY",
-      gunTime: "03:30 AM",
+      checkInTime: "02:30 AM",
+      gunTime: "03:00 AM",
       cutOffTime: "5.0 Hours",
       elevation: "Endurance Test & Long Highway Strides",
       description: "Level-up endurance test stepping into ultra-training distance.",
@@ -77,7 +80,8 @@ const EVENT_INFO = {
       distance: "32 KM",
       date: "December 19, 2026",
       dayOfWeek: "SATURDAY",
-      gunTime: "03:00 AM",
+      checkInTime: "02:00 AM",
+      gunTime: "02:30 AM",
       cutOffTime: "6.0 Hours",
       elevation: "Peak LSD (Long Slow Distance) - Grand Finale",
       description: "The ultimate long run prep for the Cebu Marathon 2027 main race.",
@@ -215,8 +219,9 @@ const RACE_SCHEDULE_CONFIG = [
     title: "16 KM",
     date: "November 15, 2026",
     dayOfWeek: "SUNDAY",
-    gunTime: "04:30 AM",
-    gunTimestamp: new Date("2026-11-15T04:30:00+08:00").getTime(),
+    checkInTime: "03:30 AM",
+    gunTime: "04:00 AM",
+    gunTimestamp: new Date("2026-11-15T04:00:00+08:00").getTime(),
     concludeTimestamp: new Date("2026-11-15T11:00:00+08:00").getTime(),
     desc: "Coastal Bypass Kickoff"
   },
@@ -226,8 +231,9 @@ const RACE_SCHEDULE_CONFIG = [
     title: "21 KM",
     date: "November 28, 2026",
     dayOfWeek: "SATURDAY",
-    gunTime: "04:00 AM",
-    gunTimestamp: new Date("2026-11-28T04:00:00+08:00").getTime(),
+    checkInTime: "03:00 AM",
+    gunTime: "03:30 AM",
+    gunTimestamp: new Date("2026-11-28T03:30:00+08:00").getTime(),
     concludeTimestamp: new Date("2026-11-28T11:00:00+08:00").getTime(),
     desc: "Half Marathon Challenge"
   },
@@ -237,8 +243,9 @@ const RACE_SCHEDULE_CONFIG = [
     title: "26 KM",
     date: "December 5, 2026",
     dayOfWeek: "SATURDAY",
-    gunTime: "03:30 AM",
-    gunTimestamp: new Date("2026-12-05T03:30:00+08:00").getTime(),
+    checkInTime: "02:30 AM",
+    gunTime: "03:00 AM",
+    gunTimestamp: new Date("2026-12-05T03:00:00+08:00").getTime(),
     concludeTimestamp: new Date("2026-12-05T11:00:00+08:00").getTime(),
     desc: "Ultra Training Distance"
   },
@@ -248,8 +255,9 @@ const RACE_SCHEDULE_CONFIG = [
     title: "32 KM",
     date: "December 19, 2026",
     dayOfWeek: "SATURDAY",
-    gunTime: "03:00 AM",
-    gunTimestamp: new Date("2026-12-19T03:00:00+08:00").getTime(),
+    checkInTime: "02:00 AM",
+    gunTime: "02:30 AM",
+    gunTimestamp: new Date("2026-12-19T02:30:00+08:00").getTime(),
     concludeTimestamp: new Date("2026-12-19T11:00:00+08:00").getTime(),
     desc: "Peak LSD Grand Finale"
   }
@@ -455,7 +463,7 @@ app.post('/api/register', async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: 'Registration successful! Your official Race E-Bib and pass have been issued.',
+      message: 'Registration submitted successfully! Your proof has been submitted for admin verification.',
       registration: record
     });
   } catch (error) {

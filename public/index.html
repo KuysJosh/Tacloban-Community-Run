@@ -1328,6 +1328,57 @@
       letter-spacing: .04em;
     }
 
+    .pass-pending-badge {
+      margin-top: 12px;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #030b2c;
+      background: linear-gradient(90deg, #ffbe1a 0%, #ff9e00 100%);
+      padding: 5px 14px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: .04em;
+      box-shadow: 0 4px 14px rgba(255, 190, 26, 0.4);
+      text-transform: uppercase;
+    }
+
+    .pending-status-banner {
+      background: rgba(255, 190, 26, 0.08);
+      border: 1.5px solid rgba(255, 190, 26, 0.45);
+      border-left: 4px solid var(--gold);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 14px auto 20px;
+      max-width: 580px;
+      text-align: left;
+    }
+
+    .pending-banner-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .pending-banner-text {
+      color: #cbd5e1;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .pending-banner-tip {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--mut);
+    }
+
     .pass-action-btns {
       display: flex;
       justify-content: center;
@@ -1474,8 +1525,15 @@
     }
 
     @keyframes modalSlideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     .waiver-header {
@@ -1512,10 +1570,12 @@
     .waiver-scroll-body::-webkit-scrollbar {
       width: 6px;
     }
+
     .waiver-scroll-body::-webkit-scrollbar-track {
       background: rgba(255, 255, 255, 0.05);
       border-radius: 4px;
     }
+
     .waiver-scroll-body::-webkit-scrollbar-thumb {
       background: var(--line-highlight);
       border-radius: 4px;
@@ -2503,8 +2563,23 @@
 
       <!-- SUCCESS SCREEN WITH OFFICIAL DIGITAL RUN PASS -->
       <div class="done-container" id="doneScreen">
-        <h2>You’re Registered! 🎉</h2>
+        <h2 id="doneTitle">Registration Submitted! ⏳</h2>
         <p id="doneMessage"></p>
+
+        <!-- Pending Review Status Banner -->
+        <div id="pendingStatusBanner" class="pending-status-banner">
+          <div class="pending-banner-title">
+            <span>⏳</span> <span>STATUS: PENDING ADMIN VERIFICATION</span>
+          </div>
+          <p class="pending-banner-text">
+            Your registration details and Cebu Marathon 2027 photo proof have been successfully received. An event
+            marshal will verify your attached photo proof before final approval of your official run pass.
+          </p>
+          <div class="pending-banner-tip">
+            💡 <em>Tip: You can use the <strong>"Find My Pass"</strong> button at any time to check if your status has
+              been verified by the admin!</em>
+          </div>
+        </div>
 
         <div class="pass-preview-box">
           <div class="official-run-pass" id="runPassCard">
@@ -2544,15 +2619,16 @@
                 <img id="resQrImage" src="" alt="Official Check-in QR">
               </div>
             </div>
-            <div class="pass-verified-badge">
-              ✓ VERIFIED CEBU MARATHON 2027 PARTICIPANT
+            <div id="resVerifiedBadge" class="pass-pending-badge">
+              ⏳ PENDING ADMIN VERIFICATION &bull; SUBMITTED
             </div>
           </div>
         </div>
 
         <div class="pass-action-btns">
           <button type="button" class="btn-hero-reg" style="font-size:16px;padding:10px 24px;"
-            onclick="downloadPassPng()"><span>📥 Download Digital Pass (PNG)</span></button>
+            onclick="downloadPassPng()"><span id="downloadPassBtnText">📥 Download Run Pass (Pending
+              Review)</span></button>
           <button type="button" class="btn-hero-pass" style="font-size:16px;padding:10px 24px;"
             onclick="window.print()"><span>🖨️ Print Pass</span></button>
           <button type="button" class="btn-hero-reg"
@@ -2724,10 +2800,12 @@
               <div style="flex:1;">
                 <span id="waiverText" style="line-height:1.45;color:var(--mut);font-size:13.5px;display:block;">
                   I certify that I am registered for the Cebu Marathon 2027 and that the attached photo proof is
-                  authentic. I accept the <strong style="color:var(--mint);text-decoration:underline;">event waiver and road safety rules</strong>.
+                  authentic. I accept the <strong style="color:var(--mint);text-decoration:underline;">event waiver and
+                    road safety rules</strong>.
                 </span>
                 <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
-                  <span style="font-size:11px;color:var(--gold);font-weight:700;background:rgba(255,190,26,0.12);border:1px solid rgba(255,190,26,0.3);border-radius:4px;padding:2px 8px;display:inline-flex;align-items:center;gap:4px;">
+                  <span
+                    style="font-size:11px;color:var(--gold);font-weight:700;background:rgba(255,190,26,0.12);border:1px solid rgba(255,190,26,0.3);border-radius:4px;padding:2px 8px;display:inline-flex;align-items:center;gap:4px;">
                     ⚠️ Click to View Safety &amp; Non-Liability Waiver
                   </span>
                 </div>
@@ -2840,7 +2918,8 @@
         <div class="waiver-tag-pill">
           <span>⚠️ Safety Protocol &amp; Legal Release</span>
         </div>
-        <h3 style="font-size:24px;color:#ffffff;line-height:1.2;margin:0 0 4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.5px;">
+        <h3
+          style="font-size:24px;color:#ffffff;line-height:1.2;margin:0 0 4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.5px;">
           Community Run Waiver &amp; Road Safety Agreement
         </h3>
         <p style="color:var(--mut);font-size:13px;margin:0;">
@@ -2867,34 +2946,53 @@
           <span>🛡️</span> 1. Safety As Priority &amp; Road Rules
         </div>
         <ul class="waiver-list">
-          <li><strong>Stay on Designated Road Shoulders:</strong> Always run along the outermost curb, sidewalk, or road shoulder. Never encroach into active vehicle travel lanes.</li>
-          <li><strong>Face Oncoming Traffic:</strong> On road segments without sidewalks or outer dividers, runners must run on the left side facing oncoming vehicular traffic to maintain clear visual awareness of motorists.</li>
-          <li><strong>High-Visibility &amp; Pre-Dawn Running:</strong> Gun starts are scheduled between <strong>03:00 AM and 04:30 AM</strong> in low-light conditions. Runners are strongly urged to wear reflective apparel, headlamps, or flashing LED blinkers.</li>
-          <li><strong>Intersections &amp; Traffic Signals:</strong> Obey all traffic signals, pedestrian crossing laws, and club volunteer marshal directions. Always look both ways before crossing junctions.</li>
-          <li><strong>Auditory Awareness:</strong> If listening to audio devices, keep the volume low or use bone-conduction / single earbud headsets so sirens, horns, traffic, and marshal instructions remain clearly audible.</li>
+          <li><strong>Stay on Designated Road Shoulders:</strong> Always run along the outermost curb, sidewalk, or road
+            shoulder. Never encroach into active vehicle travel lanes.</li>
+          <li><strong>Face Oncoming Traffic:</strong> On road segments without sidewalks or outer dividers, runners must
+            run on the left side facing oncoming vehicular traffic to maintain clear visual awareness of motorists.</li>
+          <li><strong>High-Visibility &amp; Pre-Dawn Running:</strong> Gun starts are scheduled between <strong>03:00 AM
+              and 04:30 AM</strong> in low-light conditions. Runners are strongly urged to wear reflective apparel,
+            headlamps, or flashing LED blinkers.</li>
+          <li><strong>Intersections &amp; Traffic Signals:</strong> Obey all traffic signals, pedestrian crossing laws,
+            and club volunteer marshal directions. Always look both ways before crossing junctions.</li>
+          <li><strong>Auditory Awareness:</strong> If listening to audio devices, keep the volume low or use
+            bone-conduction / single earbud headsets so sirens, horns, traffic, and marshal instructions remain clearly
+            audible.</li>
         </ul>
 
         <div class="waiver-section-title">
           <span>⚖️</span> 2. Non-Liability &amp; Assumption of Inherent Risk
         </div>
         <ul class="waiver-list">
-          <li><strong>Inherent Risks:</strong> You acknowledge that long-distance endurance running on public highways involves inherent risks including, but not limited to, vehicular collisions, road surface hazards, slips, falls, heat exhaustion, and dehydration.</li>
-          <li><strong>Waiver &amp; Release of Liability:</strong> In consideration of participating in this free training run, you hereby voluntarily assume all risks and release, discharge, and hold harmless the organizing volunteers, lead running clubs (Tacloban Bypass Running Club, Tacloban Grandstand Runners, TRC Running Club, Motion Runners, One Stride Tacloban, Alangalang Runners Club, Santa Fe Runners), Cebu Landmasters, and Cebu Marathon organizers from <strong>ANY AND ALL CLAIMS, LIABILITIES, ACCIDENTS, INJURIES, FATALITIES, OR PROPERTY LOSS</strong> occurring prior to, during, or after the run.</li>
+          <li><strong>Inherent Risks:</strong> You acknowledge that long-distance endurance running on public highways
+            involves inherent risks including, but not limited to, vehicular collisions, road surface hazards, slips,
+            falls, heat exhaustion, and dehydration.</li>
+          <li><strong>Waiver &amp; Release of Liability:</strong> In consideration of participating in this free
+            training run, you hereby voluntarily assume all risks and release, discharge, and hold harmless the
+            organizing volunteers, lead running clubs (Tacloban Bypass Running Club, Tacloban Grandstand Runners, TRC
+            Running Club, Motion Runners, One Stride Tacloban, Alangalang Runners Club, Santa Fe Runners), Cebu
+            Landmasters, and Cebu Marathon organizers from <strong>ANY AND ALL CLAIMS, LIABILITIES, ACCIDENTS, INJURIES,
+              FATALITIES, OR PROPERTY LOSS</strong> occurring prior to, during, or after the run.</li>
         </ul>
 
         <div class="waiver-section-title">
           <span>❤️</span> 3. Physical Fitness &amp; Personal Responsibility
         </div>
         <ul class="waiver-list">
-          <li><strong>Medical Fitness:</strong> You affirm that you are physically fit, healthy, and adequately trained to undertake the progressive distance (16K, 21K, 26K, or 32K) you selected.</li>
-          <li><strong>Self-Sufficiency &amp; Hydration:</strong> While participating running clubs may provide community hydration stops, runners are encouraged to carry personal hydration vests, bottles, and fuel. If you experience dizziness, chest pain, or distress, stop running immediately and notify a companion or marshal.</li>
+          <li><strong>Medical Fitness:</strong> You affirm that you are physically fit, healthy, and adequately trained
+            to undertake the progressive distance (16K, 21K, 26K, or 32K) you selected.</li>
+          <li><strong>Self-Sufficiency &amp; Hydration:</strong> While participating running clubs may provide community
+            hydration stops, runners are encouraged to carry personal hydration vests, bottles, and fuel. If you
+            experience dizziness, chest pain, or distress, stop running immediately and notify a companion or marshal.
+          </li>
         </ul>
 
         <div class="waiver-section-title">
           <span>🎫</span> 4. Cebu Marathon 2027 Authenticity
         </div>
         <p style="margin:0 0 4px;font-size:13px;">
-          You certify that you are registered for the Cebu Marathon 2027 and that your uploaded proof of registration is authentic and truthful.
+          You certify that you are registered for the Cebu Marathon 2027 and that your uploaded proof of registration is
+          authentic and truthful.
         </p>
       </div>
 
@@ -3323,6 +3421,33 @@
         });
       }
 
+      // ── VERIFICATION STATUS HELPER ──
+      function applyPassVerificationStatus(regRecord) {
+        var isVerified = Boolean(regRecord && regRecord.cebuProofVerified);
+        var badge = document.getElementById('resVerifiedBadge');
+        var banner = document.getElementById('pendingStatusBanner');
+        var dlBtn = document.getElementById('downloadPassBtnText');
+        var doneTitle = document.getElementById('doneTitle');
+
+        if (isVerified) {
+          if (doneTitle) doneTitle.textContent = "Registration Confirmed! 🎉";
+          if (badge) {
+            badge.className = 'pass-verified-badge';
+            badge.innerHTML = '✓ VERIFIED CEBU MARATHON 2027 PARTICIPANT';
+          }
+          if (banner) banner.style.display = 'none';
+          if (dlBtn) dlBtn.textContent = '📥 Download Official Digital Pass (PNG)';
+        } else {
+          if (doneTitle) doneTitle.textContent = "Registration Submitted! ⏳";
+          if (badge) {
+            badge.className = 'pass-pending-badge';
+            badge.innerHTML = '⏳ PENDING ADMIN VERIFICATION &bull; SUBMITTED';
+          }
+          if (banner) banner.style.display = 'block';
+          if (dlBtn) dlBtn.textContent = '📥 Download Run Pass (Pending Review)';
+        }
+      }
+
       // ── FORM SUBMISSION ──
       var form = document.getElementById('marathonForm');
       form.addEventListener('submit', async function (e) {
@@ -3389,7 +3514,8 @@
           }
 
           var regRecord = data.registration;
-          document.getElementById('doneMessage').textContent = 'Welcome, ' + regRecord.fullName + '! You are officially registered for the ' + regRecord.category + ' Community Run with verified Cebu Marathon photo proof.';
+          applyPassVerificationStatus(regRecord);
+          document.getElementById('doneMessage').innerHTML = 'Thank you, <b style="color:#fff;">' + regRecord.fullName + '</b>! Your registration for the <b style="color:var(--mint);">' + regRecord.category + ' Community Run</b> has been received and is currently <b>pending admin verification</b>.';
 
           document.getElementById('resPassNumber').textContent = regRecord.bibNumber;
           document.getElementById('resRunnerName').textContent = regRecord.fullName.toUpperCase();
@@ -3477,12 +3603,21 @@
 
           var html = '';
           data.registrations.forEach(function (item) {
-            html += '<div style="padding:10px;background:rgba(255,255,255,.07);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;border-radius:4px;">' +
+            var isVer = Boolean(item.cebuProofVerified);
+            var statusPill = isVer
+              ? '<span style="display:inline-block;padding:2px 7px;font-size:11px;font-weight:700;border-radius:10px;background:rgba(56,248,184,0.15);color:var(--mint);border:1px solid rgba(56,248,184,0.3);margin-left:6px;">✓ Verified</span>'
+              : '<span style="display:inline-block;padding:2px 7px;font-size:11px;font-weight:700;border-radius:10px;background:rgba(255,190,26,0.15);color:var(--gold);border:1px solid rgba(255,190,26,0.3);margin-left:6px;">⏳ Pending Verification</span>';
+
+            html += '<div style="padding:10px 12px;background:rgba(255,255,255,.07);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;border-radius:6px;border:1px solid var(--line);">' +
               '<div>' +
-              '<b style="color:#fff;">' + item.fullName + '</b> &bull; Pass: <span style="color:var(--gold);font-weight:800;">' + item.bibNumber + '</span>' +
-              '<div style="font-size:12px;color:var(--mut);">' + item.category + ' | ' + item.runningClub + ' | Pace: ' + (item.desiredPace || '6:30 min/KM') + '</div>' +
+              '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">' +
+              '<b style="color:#fff;font-size:15px;">' + item.fullName + '</b>' +
+              statusPill +
               '</div>' +
-              '<button type="button" class="btn-hero-reg" style="padding:4px 10px;font-size:13px;border-radius:4px;" onclick="loadPassData(' + JSON.stringify(item).replace(/"/g, '&quot;') + ')"><span>View Pass</span></button>' +
+              '<div style="font-size:12.5px;color:var(--gold);font-weight:700;margin-top:2px;">Pass ID: ' + item.bibNumber + '</div>' +
+              '<div style="font-size:12px;color:var(--mut);margin-top:1px;">' + item.category + ' | ' + item.runningClub + ' | Pace: ' + (item.desiredPace || '6:30 min/KM') + '</div>' +
+              '</div>' +
+              '<button type="button" class="btn-hero-reg" style="padding:6px 14px;font-size:13px;border-radius:4px;" onclick="loadPassData(' + JSON.stringify(item).replace(/"/g, '&quot;') + ')"><span>View Pass</span></button>' +
               '</div>';
           });
           resArea.innerHTML = html;
@@ -3493,7 +3628,12 @@
 
       window.loadPassData = function (regRecord) {
         closeFindPassModal();
-        document.getElementById('doneMessage').textContent = 'Official community run pass for ' + regRecord.fullName + '.';
+        applyPassVerificationStatus(regRecord);
+        if (regRecord.cebuProofVerified) {
+          document.getElementById('doneMessage').innerHTML = 'Official community run pass for <b style="color:#fff;">' + regRecord.fullName + '</b> &bull; <span style="color:var(--mint);font-weight:700;">Status: Verified</span>';
+        } else {
+          document.getElementById('doneMessage').innerHTML = 'Community run pass for <b style="color:#fff;">' + regRecord.fullName + '</b> &bull; <span style="color:var(--gold);font-weight:700;">Status: Pending Admin Verification</span>';
+        }
         document.getElementById('resPassNumber').textContent = regRecord.bibNumber;
         document.getElementById('resRunnerName').textContent = regRecord.fullName.toUpperCase();
         document.getElementById('resCategory').textContent = regRecord.category;

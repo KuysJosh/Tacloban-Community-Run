@@ -1328,6 +1328,57 @@
       letter-spacing: .04em;
     }
 
+    .pass-pending-badge {
+      margin-top: 12px;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #030b2c;
+      background: linear-gradient(90deg, #ffbe1a 0%, #ff9e00 100%);
+      padding: 5px 14px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: .04em;
+      box-shadow: 0 4px 14px rgba(255, 190, 26, 0.4);
+      text-transform: uppercase;
+    }
+
+    .pending-status-banner {
+      background: rgba(255, 190, 26, 0.08);
+      border: 1.5px solid rgba(255, 190, 26, 0.45);
+      border-left: 4px solid var(--gold);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 14px auto 20px;
+      max-width: 580px;
+      text-align: left;
+    }
+
+    .pending-banner-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .pending-banner-text {
+      color: #cbd5e1;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .pending-banner-tip {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--mut);
+    }
+
     .pass-action-btns {
       display: flex;
       justify-content: center;
@@ -2350,7 +2401,7 @@
                 <path
                   d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z" />
               </svg>
-              <span>Sunday, November 15, 2026 &bull; Gun Start 04:30 AM</span>
+              <span>Sunday, November 15, 2026 &bull; Check-in 03:30 AM &bull; Run Start 04:00 AM</span>
             </div>
 
           </div>
@@ -2377,7 +2428,7 @@
           <div class="rc-info-box">
             <div class="rc-status-pill open" id="schedBadge16">● OPEN FOR REGISTRATION</div>
             <div class="rc-date-line">November 15 &bull; Sunday</div>
-            <div class="rc-meta-line">Gun Start <b>04:30 AM</b> &bull; Coastal Bypass Kickoff</div>
+            <div class="rc-meta-line">Check-in <b>03:30 AM</b> &bull; Run Start <b>04:00 AM</b> &bull; Coastal Bypass Kickoff</div>
           </div>
           <div class="rc-btn-col">
             <span class="btn-join-schedule" id="schedBtn16">Join 16K &gt;</span>
@@ -2390,7 +2441,7 @@
           <div class="rc-info-box">
             <div class="rc-status-pill locked" id="schedBadge21">🔒 OPENS AFTER 16 KM (NOV 15)</div>
             <div class="rc-date-line">November 28 &bull; Saturday</div>
-            <div class="rc-meta-line">Gun Start <b>04:00 AM</b> &bull; Half Marathon Challenge</div>
+            <div class="rc-meta-line">Check-in <b>03:00 AM</b> &bull; Run Start <b>03:30 AM</b> &bull; Half Marathon Challenge</div>
           </div>
           <div class="rc-btn-col">
             <span class="btn-join-schedule btn-locked" id="schedBtn21">Locked 🔒</span>
@@ -2403,7 +2454,7 @@
           <div class="rc-info-box">
             <div class="rc-status-pill locked" id="schedBadge26">🔒 OPENS AFTER 21 KM (NOV 28)</div>
             <div class="rc-date-line">December 5 &bull; Saturday</div>
-            <div class="rc-meta-line">Gun Start <b>03:30 AM</b> &bull; Ultra Training Distance</div>
+            <div class="rc-meta-line">Check-in <b>02:30 AM</b> &bull; Run Start <b>03:00 AM</b> &bull; Ultra Training Distance</div>
           </div>
           <div class="rc-btn-col">
             <span class="btn-join-schedule btn-locked" id="schedBtn26">Locked 🔒</span>
@@ -2416,7 +2467,7 @@
           <div class="rc-info-box">
             <div class="rc-status-pill locked" id="schedBadge32">🔒 OPENS AFTER 26 KM (DEC 5)</div>
             <div class="rc-date-line">December 19 &bull; Saturday</div>
-            <div class="rc-meta-line">Gun Start <b>03:00 AM</b> &bull; Peak LSD Grand Finale</div>
+            <div class="rc-meta-line">Check-in <b>02:00 AM</b> &bull; Run Start <b>02:30 AM</b> &bull; Peak LSD Grand Finale</div>
           </div>
           <div class="rc-btn-col">
             <span class="btn-join-schedule btn-locked" id="schedBtn32">Locked 🔒</span>
@@ -2503,8 +2554,21 @@
 
       <!-- SUCCESS SCREEN WITH OFFICIAL DIGITAL RUN PASS -->
       <div class="done-container" id="doneScreen">
-        <h2>You’re Registered! 🎉</h2>
+        <h2 id="doneTitle">Registration Submitted! ⏳</h2>
         <p id="doneMessage"></p>
+
+        <!-- Pending Review Status Banner -->
+        <div id="pendingStatusBanner" class="pending-status-banner">
+          <div class="pending-banner-title">
+            <span>⏳</span> <span>STATUS: PENDING ADMIN VERIFICATION</span>
+          </div>
+          <p class="pending-banner-text">
+            Your registration details and Cebu Marathon 2027 photo proof have been successfully received. An event marshal will verify your attached photo proof before final approval of your official run pass.
+          </p>
+          <div class="pending-banner-tip">
+            💡 <em>Tip: You can use the <strong>"Find My Pass"</strong> button at any time to check if your status has been verified by the admin!</em>
+          </div>
+        </div>
 
         <div class="pass-preview-box">
           <div class="official-run-pass" id="runPassCard">
@@ -2544,15 +2608,15 @@
                 <img id="resQrImage" src="" alt="Official Check-in QR">
               </div>
             </div>
-            <div class="pass-verified-badge">
-              ✓ VERIFIED CEBU MARATHON 2027 PARTICIPANT
+            <div id="resVerifiedBadge" class="pass-pending-badge">
+              ⏳ PENDING ADMIN VERIFICATION &bull; SUBMITTED
             </div>
           </div>
         </div>
 
         <div class="pass-action-btns">
           <button type="button" class="btn-hero-reg" style="font-size:16px;padding:10px 24px;"
-            onclick="downloadPassPng()"><span>📥 Download Digital Pass (PNG)</span></button>
+            onclick="downloadPassPng()"><span id="downloadPassBtnText">📥 Download Run Pass (Pending Review)</span></button>
           <button type="button" class="btn-hero-pass" style="font-size:16px;padding:10px 24px;"
             onclick="window.print()"><span>🖨️ Print Pass</span></button>
           <button type="button" class="btn-hero-reg"
@@ -2755,7 +2819,7 @@
             <h3>Your Selected Leg</h3>
             <div class="sum-dist" id="sidebarDist">16 KM</div>
             <p id="sidebarDate" style="color:#cbd5e1;margin-top:6px;font-weight:600;">Sunday, November 15, 2026</p>
-            <p id="sidebarGun" style="color:var(--gold);font-size:13px;margin-top:4px;">Gun Start: 04:30 AM</p>
+            <p id="sidebarGun" style="color:var(--gold);font-size:13px;margin-top:4px;">Check-in: 03:30 AM &bull; Run Start: 04:00 AM</p>
           </div>
 
           <div class="sidebar-panel">
@@ -2869,7 +2933,7 @@
         <ul class="waiver-list">
           <li><strong>Stay on Designated Road Shoulders:</strong> Always run along the outermost curb, sidewalk, or road shoulder. Never encroach into active vehicle travel lanes.</li>
           <li><strong>Face Oncoming Traffic:</strong> On road segments without sidewalks or outer dividers, runners must run on the left side facing oncoming vehicular traffic to maintain clear visual awareness of motorists.</li>
-          <li><strong>High-Visibility &amp; Pre-Dawn Running:</strong> Gun starts are scheduled between <strong>03:00 AM and 04:30 AM</strong> in low-light conditions. Runners are strongly urged to wear reflective apparel, headlamps, or flashing LED blinkers.</li>
+          <li><strong>High-Visibility &amp; Pre-Dawn Running:</strong> Gun starts are scheduled between <strong>02:30 AM and 04:00 AM</strong> (Check-in begins as early as 02:00 AM) in low-light conditions. Runners are strongly urged to wear reflective apparel, headlamps, or flashing LED blinkers.</li>
           <li><strong>Intersections &amp; Traffic Signals:</strong> Obey all traffic signals, pedestrian crossing laws, and club volunteer marshal directions. Always look both ways before crossing junctions.</li>
           <li><strong>Auditory Awareness:</strong> If listening to audio devices, keep the volume low or use bone-conduction / single earbud headsets so sirens, horns, traffic, and marshal instructions remain clearly audible.</li>
         </ul>
@@ -2912,10 +2976,10 @@
   <script>
     (function () {
       var legInfo = {
-        "16": { title: "16 KM", date: "Sunday, November 15, 2026", gun: "04:30 AM" },
-        "21": { title: "21 KM", date: "Saturday, November 28, 2026", gun: "04:00 AM" },
-        "26": { title: "26 KM", date: "Saturday, December 5, 2026", gun: "03:30 AM" },
-        "32": { title: "32 KM", date: "Saturday, December 19, 2026", gun: "03:00 AM" }
+        "16": { title: "16 KM", date: "Sunday, November 15, 2026", checkIn: "03:30 AM", gun: "04:00 AM" },
+        "21": { title: "21 KM", date: "Saturday, November 28, 2026", checkIn: "03:00 AM", gun: "03:30 AM" },
+        "26": { title: "26 KM", date: "Saturday, December 5, 2026", checkIn: "02:30 AM", gun: "03:00 AM" },
+        "32": { title: "32 KM", date: "Saturday, December 19, 2026", checkIn: "02:00 AM", gun: "02:30 AM" }
       };
 
       var CLUB_LOGOS = {
@@ -2930,10 +2994,10 @@
 
       // ── LIVE COUNTDOWN TO NEXT UPCOMING RUN ──
       var RUN_LEGS = [
-        { dist: "16 KM", time: new Date("2026-11-15T04:30:00+08:00").getTime(), desc: "Sunday, November 15, 2026 • Gun Start 04:30 AM" },
-        { dist: "21 KM", time: new Date("2026-11-28T04:00:00+08:00").getTime(), desc: "Saturday, November 28, 2026 • Gun Start 04:00 AM" },
-        { dist: "26 KM", time: new Date("2026-12-05T03:30:00+08:00").getTime(), desc: "Saturday, December 5, 2026 • Gun Start 03:30 AM" },
-        { dist: "32 KM", time: new Date("2026-12-19T03:00:00+08:00").getTime(), desc: "Saturday, December 19, 2026 • Gun Start 03:00 AM" }
+        { dist: "16 KM", time: new Date("2026-11-15T04:00:00+08:00").getTime(), desc: "Sunday, November 15, 2026 • Check-in 03:30 AM • Run Start 04:00 AM" },
+        { dist: "21 KM", time: new Date("2026-11-28T03:30:00+08:00").getTime(), desc: "Saturday, November 28, 2026 • Check-in 03:00 AM • Run Start 03:30 AM" },
+        { dist: "26 KM", time: new Date("2026-12-05T03:00:00+08:00").getTime(), desc: "Saturday, December 5, 2026 • Check-in 02:30 AM • Run Start 03:00 AM" },
+        { dist: "32 KM", time: new Date("2026-12-19T02:30:00+08:00").getTime(), desc: "Saturday, December 19, 2026 • Check-in 02:00 AM • Run Start 02:30 AM" }
       ];
 
       function tickCountdown() {
@@ -2984,10 +3048,10 @@
 
       // ── PROGRESSIVE RACE SCHEDULE CONFIG ──
       var LEGS_CONFIG = [
-        { dist: "16", title: "16 KM", date: "Sunday, November 15, 2026", gun: "04:30 AM", conclude: new Date("2026-11-15T11:00:00+08:00").getTime() },
-        { dist: "21", title: "21 KM", date: "Saturday, November 28, 2026", gun: "04:00 AM", conclude: new Date("2026-11-28T11:00:00+08:00").getTime() },
-        { dist: "26", title: "26 KM", date: "Saturday, December 5, 2026", gun: "03:30 AM", conclude: new Date("2026-12-05T11:00:00+08:00").getTime() },
-        { dist: "32", title: "32 KM", date: "Saturday, December 19, 2026", gun: "03:00 AM", conclude: new Date("2026-12-19T11:00:00+08:00").getTime() }
+        { dist: "16", title: "16 KM", date: "Sunday, November 15, 2026", checkIn: "03:30 AM", gun: "04:00 AM", conclude: new Date("2026-11-15T11:00:00+08:00").getTime() },
+        { dist: "21", title: "21 KM", date: "Saturday, November 28, 2026", checkIn: "03:00 AM", gun: "03:30 AM", conclude: new Date("2026-11-28T11:00:00+08:00").getTime() },
+        { dist: "26", title: "26 KM", date: "Saturday, December 5, 2026", checkIn: "02:30 AM", gun: "03:00 AM", conclude: new Date("2026-12-05T11:00:00+08:00").getTime() },
+        { dist: "32", title: "32 KM", date: "Saturday, December 19, 2026", checkIn: "02:00 AM", gun: "02:30 AM", conclude: new Date("2026-12-19T11:00:00+08:00").getTime() }
       ];
 
       function getFrontendLegStatus(distVal) {
@@ -3183,7 +3247,7 @@
           var item = legInfo[checked.value];
           document.getElementById('sidebarDist').textContent = item.title;
           document.getElementById('sidebarDate').textContent = item.date;
-          document.getElementById('sidebarGun').textContent = 'Gun Start: ' + item.gun;
+          document.getElementById('sidebarGun').textContent = 'Check-in: ' + (item.checkIn || 'TBA') + ' • Run Start: ' + item.gun;
         }
       }
       document.querySelectorAll('input[name="dist"]').forEach(function (r) {
@@ -3323,6 +3387,33 @@
         });
       }
 
+      // ── VERIFICATION STATUS HELPER ──
+      function applyPassVerificationStatus(regRecord) {
+        var isVerified = Boolean(regRecord && regRecord.cebuProofVerified);
+        var badge = document.getElementById('resVerifiedBadge');
+        var banner = document.getElementById('pendingStatusBanner');
+        var dlBtn = document.getElementById('downloadPassBtnText');
+        var doneTitle = document.getElementById('doneTitle');
+
+        if (isVerified) {
+          if (doneTitle) doneTitle.textContent = "Registration Confirmed! 🎉";
+          if (badge) {
+            badge.className = 'pass-verified-badge';
+            badge.innerHTML = '✓ VERIFIED CEBU MARATHON 2027 PARTICIPANT';
+          }
+          if (banner) banner.style.display = 'none';
+          if (dlBtn) dlBtn.textContent = '📥 Download Official Digital Pass (PNG)';
+        } else {
+          if (doneTitle) doneTitle.textContent = "Registration Submitted! ⏳";
+          if (badge) {
+            badge.className = 'pass-pending-badge';
+            badge.innerHTML = '⏳ PENDING ADMIN VERIFICATION &bull; SUBMITTED';
+          }
+          if (banner) banner.style.display = 'block';
+          if (dlBtn) dlBtn.textContent = '📥 Download Run Pass (Pending Review)';
+        }
+      }
+
       // ── FORM SUBMISSION ──
       var form = document.getElementById('marathonForm');
       form.addEventListener('submit', async function (e) {
@@ -3389,7 +3480,8 @@
           }
 
           var regRecord = data.registration;
-          document.getElementById('doneMessage').textContent = 'Welcome, ' + regRecord.fullName + '! You are officially registered for the ' + regRecord.category + ' Community Run with verified Cebu Marathon photo proof.';
+          applyPassVerificationStatus(regRecord);
+          document.getElementById('doneMessage').innerHTML = 'Thank you, <b style="color:#fff;">' + regRecord.fullName + '</b>! Your registration for the <b style="color:var(--mint);">' + regRecord.category + ' Community Run</b> has been received and is currently <b>pending admin verification</b>.';
 
           document.getElementById('resPassNumber').textContent = regRecord.bibNumber;
           document.getElementById('resRunnerName').textContent = regRecord.fullName.toUpperCase();
@@ -3477,12 +3569,21 @@
 
           var html = '';
           data.registrations.forEach(function (item) {
-            html += '<div style="padding:10px;background:rgba(255,255,255,.07);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;border-radius:4px;">' +
+            var isVer = Boolean(item.cebuProofVerified);
+            var statusPill = isVer 
+              ? '<span style="display:inline-block;padding:2px 7px;font-size:11px;font-weight:700;border-radius:10px;background:rgba(56,248,184,0.15);color:var(--mint);border:1px solid rgba(56,248,184,0.3);margin-left:6px;">✓ Verified</span>'
+              : '<span style="display:inline-block;padding:2px 7px;font-size:11px;font-weight:700;border-radius:10px;background:rgba(255,190,26,0.15);color:var(--gold);border:1px solid rgba(255,190,26,0.3);margin-left:6px;">⏳ Pending Verification</span>';
+
+            html += '<div style="padding:10px 12px;background:rgba(255,255,255,.07);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;border-radius:6px;border:1px solid var(--line);">' +
               '<div>' +
-              '<b style="color:#fff;">' + item.fullName + '</b> &bull; Pass: <span style="color:var(--gold);font-weight:800;">' + item.bibNumber + '</span>' +
-              '<div style="font-size:12px;color:var(--mut);">' + item.category + ' | ' + item.runningClub + ' | Pace: ' + (item.desiredPace || '6:30 min/KM') + '</div>' +
+              '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">' +
+              '<b style="color:#fff;font-size:15px;">' + item.fullName + '</b>' +
+              statusPill +
               '</div>' +
-              '<button type="button" class="btn-hero-reg" style="padding:4px 10px;font-size:13px;border-radius:4px;" onclick="loadPassData(' + JSON.stringify(item).replace(/"/g, '&quot;') + ')"><span>View Pass</span></button>' +
+              '<div style="font-size:12.5px;color:var(--gold);font-weight:700;margin-top:2px;">Pass ID: ' + item.bibNumber + '</div>' +
+              '<div style="font-size:12px;color:var(--mut);margin-top:1px;">' + item.category + ' | ' + item.runningClub + ' | Pace: ' + (item.desiredPace || '6:30 min/KM') + '</div>' +
+              '</div>' +
+              '<button type="button" class="btn-hero-reg" style="padding:6px 14px;font-size:13px;border-radius:4px;" onclick="loadPassData(' + JSON.stringify(item).replace(/"/g, '&quot;') + ')"><span>View Pass</span></button>' +
               '</div>';
           });
           resArea.innerHTML = html;
@@ -3493,7 +3594,12 @@
 
       window.loadPassData = function (regRecord) {
         closeFindPassModal();
-        document.getElementById('doneMessage').textContent = 'Official community run pass for ' + regRecord.fullName + '.';
+        applyPassVerificationStatus(regRecord);
+        if (regRecord.cebuProofVerified) {
+          document.getElementById('doneMessage').innerHTML = 'Official community run pass for <b style="color:#fff;">' + regRecord.fullName + '</b> &bull; <span style="color:var(--mint);font-weight:700;">Status: Verified</span>';
+        } else {
+          document.getElementById('doneMessage').innerHTML = 'Community run pass for <b style="color:#fff;">' + regRecord.fullName + '</b> &bull; <span style="color:var(--gold);font-weight:700;">Status: Pending Admin Verification</span>';
+        }
         document.getElementById('resPassNumber').textContent = regRecord.bibNumber;
         document.getElementById('resRunnerName').textContent = regRecord.fullName.toUpperCase();
         document.getElementById('resCategory').textContent = regRecord.category;
