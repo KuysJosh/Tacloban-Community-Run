@@ -1799,11 +1799,14 @@
 
     .waiver-scroll-body {
       overflow-y: auto;
+      flex: 1;
+      min-height: 180px;
       padding-right: 8px;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
       font-size: 13.5px;
       line-height: 1.6;
       color: #cbd5e1;
+      scroll-behavior: smooth;
     }
 
     .waiver-scroll-body::-webkit-scrollbar {
@@ -1891,6 +1894,38 @@
     .btn-waiver-accept:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(255, 190, 26, 0.5);
+    }
+
+    .btn-waiver-accept:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      filter: grayscale(0.85);
+      transform: none !important;
+      box-shadow: none !important;
+      pointer-events: none;
+    }
+
+    .waiver-scroll-notice {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 12.5px;
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px dashed rgba(255, 255, 255, 0.18);
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .waiver-scroll-notice.unlocked {
+      background: rgba(56, 248, 184, 0.12);
+      border-color: rgba(56, 248, 184, 0.5);
+      color: var(--mint);
+      font-weight: 700;
     }
 
     .btn-waiver-decline {
@@ -3386,26 +3421,25 @@
           <div class="f full" id="waiverContainer">
             <div class="chk-wrap waiver-clickable-box" id="waiverTriggerArea"
               style="cursor:pointer;padding:12px 14px;background:rgba(6,18,70,0.65);border:1.5px solid var(--line);border-radius:8px;transition:all .25s ease;display:flex;align-items:flex-start;gap:12px;"
-              title="Click to view and accept event waiver and road safety rules">
+              title="Click to view and accept Training Run Waiver & Participant Agreement">
               <input type="checkbox" id="ag" name="ag" required
                 style="cursor:pointer;margin-top:2px;width:19px;height:19px;accent-color:var(--mint);flex-shrink:0;">
               <div style="flex:1;">
                 <span id="waiverText" style="line-height:1.45;color:var(--mut);font-size:13.5px;display:block;">
                   I certify that I am registered for the Cebu Marathon 2027 and that the attached photo proof is
-                  authentic. I accept the <strong style="color:var(--mint);text-decoration:underline;">event waiver and
-                    road safety rules</strong>.
+                  authentic. I accept the <strong style="color:var(--mint);text-decoration:underline;">Training Run Waiver &amp; Participant Agreement</strong>.
                 </span>
                 <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
                   <span
                     style="font-size:11px;color:var(--gold);font-weight:700;background:rgba(255,190,26,0.12);border:1px solid rgba(255,190,26,0.3);border-radius:4px;padding:2px 8px;display:inline-flex;align-items:center;gap:4px;">
-                    ⚠️ Click to View Safety &amp; Non-Liability Waiver
+                    📜 Click to Read &amp; Sign Training Run Waiver (12 Sections)
                   </span>
                 </div>
               </div>
             </div>
             <div id="waiverAcceptedBadge"
               style="display:none;font-size:12.5px;color:var(--mint);font-weight:700;margin-top:6px;align-items:center;gap:6px;">
-              <span>✓</span> <span>Road Safety Rules &amp; Non-Liability Waiver Agreed</span>
+              <span>✓</span> <span>Training Run Waiver &amp; Participant Agreement Confirmed</span>
             </div>
           </div>
 
@@ -3516,7 +3550,7 @@
   </div>
 
   <!-- ==============================================
-     MODAL: WAIVER & ROAD SAFETY AGREEMENT
+     MODAL: TRAINING RUN WAIVER & PARTICIPANT AGREEMENT
 ============================================== -->
   <div class="modal-overlay" id="waiverModal">
     <div class="waiver-modal-box">
@@ -3528,7 +3562,7 @@
         </div>
         <h3
           style="font-size:24px;color:#ffffff;line-height:1.2;margin:0 0 4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.5px;">
-          Community Run Waiver &amp; Road Safety Agreement
+          TRAINING RUN WAIVER &amp; PARTICIPANT AGREEMENT
         </h3>
         <p style="color:var(--mut);font-size:13px;margin:0;">
           Cebu Marathon 2027 &bull; Tacloban Community Progressive Long Run Leg (16K &bull; 21K &bull; 26K &bull; 32K)
@@ -3536,80 +3570,180 @@
       </div>
 
       <div class="waiver-scroll-body" id="waiverScrollBody">
-        <!-- Callout Alert for Open Roads -->
-        <div class="waiver-callout-warning">
-          <h4>
-            <span>🚨</span>
-            <span>CRITICAL SAFETY NOTICE: OPEN PUBLIC HIGHWAYS</span>
-          </h4>
-          <p style="margin:0;font-size:13px;color:#f8fafc;line-height:1.5;">
-            <strong>This is a community-driven training run, NOT a closed-course race.</strong>
-            The roads, coastal bypass, and city thoroughfares remain <strong>FULLY OPEN TO VEHICULAR TRAFFIC</strong>
-            (cars, motorcycles, buses, trucks, and public utility vehicles) at all times.
-            <strong>Your personal safety is your top priority.</strong>
+        <div class="waiver-callout-warning" style="margin-bottom:14px;">
+          <p style="margin:0;font-size:13.5px;color:#f8fafc;line-height:1.55;">
+            By registering for and participating in the Training Run, I confirm that I have read, understood, and voluntarily agree to the following terms and conditions:
           </p>
         </div>
 
         <div class="waiver-section-title">
-          <span>🛡️</span> 1. Safety As Priority &amp; Road Rules
+          <span>🛡️</span> 1. Acknowledgment of Physical Activity and Road Risks
         </div>
-        <ul class="waiver-list">
-          <li><strong>Stay on Designated Road Shoulders:</strong> Always run along the outermost curb, sidewalk, or road
-            shoulder. Never encroach into active vehicle travel lanes.</li>
-          <li><strong>Face Oncoming Traffic:</strong> On road segments without sidewalks or outer dividers, runners must
-            run on the left side facing oncoming vehicular traffic to maintain clear visual awareness of motorists.</li>
-          <li><strong>High-Visibility &amp; Pre-Dawn Running:</strong> Run starts are scheduled between <strong>02:30 AM
-              and 04:00 AM</strong> in low-light conditions. Runners are strongly urged to wear reflective apparel,
-            headlamps, or flashing LED blinkers.</li>
-          <li><strong>Intersections &amp; Traffic Signals:</strong> Obey all traffic signals, pedestrian crossing laws,
-            and club volunteer marshal directions. Always look both ways before crossing junctions.</li>
-          <li><strong>Auditory Awareness:</strong> If listening to audio devices, keep the volume low or use
-            bone-conduction / single earbud headsets so sirens, horns, traffic, and marshal instructions remain clearly
-            audible.</li>
-        </ul>
-
-        <div class="waiver-section-title">
-          <span>⚖️</span> 2. Non-Liability &amp; Assumption of Inherent Risk
-        </div>
-        <ul class="waiver-list">
-          <li><strong>Inherent Risks:</strong> You acknowledge that long-distance endurance running on public highways
-            involves inherent risks including, but not limited to, vehicular collisions, road surface hazards, slips,
-            falls, heat exhaustion, and dehydration.</li>
-          <li><strong>Waiver &amp; Release of Liability:</strong> In consideration of participating in this free
-            training run, you hereby voluntarily assume all risks and release, discharge, and hold harmless the
-            organizing volunteers, lead running clubs (Tacloban Bypass Running Club, Tacloban Grandstand Runners, Tacloban Runners Club,
-            Motion Runners, One Stride Tacloban, Alangalang Runners Club, Santa Fe Runners), Cebu
-            Landmasters, and Cebu Marathon organizers from <strong>ANY AND ALL CLAIMS, LIABILITIES, ACCIDENTS, INJURIES,
-              FATALITIES, OR PROPERTY LOSS</strong> occurring prior to, during, or after the run.</li>
-        </ul>
-
-        <div class="waiver-section-title">
-          <span>❤️</span> 3. Physical Fitness &amp; Personal Responsibility
-        </div>
-        <ul class="waiver-list">
-          <li><strong>Medical Fitness:</strong> You affirm that you are physically fit, healthy, and adequately trained
-            to undertake the progressive distance (16K, 21K, 26K, or 32K) you selected.</li>
-          <li><strong>Self-Sufficiency &amp; Hydration:</strong> While participating running clubs may provide community
-            hydration stops, runners are encouraged to carry personal hydration vests, bottles, and fuel. If you
-            experience dizziness, chest pain, or distress, stop running immediately and notify a companion or marshal.
-          </li>
-        </ul>
-
-        <div class="waiver-section-title">
-          <span>🎫</span> 4. Cebu Marathon 2027 Authenticity
-        </div>
-        <p style="margin:0 0 4px;font-size:13px;">
-          You certify that you are registered for the Cebu Marathon 2027 and that your uploaded proof of registration is
-          authentic and truthful.
+        <p style="margin:0 0 6px;font-size:13px;">
+          I understand that participation in a running or training event involves inherent risks, including but not limited to:
         </p>
+        <ul class="waiver-list" style="margin-bottom:8px;">
+          <li>Muscle strains, sprains, cramps, fatigue, dehydration, heat-related illness, and other physical conditions;</li>
+          <li>Falls, trips, slips, collisions with other participants, pedestrians, bicycles, motorcycles, or vehicles;</li>
+          <li>Uneven or slippery surfaces, potholes, road obstructions, weather conditions, and other environmental hazards;</li>
+          <li>Risks associated with running on or near public roads and areas where normal vehicular and pedestrian traffic may be present; and</li>
+          <li>Accidents, injuries, illness, property damage, or other incidents arising from circumstances beyond the reasonable control of the organizers.</li>
+        </ul>
+        <p style="margin:0 0 6px;font-size:13px;">
+          I understand that the Training Run may take place on or near roads that are not completely closed to vehicular traffic, and that vehicles, motorcycles, bicycles, pedestrians, and other road users may be present.
+        </p>
+        <p style="margin:0 0 14px;font-size:13px;font-weight:600;color:#f8fafc;">
+          I voluntarily assume the inherent risks associated with participating in the Training Run.
+        </p>
+
+        <div class="waiver-section-title">
+          <span>❤️</span> 2. Participant Fitness and Health Declaration
+        </div>
+        <p style="margin:0 0 6px;font-size:13px;">
+          I confirm that I am physically capable of participating in the Training Run and that I have considered any health or physical conditions that may affect my ability to safely participate.
+        </p>
+        <p style="margin:0 0 6px;font-size:13px;">
+          I understand that participation is voluntary and that I am responsible for determining whether I am fit to participate. If I have any concerns regarding my health or physical condition, I understand that I should consult an appropriate medical professional before participating.
+        </p>
+        <p style="margin:0 0 14px;font-size:13px;">
+          I agree not to participate if I am experiencing symptoms, illness, injury, or any condition that may make participation unsafe for myself or others.
+        </p>
+
+        <div class="waiver-section-title">
+          <span>🚦</span> 3. Participant Responsibility and Road Safety
+        </div>
+        <p style="margin:0 0 6px;font-size:13px;">
+          I agree to exercise reasonable care at all times and to follow all safety instructions issued by the organizers and pacers / coaches.
+        </p>
+        <p style="margin:0 0 6px;font-size:13px;">
+          I agree to:
+        </p>
+        <ul class="waiver-list" style="margin-bottom:8px;">
+          <li>Follow the designated training route;</li>
+          <li>Obey traffic lights, road signs, traffic rules, and instructions from authorized traffic personnel and marshals;</li>
+          <li>Use designated pedestrian crossings and crossing points where provided;</li>
+          <li>Exercise caution before crossing or entering any roadway;</li>
+          <li>Remain alert to surrounding vehicles, motorcycles, bicycles, pedestrians, and other hazards;</li>
+          <li>Not deliberately enter the path of moving vehicles or obstruct traffic;</li>
+          <li>Follow instructions to stop, slow down, wait, or change direction when directed by event personnel;</li>
+          <li>Immediately report any accident, injury, unsafe condition, or hazard; and</li>
+          <li>Conduct myself in a manner that does not knowingly endanger myself or another participant.</li>
+        </ul>
+        <p style="margin:0 0 14px;font-size:13px;">
+          I understand that organizers cannot control the actions of independent third parties, including motorists and other road users, and that I must remain alert and exercise caution even when following the designated route.
+        </p>
+
+        <div class="waiver-section-title">
+          <span>📋</span> 4. Compliance With Safety Instructions
+        </div>
+        <p style="margin:0 0 6px;font-size:13px;">
+          I understand that the organizers may modify, suspend, delay, reroute, or stop the Training Run, in whole or in part, when reasonably necessary for participant safety, including due to traffic conditions, weather, road conditions, emergencies, or other unforeseen circumstances.
+        </p>
+        <p style="margin:0 0 6px;font-size:13px;">
+          The organizers may also require a participant to stop or leave the activity if, in the reasonable judgment of event personnel, the participant’s continued participation presents a safety risk.
+        </p>
+        <p style="margin:0 0 14px;font-size:13px;">
+          I agree to comply promptly with reasonable safety instructions.
+        </p>
+
+        <div class="waiver-section-title">
+          <span>⚠️</span> 5. Assumption of Risk
+        </div>
+        <p style="margin:0 0 6px;font-size:13px;">
+          I acknowledge that not all risks associated with a training run can be eliminated, even when reasonable safety precautions are taken.
+        </p>
+        <p style="margin:0 0 14px;font-size:13px;">
+          I voluntarily assume the inherent and reasonably foreseeable risks associated with my participation, including risks arising from physical activity, road conditions, weather, other participants, pedestrians, and third-party road users.
+        </p>
+
+        <div class="waiver-section-title">
+          <span>⚖️</span> 6. Waiver and Release
+        </div>
+        <p style="margin:0 0 14px;font-size:13px;">
+          To the fullest extent permitted by applicable law, I release and agree to hold harmless the event organizers, pacers, coaches, volunteers, sponsors, venue owners, and their respective officers, employees, and representatives from claims arising from my participation in the Training Run to the extent such claims result from the inherent risks of participation or circumstances beyond their reasonable control.
+        </p>
+
+        <div class="waiver-section-title">
+          <span>🚗</span> 7. Third-Party Vehicles and Road Users
+        </div>
+        <p style="margin:0 0 6px;font-size:13px;">
+          I specifically acknowledge that the Training Run may occur in areas where third-party vehicles, motorcycles, bicycles, pedestrians, and other road users are present.
+        </p>
+        <p style="margin:0 0 6px;font-size:13px;">
+          I understand that the organizers do not own or control such third parties and cannot guarantee their conduct, attention, compliance with traffic laws, or reaction to runners.
+        </p>
+        <p style="margin:0 0 14px;font-size:13px;">
+          I agree to remain vigilant and exercise reasonable caution around traffic at all times, including at intersections, crossings, driveways, entrances, exits, and other areas where vehicles may be present.
+        </p>
+
+        <div class="waiver-section-title">
+          <span>🚑</span> 8. Emergency Medical Assistance
+        </div>
+        <p style="margin:0 0 6px;font-size:13px;">
+          In the event of an injury, medical emergency, or other situation requiring assistance, I authorize the organizers and their designated personnel, to the extent reasonably necessary, to arrange or request emergency medical assistance for me.
+        </p>
+        <p style="margin:0 0 6px;font-size:13px;">
+          I understand that any medical, hospital, transportation, medication, or other expenses incurred on my behalf may be my responsibility, subject to applicable law and any insurance coverage that may apply.
+        </p>
+        <p style="margin:0 0 14px;font-size:13px;">
+          I agree to provide accurate emergency contact and relevant medical information when requested during registration.
+        </p>
+
+        <div class="waiver-section-title">
+          <span>🔄</span> 9. Event Changes, Suspension, or Cancellation
+        </div>
+        <p style="margin:0 0 6px;font-size:13px;">
+          The organizers reserve the right to modify the schedule, route, venue, format, or other event details when reasonably necessary due to safety concerns, weather, traffic conditions, government directives, force majeure, or other unforeseen circumstances.
+        </p>
+        <p style="margin:0 0 14px;font-size:13px;">
+          The organizers may postpone, suspend, or cancel the Training Run when necessary for the safety and welfare of participants, staff, volunteers, or the public.
+        </p>
+
+        <div class="waiver-section-title">
+          <span>🎒</span> 10. Personal Belongings
+        </div>
+        <p style="margin:0 0 6px;font-size:13px;">
+          I acknowledge that I am responsible for my personal belongings brought to the Training Run.
+        </p>
+        <p style="margin:0 0 14px;font-size:13px;">
+          The organizers shall not be responsible for loss, theft, or damage to personal property except to the extent liability cannot lawfully be excluded.
+        </p>
+
+        <div class="waiver-section-title">
+          <span>📸</span> 11. Photography, Video, and Media Release
+        </div>
+        <p style="margin:0 0 6px;font-size:13px;">
+          I understand that photography, video recording, and other forms of media coverage may take place during the Training Run.
+        </p>
+        <p style="margin:0 0 14px;font-size:13px;">
+          I grant the organizers and their authorized partners permission to use photographs, videos, and recordings in which I may appear for legitimate event documentation, promotional, marketing, social media, advertising, and related purposes without additional compensation.
+        </p>
+
+        <div class="waiver-section-title">
+          <span>✍️</span> 12. Accuracy of Registration Information
+        </div>
+        <p style="margin:0 0 6px;font-size:13px;">
+          I certify that the information I provide during registration is true and accurate to the best of my knowledge.
+        </p>
+        <p style="margin:0 0 10px;font-size:13px;">
+          I understand that providing inaccurate or incomplete information, particularly emergency contact or relevant health information, may affect the organizers’ ability to assist me in an emergency.
+        </p>
+
+        <div style="padding:10px 14px;text-align:center;color:var(--mint);font-size:12px;font-weight:700;background:rgba(56,248,184,0.08);border:1px solid rgba(56,248,184,0.25);border-radius:6px;margin-top:14px;">
+          ✓ You have reached the end of the Training Run Waiver &amp; Participant Agreement.
+        </div>
+      </div>
+
+      <div id="waiverScrollNotice" class="waiver-scroll-notice">
+        <span>📜 Please scroll down to the bottom to unlock the agreement button</span>
       </div>
 
       <div class="waiver-actions-footer">
         <button type="button" class="btn-waiver-decline" onclick="declineWaiver()">
           Decline / Close
         </button>
-        <button type="button" class="btn-waiver-accept" onclick="acceptWaiver()">
-          <span>✓</span> I Understand &amp; Agree to All Terms
+        <button type="button" class="btn-waiver-accept" id="btnWaiverAccept" onclick="acceptWaiver()" disabled>
+          <span>🔒</span> Scroll Down to Agree
         </button>
       </div>
     </div>
@@ -3975,18 +4109,66 @@
         document.getElementById('proofEnlargedModal').style.display = 'none';
       };
 
-      // ── WAIVER & ROAD SAFETY MODAL HANDLERS ──
+      // ── WAIVER & PARTICIPANT AGREEMENT MODAL HANDLERS ──
       var agCheckbox = document.getElementById('ag');
       var waiverTriggerArea = document.getElementById('waiverTriggerArea');
       var waiverModal = document.getElementById('waiverModal');
+      var waiverScrollBody = document.getElementById('waiverScrollBody');
+      var btnWaiverAccept = document.getElementById('btnWaiverAccept');
+      var waiverScrollNotice = document.getElementById('waiverScrollNotice');
       var waiverAcceptedBadge = document.getElementById('waiverAcceptedBadge');
+      var waiverHasScrolledToBottom = false;
+
+      function checkWaiverScrollBottom() {
+        if (!waiverScrollBody) return;
+        var tolerance = 35; // 35px threshold from bottom
+        var isAtBottom = (waiverScrollBody.scrollHeight - waiverScrollBody.scrollTop) <= (waiverScrollBody.clientHeight + tolerance);
+        if (isAtBottom && !waiverHasScrolledToBottom) {
+          waiverHasScrolledToBottom = true;
+          if (btnWaiverAccept) {
+            btnWaiverAccept.disabled = false;
+            btnWaiverAccept.innerHTML = '<span>✓</span> I Understand &amp; Agree to All Terms';
+          }
+          if (waiverScrollNotice) {
+            waiverScrollNotice.classList.add('unlocked');
+            waiverScrollNotice.innerHTML = '<span>✓ You have reviewed all 12 sections. You may now agree below.</span>';
+          }
+        }
+      }
+
+      if (waiverScrollBody) {
+        waiverScrollBody.addEventListener('scroll', checkWaiverScrollBottom);
+      }
 
       window.openWaiverModal = function (e) {
         if (e && e.preventDefault) e.preventDefault();
         if (waiverModal) {
           waiverModal.style.display = 'flex';
-          var scrollBody = document.getElementById('waiverScrollBody');
-          if (scrollBody) scrollBody.scrollTop = 0;
+          if (!agCheckbox || !agCheckbox.checked) {
+            waiverHasScrolledToBottom = false;
+            if (waiverScrollBody) {
+              waiverScrollBody.scrollTop = 0;
+            }
+            if (btnWaiverAccept) {
+              btnWaiverAccept.disabled = true;
+              btnWaiverAccept.innerHTML = '<span>🔒</span> Scroll Down to Agree';
+            }
+            if (waiverScrollNotice) {
+              waiverScrollNotice.classList.remove('unlocked');
+              waiverScrollNotice.innerHTML = '<span>📜 Please scroll down to the bottom to unlock the agreement button</span>';
+            }
+            setTimeout(checkWaiverScrollBottom, 150);
+          } else {
+            // Already agreed
+            if (btnWaiverAccept) {
+              btnWaiverAccept.disabled = false;
+              btnWaiverAccept.innerHTML = '<span>✓</span> I Understand &amp; Agree to All Terms';
+            }
+            if (waiverScrollNotice) {
+              waiverScrollNotice.classList.add('unlocked');
+              waiverScrollNotice.innerHTML = '<span>✓ Agreement previously confirmed.</span>';
+            }
+          }
         }
       };
 
@@ -3997,6 +4179,7 @@
       };
 
       window.acceptWaiver = function () {
+        if (btnWaiverAccept && btnWaiverAccept.disabled) return;
         if (agCheckbox) agCheckbox.checked = true;
         if (waiverTriggerArea) {
           waiverTriggerArea.style.borderColor = 'var(--mint)';
@@ -4012,6 +4195,15 @@
 
       window.declineWaiver = function () {
         if (agCheckbox) agCheckbox.checked = false;
+        waiverHasScrolledToBottom = false;
+        if (btnWaiverAccept) {
+          btnWaiverAccept.disabled = true;
+          btnWaiverAccept.innerHTML = '<span>🔒</span> Scroll Down to Agree';
+        }
+        if (waiverScrollNotice) {
+          waiverScrollNotice.classList.remove('unlocked');
+          waiverScrollNotice.innerHTML = '<span>📜 Please scroll down to the bottom to unlock the agreement button</span>';
+        }
         if (waiverTriggerArea) {
           waiverTriggerArea.style.borderColor = 'var(--line)';
           waiverTriggerArea.style.background = 'rgba(6,18,70,0.65)';
@@ -4024,7 +4216,13 @@
 
       if (waiverTriggerArea) {
         waiverTriggerArea.addEventListener('click', function (e) {
-          // Open waiver modal whenever the checkbox or any text is clicked
+          e.preventDefault();
+          openWaiverModal(e);
+        });
+      }
+      if (agCheckbox) {
+        agCheckbox.addEventListener('click', function (e) {
+          e.preventDefault();
           openWaiverModal(e);
         });
       }
@@ -4077,7 +4275,7 @@
         errProof.textContent = '';
 
         if (!agCheckbox.checked) {
-          document.getElementById('errGeneral').textContent = 'Please read and accept the Community Run Waiver & Road Safety Rules before submitting.';
+          document.getElementById('errGeneral').textContent = 'Please read and accept the Training Run Waiver & Participant Agreement before submitting.';
           waiverTriggerArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
           waiverTriggerArea.style.borderColor = '#ff5c77';
           return;
