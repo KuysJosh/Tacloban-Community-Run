@@ -3019,7 +3019,7 @@
         <div class="race-full-card is-locked" id="schedCard21" onclick="handleLegClick('21')">
           <div class="rc-dist-box">21<small>KM</small></div>
           <div class="rc-info-box">
-            <div class="rc-status-pill locked" id="schedBadge21">🔒 OPENS AFTER 16 KM (NOV 15)</div>
+            <div class="rc-status-pill locked" id="schedBadge21">🔒 OPENS AFTER 16 KM</div>
             <div class="rc-date-line">November 28 &bull; Saturday</div>
             <div class="rc-meta-line">Check-in <b>03:00 AM</b> &bull; Run Start <b>03:30 AM</b></div>
           </div>
@@ -3032,7 +3032,7 @@
         <div class="race-full-card is-locked" id="schedCard26" onclick="handleLegClick('26')">
           <div class="rc-dist-box">26<small>KM</small></div>
           <div class="rc-info-box">
-            <div class="rc-status-pill locked" id="schedBadge26">🔒 OPENS AFTER 21 KM (NOV 28)</div>
+            <div class="rc-status-pill locked" id="schedBadge26">🔒 OPENS AFTER 21 KM</div>
             <div class="rc-date-line">December 5 &bull; Saturday</div>
             <div class="rc-meta-line">Check-in <b>02:30 AM</b> &bull; Run Start <b>03:00 AM</b></div>
           </div>
@@ -3045,7 +3045,7 @@
         <div class="race-full-card is-locked" id="schedCard32" onclick="handleLegClick('32')">
           <div class="rc-dist-box">32<small>KM</small></div>
           <div class="rc-info-box">
-            <div class="rc-status-pill locked" id="schedBadge32">🔒 OPENS AFTER 26 KM (DEC 5)</div>
+            <div class="rc-status-pill locked" id="schedBadge32">🔒 OPENS AFTER 26 KM</div>
             <div class="rc-date-line">December 19 &bull; Saturday</div>
             <div class="rc-meta-line">Check-in <b>02:00 AM</b> &bull; Run Start <b>02:30 AM</b></div>
           </div>
@@ -3844,8 +3844,10 @@
             message: 'The ' + leg.title + ' run on ' + leg.date + ' has already concluded.'
           };
         }
-        for (var i = 0; i < idx; i++) {
-          var prev = LEGS_CONFIG[i];
+        // Progressive Rule: Each leg unlocks once its immediately preceding leg concludes
+        // 21KM opens after 16KM, 26KM opens after 21KM, 32KM opens after 26KM
+        if (idx > 0) {
+          var prev = LEGS_CONFIG[idx - 1];
           if (now <= prev.conclude) {
             return {
               isOpen: false,

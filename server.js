@@ -386,9 +386,10 @@ function getLegRegistrationStatus(legIndex, now = Date.now()) {
     };
   }
 
-  // Progressive Rule: Check if all earlier legs are completed!
-  for (let i = 0; i < legIndex; i++) {
-    const prevLeg = RACE_SCHEDULE_CONFIG[i];
+  // Progressive Rule: Each leg unlocks once its immediately preceding leg concludes
+  // 21KM opens after 16KM, 26KM opens after 21KM, 32KM opens after 26KM
+  if (legIndex > 0) {
+    const prevLeg = RACE_SCHEDULE_CONFIG[legIndex - 1];
     if (now <= prevLeg.concludeTimestamp) {
       return {
         status: 'LOCKED',
