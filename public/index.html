@@ -1351,6 +1351,62 @@
       color: var(--mut);
     }
 
+    /* Event Day ID Requirement Instruction */
+    .event-id-instruction-card {
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(13, 35, 95, 0.88));
+      border: 1.5px solid rgba(250, 204, 21, 0.55);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: 18px auto 24px;
+      max-width: 580px;
+      text-align: left;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(234, 179, 8, 0.15);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .id-instruction-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-style: italic;
+      font-size: 16px;
+      letter-spacing: 1px;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .id-instruction-header .id-icon {
+      font-size: 20px;
+      font-style: normal;
+    }
+
+    .id-instruction-body {
+      font-size: 13.5px;
+      color: #e2e8f0;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .id-instruction-body strong {
+      color: #ffffff;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      font-weight: 700;
+    }
+
+    .pass-id-note {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-align: center;
+      margin-top: 8px;
+      letter-spacing: 0.3px;
+    }
+
     .pass-action-btns {
       display: flex;
       justify-content: center;
@@ -2837,6 +2893,17 @@
           </div>
         </div>
 
+        <!-- Important Event Day ID Requirement Instruction -->
+        <div class="event-id-instruction-card">
+          <div class="id-instruction-header">
+            <span class="id-icon">🪪</span>
+            <span class="id-header-title">EVENT DAY CHECK-IN REQUIREMENT</span>
+          </div>
+          <p class="id-instruction-body">
+            Please <strong>bring 1 or more valid IDs</strong> (Government ID, Driver's License, Company ID, Student ID, or Passport) on the day of the event for verification purposes during check-in.
+          </p>
+        </div>
+
         <div class="pass-preview-box">
           <div class="official-run-pass" id="runPassCard">
             <div style="display:flex;justify-content:center;margin-bottom:6px;">
@@ -2877,6 +2944,9 @@
             </div>
             <div id="resVerifiedBadge" class="pass-pending-badge">
               ⏳ PENDING ADMIN VERIFICATION &bull; SUBMITTED
+            </div>
+            <div class="pass-id-note">
+              🪪 Please bring 1 or more valid IDs during the event for verification purposes.
             </div>
           </div>
         </div>
