@@ -217,17 +217,22 @@
       min-height: calc(100vh - 72px);
       display: flex;
       align-items: center;
+      background: 
+        linear-gradient(135deg, rgba(2, 10, 42, 0.74) 0%, rgba(4, 18, 70, 0.58) 45%, rgba(2, 9, 36, 0.82) 100%),
+        url('hero-runners-bg.jpg') center 30% / cover no-repeat;
     }
 
     /* TOP-LEFT LAYERED CYANG/TEAL SWOOSHES (MATCHING MOCKUP) */
     .decor-wave-left {
       position: absolute;
-      top: -20px;
-      left: -40px;
-      width: min(48vw, 540px);
+      top: -30px;
+      left: -60px;
+      width: min(54vw, 680px);
+      height: 115%;
       pointer-events: none;
       z-index: 0;
-      opacity: .95;
+      opacity: .88;
+      filter: drop-shadow(0 0 35px rgba(0, 229, 255, 0.4));
     }
 
     /* BOTTOM-RIGHT LAYERED NEON CYAN & LIME SWOOSHES (MATCHING MOCKUP) */
@@ -238,7 +243,7 @@
       width: min(52vw, 580px);
       pointer-events: none;
       z-index: 0;
-      opacity: .95;
+      opacity: .25;
     }
 
     /* 2-COLUMN HERO GRID */
@@ -267,30 +272,30 @@
       margin-bottom: 6px;
     }
 
-    /* Title: Community Run */
+    /* Title: Tacloban */
     .title-comm-run {
       font-family: "Barlow Condensed", sans-serif;
       font-style: italic;
       font-weight: 900;
-      font-size: clamp(52px, 5.8vw, 84px);
-      color: var(--gold);
+      font-size: clamp(58px, 6.6vw, 92px);
+      color: #ffbe1a;
       line-height: 0.92;
       letter-spacing: .01em;
-      margin-top: 4px;
-      text-shadow: 0 4px 22px rgba(255, 190, 26, 0.35);
+      margin-top: 6px;
+      text-shadow: 0 4px 22px rgba(0, 0, 0, 0.8), 0 2px 10px rgba(255, 190, 26, 0.4);
     }
 
-    /* Title: Tacloban Leg */
+    /* Title: Community Run */
     .title-tac-leg {
       font-family: "Barlow Condensed", sans-serif;
       font-style: italic;
       font-weight: 900;
-      font-size: clamp(58px, 6.6vw, 96px);
-      color: var(--mint);
+      font-size: clamp(64px, 7.4vw, 104px);
+      color: #38f8b8;
       line-height: 0.92;
       letter-spacing: .01em;
-      text-shadow: 0 0 35px rgba(56, 248, 184, 0.5);
-      margin-top: -2px;
+      text-shadow: 0 4px 26px rgba(0, 0, 0, 0.85), 0 0 35px rgba(56, 248, 184, 0.5);
+      margin-top: -4px;
     }
 
     /* Tagline */
@@ -2601,8 +2606,14 @@
         <img src="Cebu Marathon 2027 Rainbow Logo.png" alt="Cebu Marathon 2027" class="nav-brand-img">
       </a>
       <div class="nav-links">
+        <a class="nav-link-item" href="#schedule">Schedule</a>
+        <span class="nav-divider">|</span>
+        <a class="nav-link-item" href="#groups">Running Groups</a>
+        <button type="button" class="btn-nav-find" onclick="openFindPassModal()" title="Find My Pass">
+          <span>🔍</span> <span class="desktop-only">Find My Pass</span><span class="mobile-only">Pass</span>
+        </button>
         <a class="btn-nav-register" href="#register">
-          <span class="desktop-only">Register Now &gt;</span><span class="mobile-only">Register &gt;</span>
+          <span class="desktop-only">REGISTER NOW &gt;</span><span class="mobile-only">REGISTER &gt;</span>
         </a>
       </div>
     </div>
@@ -2674,6 +2685,9 @@
             <a class="btn-hero-reg" href="#register">
               <span>REGISTER FOR A LEG &gt;</span>
             </a>
+            <button type="button" class="btn-hero-pass" onclick="openFindPassModal()">
+              <span>FIND MY PASS &gt;</span>
+            </button>
           </div>
         </div>
 

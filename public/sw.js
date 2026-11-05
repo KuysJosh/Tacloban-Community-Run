@@ -1,10 +1,11 @@
 // Service Worker for Cebu Marathon 2027 - Tacloban Leg
 // Provides instant HTML shell loading while Render free-tier awakens from cold sleep
 
-const CACHE_NAME = 'cebu-marathon-shell-v1';
+const CACHE_NAME = 'cebu-marathon-shell-v2';
 const SHELL_ASSETS = [
   '/',
   '/index.html',
+  '/hero-runners-bg.jpg',
   '/Cebu Marathon 2027 Rainbow Logo.png',
   '/clubs/club_tbrc.png',
   '/clubs/club_tgr.png',
