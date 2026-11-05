@@ -12,7 +12,7 @@ const app = express();
 const PORT = parseInt(process.env.PORT, 10) || 3000;
 
 // Admin Authentication Configuration
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'TaclobanComRun@2031';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'cebumarathon2027';
 const ADMIN_SECRET = process.env.ADMIN_SECRET || 'cebu_marathon_tacloban_admin_secret_key_2027';
 
@@ -808,8 +808,10 @@ function startServer(portToTry) {
     console.log(`📸 Poster View:    http://localhost:${actualPort}/poster.png`);
     console.log(`=============================================================\n`);
 
-    // Seed sample data if empty
-    await seedInitialDataIfEmpty();
+    // Seed sample data only if explicitly enabled via SEED_DEMO_DATA=true
+    if (process.env.SEED_DEMO_DATA === 'true') {
+      await seedInitialDataIfEmpty();
+    }
   });
 
   server.on('error', (err) => {
