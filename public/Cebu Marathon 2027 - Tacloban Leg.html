@@ -793,7 +793,7 @@
       border: 1.5px solid var(--line-highlight);
       border-radius: 12px;
       padding: 28px 32px;
-      margin-bottom: 35px;
+      margin-bottom: 0;
       box-shadow: 0 16px 42px rgba(0, 0, 0, 0.65), 0 0 35px rgba(56, 189, 248, 0.2);
       position: relative;
     }
@@ -833,63 +833,6 @@
 
     .banner-club-item:hover img {
       filter: drop-shadow(0 10px 26px rgba(56, 248, 184, 0.65));
-    }
-
-    /* 7 Individual Club Cards Grid */
-    .clubs-highlight-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 16px;
-    }
-
-    .club-feature-card {
-      background: var(--deep-card);
-      border: 1px solid var(--line);
-      padding: 22px 14px;
-      text-align: center;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all .25s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      backdrop-filter: blur(8px);
-    }
-
-    .club-feature-card img {
-      width: 86px;
-      height: 86px;
-      object-fit: contain;
-      margin-bottom: 12px;
-      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
-      transition: transform .25s ease;
-    }
-
-    .club-feature-card h3 {
-      font-size: 17px;
-      color: #ffffff;
-      margin: 0;
-      line-height: 1.15;
-    }
-
-    .club-feature-card span {
-      font-size: 12px;
-      color: var(--mint);
-      font-weight: 600;
-      line-height: 1.3;
-    }
-
-    .club-feature-card:hover {
-      background: rgba(56, 248, 184, 0.16);
-      border-color: var(--mint);
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(56, 248, 184, 0.28);
-    }
-
-    .club-feature-card:hover img {
-      transform: scale(1.1);
     }
 
     /* ==============================================
@@ -1753,7 +1696,7 @@
 
       .clubs-banner-highlight-frame {
         padding: 22px 20px;
-        margin-bottom: 26px;
+        margin-bottom: 0;
       }
 
       .clubs-banner-logos-row {
@@ -2076,7 +2019,7 @@
 
       .clubs-banner-highlight-frame {
         padding: 16px 12px;
-        margin-bottom: 20px;
+        margin-bottom: 0;
         border-radius: 10px;
       }
 
@@ -2111,30 +2054,6 @@
       .banner-club-item img {
         height: 74px;
         max-width: 95px;
-      }
-
-      .clubs-highlight-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-
-      .club-feature-card {
-        padding: 12px 8px;
-        border-radius: 6px;
-      }
-
-      .club-feature-card img {
-        width: 52px;
-        height: 52px;
-        margin-bottom: 6px;
-      }
-
-      .club-feature-card h3 {
-        font-size: 14px;
-      }
-
-      .club-feature-card span {
-        font-size: 10.5px;
       }
 
       /* REGISTRATION SECTION */
@@ -2592,44 +2511,6 @@
           <div class="banner-club-item" onclick="preselectClub('Santa Fe Runners')" title="Santa Fe Runners">
             <img src="clubs/club_santafe.png" alt="Santa Fe Runners Logo">
           </div>
-        </div>
-      </div>
-
-      <!-- 7 Individual Club Cards Grid with Logos -->
-      <div class="clubs-highlight-grid">
-        <div class="club-feature-card" onclick="preselectClub('Tacloban Bypass Running Club')">
-          <img src="clubs/club_tbrc.png" alt="TBRC Logo">
-          <h3>Tacloban Bypass Running Club</h3>
-        </div>
-
-        <div class="club-feature-card" onclick="preselectClub('Tacloban Grandstand Runners')">
-          <img src="clubs/club_tgr.png" alt="TGR Logo">
-          <h3>Tacloban Grandstand Runners</h3>
-        </div>
-
-        <div class="club-feature-card" onclick="preselectClub('Tacloban Runners Club')">
-          <img src="clubs/club_trc.png" alt="TRC Logo">
-          <h3>Tacloban Runners Club</h3>
-        </div>
-
-        <div class="club-feature-card" onclick="preselectClub('Motion Runners')">
-          <img src="clubs/club_motion.png" alt="Motion Runners Logo">
-          <h3>Motion Runners</h3>
-        </div>
-
-        <div class="club-feature-card" onclick="preselectClub('One Stride Tacloban')">
-          <img src="clubs/club_ost.png" alt="OST Logo">
-          <h3>One Stride Tacloban</h3>
-        </div>
-
-        <div class="club-feature-card" onclick="preselectClub('Alangalang Runners Club')">
-          <img src="clubs/club_alangalang.png" alt="Alangalang Runners Logo">
-          <h3>Alangalang Runners</h3>
-        </div>
-
-        <div class="club-feature-card" onclick="preselectClub('Santa Fe Runners')">
-          <img src="clubs/club_santafe.png" alt="Santa Fe Runners Logo">
-          <h3>Santa Fe Runners</h3>
         </div>
       </div>
     </div>
