@@ -627,6 +627,7 @@ app.use((req, res) => {
 // Start Server
 const server = app.listen(PORT, async () => {
   const address = server.address();
+  if (!address) return;
   const actualPort = typeof address === 'string' ? address : address.port;
 
   console.log(`\n=============================================================`);
@@ -644,8 +645,10 @@ const server = app.listen(PORT, async () => {
 server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     console.error(`\n❌ Port ${PORT} is already in use by another process.`);
-    console.error(`👉 Stop the other process or set a different PORT in .env\n`);
+    console.error(`👉 Stop the process using port ${PORT} or set a different PORT in .env\n`);
+    process.exit(1);
   } else {
     console.error(`\n❌ Server error:`, err);
+    process.exit(1);
   }
 });
