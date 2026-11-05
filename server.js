@@ -8,7 +8,7 @@ const { connectDB } = require('./config/db');
 const storage = require('./services/storage');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = parseInt(process.env.PORT, 10) || 3000;
 
 // Ensure upload directory exists
 const UPLOADS_DIR = path.join(__dirname, 'public', 'uploads', 'proofs');
@@ -624,31 +624,40 @@ app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Start Server
-const server = app.listen(PORT, async () => {
-  const address = server.address();
-  if (!address) return;
-  const actualPort = typeof address === 'string' ? address : address.port;
+// Start Server with automatic port fallback if port is in use
+function startServer(portToTry) {
+  const server = app.listen(portToTry);
 
-  console.log(`\n=============================================================`);
-  console.log(`🏃 Cebu Marathon 2027 - Tacloban Community Leg Server Running`);
-  console.log(`🔌 Actual Port:    ${actualPort}`);
-  console.log(`📍 Web App:        http://localhost:${actualPort}`);
-  console.log(`📊 Admin Portal:   http://localhost:${actualPort}/admin`);
-  console.log(`📸 Poster View:    http://localhost:${actualPort}/poster.png`);
-  console.log(`=============================================================\n`);
+  server.on('listening', async () => {
+    const address = server.address();
+    const actualPort = typeof address === 'string' ? address : address.port;
 
-  // Seed sample data if empty
-  await seedInitialDataIfEmpty();
-});
+    if (actualPort !== PORT) {
+      console.log(`\n💡 Note: Port ${PORT} was occupied, so server automatically bound to available port ${actualPort}.`);
+    }
 
-server.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`\n❌ Port ${PORT} is already in use by another process.`);
-    console.error(`👉 Stop the process using port ${PORT} or set a different PORT in .env\n`);
-    process.exit(1);
-  } else {
-    console.error(`\n❌ Server error:`, err);
-    process.exit(1);
-  }
-});
+    console.log(`\n=============================================================`);
+    console.log(`🏃 Cebu Marathon 2027 - Tacloban Community Leg Server Running`);
+    console.log(`🔌 Actual Port:    ${actualPort}`);
+    console.log(`📍 Web App:        http://localhost:${actualPort}`);
+    console.log(`📊 Admin Portal:   http://localhost:${actualPort}/admin`);
+    console.log(`📸 Poster View:    http://localhost:${actualPort}/poster.png`);
+    console.log(`=============================================================\n`);
+
+    // Seed sample data if empty
+    await seedInitialDataIfEmpty();
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      const nextPort = Number(portToTry) + 1;
+      console.log(`⚠️  Port ${portToTry} is in use. Automatically trying port ${nextPort}...`);
+      startServer(nextPort);
+    } else {
+      console.error(`\n❌ Server error:`, err);
+      process.exit(1);
+    }
+  });
+}
+
+startServer(PORT);
