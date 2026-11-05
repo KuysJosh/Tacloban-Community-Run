@@ -1357,50 +1357,191 @@
     }
 
     /* Event Day ID Requirement Instruction */
+    /* Ultra-Emphasized Event Day Check-in & ID Requirement Card */
     .event-id-instruction-card {
-      background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(13, 35, 95, 0.88));
-      border: 1.5px solid rgba(250, 204, 21, 0.55);
-      border-radius: 12px;
-      padding: 16px 20px;
-      margin: 18px auto 24px;
-      max-width: 580px;
+      background: linear-gradient(135deg, rgba(255, 190, 26, 0.16) 0%, rgba(9, 28, 120, 0.95) 45%, rgba(3, 11, 44, 0.98) 100%);
+      border: 2px solid #ffbe1a;
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin: 20px auto 26px;
+      max-width: 620px;
       text-align: left;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(234, 179, 8, 0.15);
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55), 0 0 30px rgba(255, 190, 26, 0.25);
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .event-id-instruction-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ffbe1a, #38f8b8, #ffbe1a);
+    }
+
+    .id-instruction-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255, 190, 26, 0.28);
+      padding-bottom: 10px;
     }
 
     .id-instruction-header {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800;
+      font-weight: 900;
       font-style: italic;
-      font-size: 16px;
+      font-size: 19px;
       letter-spacing: 1px;
-      color: var(--gold);
+      color: #ffbe1a;
       text-transform: uppercase;
+      line-height: 1.1;
     }
 
     .id-instruction-header .id-icon {
-      font-size: 20px;
+      font-size: 24px;
       font-style: normal;
+      filter: drop-shadow(0 2px 8px rgba(255, 190, 26, 0.5));
+    }
+
+    .id-req-pill {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.8px;
+      color: #030b2c;
+      background: #ffbe1a;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px rgba(255, 190, 26, 0.5);
+    }
+
+    .id-primary-alert {
+      background: rgba(255, 190, 26, 0.12);
+      border: 1.5px solid rgba(255, 190, 26, 0.45);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+
+    .id-primary-alert-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-style: italic;
+      font-size: 17px;
+      color: #ffffff;
+      letter-spacing: 0.6px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .id-primary-alert-title span.highlight-id {
+      color: #ffbe1a;
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
 
     .id-instruction-body {
       font-size: 13.5px;
-      color: #e2e8f0;
+      color: #f1f5f9;
       line-height: 1.55;
       margin: 0;
     }
 
-    .id-instruction-body strong {
+    .id-badges-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .id-badges-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #94a3b8;
+    }
+
+    .id-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .id-chip {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.35);
       color: #ffffff;
-      text-decoration: underline;
-      text-underline-offset: 2px;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .id-chip strong {
+      color: var(--mint);
+    }
+
+    .id-checkin-rule {
+      background: rgba(4, 13, 58, 0.7);
+      border-left: 3px solid var(--mint);
+      padding: 8px 12px;
+      border-radius: 0 6px 6px 0;
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    .id-checkin-rule b {
+      color: var(--mint);
+    }
+
+    /* Emphasized Check-In Warning Strip on Pass Card */
+    .pass-id-note-box {
+      margin-top: 10px;
+      padding: 9px 12px;
+      background: linear-gradient(135deg, rgba(255, 190, 26, 0.22), rgba(6, 18, 70, 0.85));
+      border: 1.5px dashed #ffbe1a;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .pass-id-note-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-style: italic;
+      font-size: 13px;
+      letter-spacing: 0.8px;
+      color: #ffbe1a;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .pass-id-note-text {
+      font-size: 11.5px;
       font-weight: 700;
+      color: #ffffff;
+      margin-top: 3px;
+      line-height: 1.35;
     }
 
     .pass-id-note {
@@ -2896,13 +3037,39 @@
 
         <!-- Important Event Day ID Requirement Instruction -->
         <div class="event-id-instruction-card">
-          <div class="id-instruction-header">
-            <span class="id-icon">🪪</span>
-            <span class="id-header-title">EVENT DAY CHECK-IN REQUIREMENT</span>
+          <div class="id-instruction-topbar">
+            <div class="id-instruction-header">
+              <span class="id-icon">🪪</span>
+              <span class="id-header-title">EVENT DAY CHECK-IN &amp; ID REQUIREMENT</span>
+            </div>
+            <span class="id-req-pill">MANDATORY</span>
           </div>
-          <p class="id-instruction-body">
-            Please <strong>bring 1 or more valid IDs</strong> (Government ID, Driver's License, Company ID, Student ID, or Passport) on the day of the event for verification purposes during check-in.
-          </p>
+
+          <div class="id-primary-alert">
+            <div class="id-primary-alert-title">
+              ⚠️ MUST BRING <span class="highlight-id">1 OR MORE VALID IDs</span> FOR VERIFICATION
+            </div>
+            <p class="id-instruction-body">
+              To verify runner identity and release your official community run entry, all registered participants <strong>MUST bring at least 1 valid physical or government-issued photo ID</strong> during check-in on event day.
+            </p>
+          </div>
+
+          <div class="id-badges-row">
+            <div class="id-badges-title">Accepted Valid Identifications:</div>
+            <div class="id-chips">
+              <span class="id-chip">🪪 <strong>PhilSys National ID</strong></span>
+              <span class="id-chip">🚗 <strong>Driver's License</strong></span>
+              <span class="id-chip">🛂 <strong>Passport</strong></span>
+              <span class="id-chip">🏢 <strong>Company / Work ID</strong></span>
+              <span class="id-chip">🎓 <strong>Student ID</strong></span>
+              <span class="id-chip">📜 <strong>UMID / SSS / GSIS</strong></span>
+              <span class="id-chip">📮 <strong>PRC / Postal / Voter's ID</strong></span>
+            </div>
+          </div>
+
+          <div class="id-checkin-rule">
+            ⏱️ <b>Check-In Protocol:</b> Please arrive at the check-in desk <b>30 to 45 minutes before gun start</b>. Present your <b>Digital Run Pass QR</b> together with your <b>Valid ID</b> to event marshals. Unverified runners will not be permitted to start.
+          </div>
         </div>
 
         <div class="pass-preview-box">
@@ -2946,8 +3113,13 @@
             <div id="resVerifiedBadge" class="pass-pending-badge">
               ⏳ PENDING ADMIN VERIFICATION &bull; SUBMITTED
             </div>
-            <div class="pass-id-note">
-              🪪 Please bring 1 or more valid IDs during the event for verification purposes.
+            <div class="pass-id-note-box">
+              <div class="pass-id-note-title">
+                <span>⚠️ MANDATORY CHECK-IN REQUIREMENT</span>
+              </div>
+              <div class="pass-id-note-text">
+                Bring <strong>1 or more Valid IDs</strong> for marshal verification upon check-in.
+              </div>
             </div>
           </div>
         </div>
@@ -3161,6 +3333,22 @@
             <div class="sum-dist" id="sidebarDist">16 KM</div>
             <p id="sidebarDate" style="color:#cbd5e1;margin-top:6px;font-weight:600;">Sunday, November 15, 2026</p>
             <p id="sidebarGun" style="color:var(--gold);font-size:13px;margin-top:4px;">Check-in: 03:30 AM &bull; Run Start: 04:00 AM</p>
+          </div>
+
+          <div class="sidebar-panel" style="border:1.5px solid #ffbe1a;background:linear-gradient(135deg,rgba(255,190,26,0.15) 0%,rgba(6,18,70,0.9) 100%);box-shadow:0 0 18px rgba(255,190,26,0.2);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <span style="font-size:20px;">🪪</span>
+              <h3 style="color:#ffbe1a;font-size:16px;margin:0;letter-spacing:0.5px;">CHECK-IN &amp; ID REQUIREMENT</h3>
+            </div>
+            <p style="color:#ffffff;font-size:13px;line-height:1.45;margin-bottom:8px;">
+              ⚠️ <strong>MANDATORY:</strong> All runners <strong>MUST bring 1 or more valid IDs</strong> on event morning for marshal verification during check-in.
+            </p>
+            <div style="font-size:11.5px;color:#cbd5e1;line-height:1.4;">
+              Accepted: National ID, Driver's License, Passport, Company ID, Student ID, or UMID.
+            </div>
+            <div style="margin-top:8px;padding-top:8px;border-top:1px dashed rgba(255,190,26,0.3);font-size:11.5px;color:var(--mint);font-weight:700;">
+              ⏱️ Arrive 30-45 mins before gun start to complete check-in.
+            </div>
           </div>
 
           <div class="sidebar-panel">
