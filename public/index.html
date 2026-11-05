@@ -801,6 +801,12 @@
       margin-bottom: 0;
       box-shadow: 0 16px 42px rgba(0, 0, 0, 0.65), 0 0 35px rgba(56, 189, 248, 0.2);
       position: relative;
+      overflow: hidden;
+    }
+
+    .clubs-marquee-track {
+      display: flex;
+      width: 100%;
     }
 
     .clubs-banner-logos-row {
@@ -810,6 +816,10 @@
       gap: clamp(20px, 3.8vw, 48px);
       width: 100%;
       box-sizing: border-box;
+    }
+
+    .clubs-clone-row {
+      display: none;
     }
 
     .banner-club-item {
@@ -2320,42 +2330,61 @@
       }
 
       .clubs-banner-highlight-frame {
-        padding: 16px 12px;
+        padding: 16px 0;
         margin-bottom: 0;
         border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+        mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      }
+
+      .clubs-marquee-track {
+        display: flex;
+        width: max-content;
+        animation: smoothContinuousMarquee 22s linear infinite;
+        will-change: transform;
+      }
+
+      .clubs-banner-highlight-frame:hover .clubs-marquee-track,
+      .clubs-banner-highlight-frame:active .clubs-marquee-track {
+        animation-play-state: paused;
       }
 
       .clubs-banner-logos-row {
-        overflow-x: auto;
-        justify-content: flex-start;
-        gap: 20px;
-        padding-bottom: 8px;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        padding-right: 28px;
+        flex-shrink: 0;
+        width: auto;
       }
 
-      .clubs-banner-logos-row::-webkit-scrollbar {
-        height: 4px;
-      }
-
-      .clubs-banner-logos-row::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 4px;
-      }
-
-      .clubs-banner-logos-row::-webkit-scrollbar-thumb {
-        background: var(--line-highlight);
-        border-radius: 4px;
+      .clubs-clone-row {
+        display: flex;
       }
 
       .banner-club-item {
         flex: 0 0 auto;
-        scroll-snap-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .banner-club-item img {
-        height: 74px;
+        height: 72px;
         max-width: 95px;
+        object-fit: contain;
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+      }
+
+      @keyframes smoothContinuousMarquee {
+        0% {
+          transform: translate3d(0, 0, 0);
+        }
+        100% {
+          transform: translate3d(-50%, 0, 0);
+        }
       }
 
       /* REGISTRATION SECTION */
@@ -3069,27 +3098,53 @@
 
       <!-- Highlighting the Full Collection Banner (Maximized & Spaced) -->
       <div class="clubs-banner-highlight-frame">
-        <div class="clubs-banner-logos-row">
-          <div class="banner-club-item" onclick="preselectClub('Tacloban Bypass Running Club')" title="Tacloban Bypass Running Club">
-            <img src="clubs/club_tbrc.png" alt="TBRC Logo">
+        <div class="clubs-marquee-track">
+          <div class="clubs-banner-logos-row">
+            <div class="banner-club-item" onclick="preselectClub('Tacloban Bypass Running Club')" title="Tacloban Bypass Running Club">
+              <img src="clubs/club_tbrc.png" alt="TBRC Logo">
+            </div>
+            <div class="banner-club-item" onclick="preselectClub('Tacloban Grandstand Runners')" title="Tacloban Grandstand Runners">
+              <img src="clubs/club_tgr.png" alt="TGR Logo">
+            </div>
+            <div class="banner-club-item" onclick="preselectClub('Tacloban Runners Club')" title="Tacloban Runners Club">
+              <img src="clubs/club_trc.png" alt="TRC Logo">
+            </div>
+            <div class="banner-club-item" onclick="preselectClub('Motion Runners')" title="Motion Runners">
+              <img src="clubs/club_motion.png" alt="Motion Runners Logo">
+            </div>
+            <div class="banner-club-item" onclick="preselectClub('One Stride Tacloban')" title="One Stride Tacloban">
+              <img src="clubs/club_ost.png" alt="OST Logo">
+            </div>
+            <div class="banner-club-item" onclick="preselectClub('Alangalang Runners Club')" title="Alangalang Runners Club">
+              <img src="clubs/club_alangalang.png" alt="Alangalang Runners Logo">
+            </div>
+            <div class="banner-club-item" onclick="preselectClub('Santa Fe Runners')" title="Santa Fe Runners">
+              <img src="clubs/club_santafe.png" alt="Santa Fe Runners Logo">
+            </div>
           </div>
-          <div class="banner-club-item" onclick="preselectClub('Tacloban Grandstand Runners')" title="Tacloban Grandstand Runners">
-            <img src="clubs/club_tgr.png" alt="TGR Logo">
-          </div>
-          <div class="banner-club-item" onclick="preselectClub('Tacloban Runners Club')" title="Tacloban Runners Club">
-            <img src="clubs/club_trc.png" alt="TRC Logo">
-          </div>
-          <div class="banner-club-item" onclick="preselectClub('Motion Runners')" title="Motion Runners">
-            <img src="clubs/club_motion.png" alt="Motion Runners Logo">
-          </div>
-          <div class="banner-club-item" onclick="preselectClub('One Stride Tacloban')" title="One Stride Tacloban">
-            <img src="clubs/club_ost.png" alt="OST Logo">
-          </div>
-          <div class="banner-club-item" onclick="preselectClub('Alangalang Runners Club')" title="Alangalang Runners Club">
-            <img src="clubs/club_alangalang.png" alt="Alangalang Runners Logo">
-          </div>
-          <div class="banner-club-item" onclick="preselectClub('Santa Fe Runners')" title="Santa Fe Runners">
-            <img src="clubs/club_santafe.png" alt="Santa Fe Runners Logo">
+          <!-- Cloned Row for Seamless Infinite Mobile Auto-Slide -->
+          <div class="clubs-banner-logos-row clubs-clone-row" aria-hidden="true">
+            <div class="banner-club-item" onclick="preselectClub('Tacloban Bypass Running Club')" title="Tacloban Bypass Running Club">
+              <img src="clubs/club_tbrc.png" alt="TBRC Logo">
+            </div>
+            <div class="banner-club-item" onclick="preselectClub('Tacloban Grandstand Runners')" title="Tacloban Grandstand Runners">
+              <img src="clubs/club_tgr.png" alt="TGR Logo">
+            </div>
+            <div class="banner-club-item" onclick="preselectClub('Tacloban Runners Club')" title="Tacloban Runners Club">
+              <img src="clubs/club_trc.png" alt="TRC Logo">
+            </div>
+            <div class="banner-club-item" onclick="preselectClub('Motion Runners')" title="Motion Runners">
+              <img src="clubs/club_motion.png" alt="Motion Runners Logo">
+            </div>
+            <div class="banner-club-item" onclick="preselectClub('One Stride Tacloban')" title="One Stride Tacloban">
+              <img src="clubs/club_ost.png" alt="OST Logo">
+            </div>
+            <div class="banner-club-item" onclick="preselectClub('Alangalang Runners Club')" title="Alangalang Runners Club">
+              <img src="clubs/club_alangalang.png" alt="Alangalang Runners Logo">
+            </div>
+            <div class="banner-club-item" onclick="preselectClub('Santa Fe Runners')" title="Santa Fe Runners">
+              <img src="clubs/club_santafe.png" alt="Santa Fe Runners Logo">
+            </div>
           </div>
         </div>
       </div>
