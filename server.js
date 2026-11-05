@@ -625,14 +625,27 @@ app.use((req, res) => {
 });
 
 // Start Server
-app.listen(PORT, async () => {
+const server = app.listen(PORT, async () => {
+  const address = server.address();
+  const actualPort = typeof address === 'string' ? address : address.port;
+
   console.log(`\n=============================================================`);
   console.log(`🏃 Cebu Marathon 2027 - Tacloban Community Leg Server Running`);
-  console.log(`📍 Web App:        http://localhost:${PORT}`);
-  console.log(`📊 Admin Portal:   http://localhost:${PORT}/admin`);
-  console.log(`📸 Poster View:    http://localhost:${PORT}/poster.png`);
+  console.log(`🔌 Actual Port:    ${actualPort}`);
+  console.log(`📍 Web App:        http://localhost:${actualPort}`);
+  console.log(`📊 Admin Portal:   http://localhost:${actualPort}/admin`);
+  console.log(`📸 Poster View:    http://localhost:${actualPort}/poster.png`);
   console.log(`=============================================================\n`);
 
   // Seed sample data if empty
   await seedInitialDataIfEmpty();
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n❌ Port ${PORT} is already in use by another process.`);
+    console.error(`👉 Stop the other process or set a different PORT in .env\n`);
+  } else {
+    console.error(`\n❌ Server error:`, err);
+  }
 });
