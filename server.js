@@ -33,6 +33,16 @@ app.get('/poster.png', (req, res) => {
   res.sendFile(path.join(__dirname, 'poster.png'));
 });
 
+// Lightweight Health-Check endpoint for wake-up detection & uptime monitoring
+app.get('/api/health', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.json({
+    status: 'ok',
+    uptime: Math.round(process.uptime()),
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Event Configuration Data based on the official poster
 const EVENT_INFO = {
   title: "CEBULANDMASTERS CEBU MARATHON 2027",

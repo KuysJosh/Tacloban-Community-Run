@@ -2244,10 +2244,297 @@
         padding: 12px;
       }
     }
+
+    /* ==============================================
+       SERVER WAKE-UP / COLD START WAITING OVERLAY
+    ============================================== */
+    .wake-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, rgba(10, 25, 75, 0.96) 0%, rgba(3, 8, 30, 0.98) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+      visibility: hidden;
+    }
+
+    .wake-overlay.is-active {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .wake-card {
+      background: linear-gradient(135deg, rgba(13, 38, 120, 0.9), rgba(6, 17, 60, 0.98));
+      border: 1.5px solid var(--line-highlight);
+      border-radius: 20px;
+      padding: 38px 32px 30px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(56, 189, 248, 0.25);
+      position: relative;
+      overflow: hidden;
+      transform: scale(0.96);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .wake-overlay.is-active .wake-card {
+      transform: scale(1);
+    }
+
+    .wake-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(56, 248, 184, 0.12);
+      border: 1px solid rgba(56, 248, 184, 0.35);
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: var(--mint);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .wake-pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--mint);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--mint);
+      animation: wakeDotPulse 1.4s infinite ease-in-out;
+    }
+
+    @keyframes wakeDotPulse {
+      0%, 100% { transform: scale(0.85); opacity: 0.6; }
+      50% { transform: scale(1.35); opacity: 1; }
+    }
+
+    .wake-track-scene {
+      position: relative;
+      height: 90px;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .wake-runner-svg-wrap {
+      width: 72px;
+      height: 72px;
+      position: relative;
+      animation: runnerBounce 0.65s infinite alternate ease-in-out;
+      filter: drop-shadow(0 0 16px rgba(56, 248, 184, 0.65));
+    }
+
+    @keyframes runnerBounce {
+      0% { transform: translateY(0) rotate(-2deg); }
+      100% { transform: translateY(-8px) rotate(4deg); }
+    }
+
+    .wake-speed-lines {
+      position: absolute;
+      width: 140px;
+      height: 2px;
+      top: 55%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .wake-speed-lines span {
+      position: absolute;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.85), transparent);
+      border-radius: 2px;
+      animation: speedLineRush 0.9s infinite linear;
+    }
+    .wake-speed-lines span:nth-child(1) { top: -14px; width: 45px; animation-delay: 0s; }
+    .wake-speed-lines span:nth-child(2) { top: 0px; width: 65px; animation-delay: 0.3s; }
+    .wake-speed-lines span:nth-child(3) { top: 14px; width: 35px; animation-delay: 0.6s; }
+
+    @keyframes speedLineRush {
+      0% { right: -60px; opacity: 0; }
+      50% { opacity: 1; }
+      100% { right: 140px; opacity: 0; }
+    }
+
+    .wake-track-glow {
+      position: absolute;
+      bottom: 12px;
+      width: 120px;
+      height: 14px;
+      background: radial-gradient(ellipse, rgba(56, 189, 248, 0.45) 0%, transparent 70%);
+      filter: blur(4px);
+    }
+
+    .wake-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .wake-subtitle {
+      font-size: 13.5px;
+      color: #94a3b8;
+      line-height: 1.55;
+      margin-bottom: 22px;
+      padding: 0 10px;
+    }
+
+    .wake-progress-bar-wrap {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .wake-progress-bar {
+      height: 100%;
+      width: 15%;
+      background: linear-gradient(90deg, #00f0ff, #38f8b8, #ffb800);
+      background-size: 200% 100%;
+      border-radius: 999px;
+      box-shadow: 0 0 14px rgba(56, 248, 184, 0.7);
+      animation: gradientShift 2s linear infinite;
+      transition: width 0.4s ease;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    .wake-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding: 0 4px;
+    }
+
+    .wake-meta-item {
+      text-align: left;
+    }
+
+    .wake-meta-right {
+      text-align: right;
+    }
+
+    .wake-meta-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #64748b;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+    }
+
+    .wake-meta-value {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .wake-timer {
+      font-family: monospace;
+      color: var(--gold);
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    .wake-tip-box {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.45;
+    }
+
+    .wake-tip-box strong {
+      color: #cbd5e1;
+    }
   </style>
 </head>
 
 <body>
+
+  <!-- ==============================================
+     SERVER WAKE-UP / COLD START WAITING OVERLAY
+============================================== -->
+  <div id="serverWakeOverlay" class="wake-overlay" aria-hidden="true">
+    <div class="wake-card">
+      <div class="wake-header-badge">
+        <span class="wake-pulse-dot"></span>
+        <span id="wakeBadgeText">CLOUD SERVER WAKING UP</span>
+      </div>
+
+      <!-- Animated Neon Runner Track -->
+      <div class="wake-track-scene">
+        <div class="wake-track-glow"></div>
+        <div class="wake-speed-lines">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="wake-runner-svg-wrap">
+          <svg class="wake-runner-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="44" cy="12" r="6" fill="#38f8b8" />
+            <path d="M38 22 L28 32 L34 38 L26 56" stroke="#38f8b8" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M28 32 L20 28 L14 36" stroke="#38f8b8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M34 38 L46 36 L52 46" stroke="#00f0ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M38 22 L48 26 L56 22" stroke="#ffb800" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+      </div>
+
+      <h3 class="wake-title" id="wakeTitle">Waking Up Community Server</h3>
+      <p class="wake-subtitle" id="wakeSubtitle">
+        Our free-tier cloud server spins down after inactivity. Hang tight while it boots up and connects to MongoDB Atlas!
+      </p>
+
+      <!-- Progress Track -->
+      <div class="wake-progress-bar-wrap">
+        <div class="wake-progress-bar" id="wakeProgressBar"></div>
+      </div>
+
+      <!-- Live Stats & Timer -->
+      <div class="wake-meta-row">
+        <div class="wake-meta-item">
+          <span class="wake-meta-label">STATUS</span>
+          <span class="wake-meta-value" id="wakeStatusMsg">Spinning up container...</span>
+        </div>
+        <div class="wake-meta-item wake-meta-right">
+          <span class="wake-meta-label">ELAPSED TIME</span>
+          <span class="wake-meta-value wake-timer" id="wakeTimerVal">00:00</span>
+        </div>
+      </div>
+
+      <div class="wake-tip-box">
+        💡 <strong>First visit?</strong> Render cold starts take ~20–45 seconds. Once active, the entire portal is lightning fast!
+      </div>
+    </div>
+  </div>
 
   <!-- ==============================================
      NAVBAR (MATCHING MOCKUP)
@@ -2258,12 +2545,6 @@
         <img src="Cebu Marathon 2027 Rainbow Logo.png" alt="Cebu Marathon 2027" class="nav-brand-img">
       </a>
       <div class="nav-links">
-        <a class="nav-link-item" href="#schedule">Schedule</a>
-        <span class="nav-divider">|</span>
-        <a class="nav-link-item" href="#groups">Running Groups</a>
-        <button type="button" class="btn-nav-find" onclick="openFindPassModal()" title="Find My Pass">
-          <span>🔍</span> <span class="desktop-only">Find My Pass</span><span class="mobile-only">Pass</span>
-        </button>
         <a class="btn-nav-register" href="#register">
           <span class="desktop-only">Register Now &gt;</span><span class="mobile-only">Register &gt;</span>
         </a>
@@ -3477,12 +3758,15 @@
           cebuProofImage: cebuProofBase64
         };
 
+        var pendingTimer = window.notifyServerPending ? window.notifyServerPending('Submitting registration to server...') : null;
         try {
           var res = await fetch('/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           });
+          if (pendingTimer) clearTimeout(pendingTimer);
+          if (window.notifyServerReady) window.notifyServerReady();
           var data = await res.json();
           if (!res.ok || !data.success) {
             throw new Error(data.message || 'Registration failed');
@@ -3568,8 +3852,11 @@
         resArea.style.display = 'block';
         resArea.innerHTML = '<span style="color:var(--mut);">Searching runner passes...</span>';
 
+        var pendingTimer = window.notifyServerPending ? window.notifyServerPending('Searching database...') : null;
         try {
           var res = await fetch('/api/registrations?search=' + encodeURIComponent(q));
+          if (pendingTimer) clearTimeout(pendingTimer);
+          if (window.notifyServerReady) window.notifyServerReady();
           var data = await res.json();
           if (!data.success || data.registrations.length === 0) {
             resArea.innerHTML = '<span style="color:#ff7a8e;">No runner pass found for "<strong>' + q + '</strong>".</span>';
@@ -3640,6 +3927,128 @@
           e.target.style.display = 'none';
         }
       });
+
+      // ── SERVER WAKE-UP DETECTION & WAITING OVERLAY ──
+      (function initServerWakeWatcher() {
+        var overlay = document.getElementById('serverWakeOverlay');
+        var timerEl = document.getElementById('wakeTimerVal');
+        var statusEl = document.getElementById('wakeStatusMsg');
+        var barEl = document.getElementById('wakeProgressBar');
+        var titleEl = document.getElementById('wakeTitle');
+        var badgeText = document.getElementById('wakeBadgeText');
+        var badgeEl = document.querySelector('.wake-header-badge');
+
+        var startTime = Date.now();
+        var timerInterval = null;
+        var isOverlayVisible = false;
+        var isServerAwake = false;
+
+        var statusMessages = [
+          "Waking up free-tier cloud container...",
+          "Spinning up Node.js server environment...",
+          "Establishing connection to MongoDB Atlas...",
+          "Loading Tacloban Community Run records...",
+          "Finalizing server readiness..."
+        ];
+        var msgIndex = 0;
+
+        function updateTimer() {
+          var elapsed = Math.floor((Date.now() - startTime) / 1000);
+          var m = Math.floor(elapsed / 60);
+          var s = elapsed % 60;
+          if (timerEl) {
+            timerEl.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+          }
+
+          var progress = Math.min(92, 15 + Math.floor(elapsed * 2.2));
+          if (barEl) barEl.style.width = progress + '%';
+
+          if (elapsed > 0 && elapsed % 5 === 0 && msgIndex < statusMessages.length - 1) {
+            msgIndex++;
+            if (statusEl) statusEl.textContent = statusMessages[msgIndex];
+          }
+        }
+
+        function showOverlay(customTitle, customStatus) {
+          if (isServerAwake || isOverlayVisible || !overlay) return;
+          isOverlayVisible = true;
+          if (customTitle && titleEl) titleEl.textContent = customTitle;
+          if (customStatus && statusEl) statusEl.textContent = customStatus;
+          overlay.classList.add('is-active');
+          if (!timerInterval) {
+            timerInterval = setInterval(updateTimer, 1000);
+          }
+        }
+
+        function markServerAwake() {
+          if (isServerAwake) return;
+          isServerAwake = true;
+          if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
+
+          if (isOverlayVisible && overlay) {
+            if (barEl) barEl.style.width = '100%';
+            if (titleEl) titleEl.textContent = 'Server Is Online! 🚀';
+            if (badgeText) badgeText.textContent = 'SYSTEM OPERATIONAL';
+            if (badgeEl) {
+              badgeEl.style.background = 'rgba(56, 248, 184, 0.25)';
+              badgeEl.style.borderColor = 'var(--mint)';
+            }
+            if (statusEl) statusEl.innerHTML = '<span style="color:#38f8b8;font-weight:700;">✓ Connected & Running!</span>';
+
+            setTimeout(function () {
+              overlay.classList.remove('is-active');
+              isOverlayVisible = false;
+            }, 700);
+          }
+        }
+
+        var initialCheckTimeout = setTimeout(function () {
+          if (!isServerAwake) {
+            showOverlay('Waking Up Community Server', 'Connecting to Render free-tier instance...');
+          }
+        }, 900);
+
+        function checkHealth() {
+          fetch('/api/health', { cache: 'no-store' })
+            .then(function (res) {
+              if (res.ok) return res.json();
+              throw new Error('Not ready');
+            })
+            .then(function () {
+              clearTimeout(initialCheckTimeout);
+              markServerAwake();
+            })
+            .catch(function () {
+              setTimeout(checkHealth, 2500);
+            });
+        }
+
+        checkHealth();
+
+        window.notifyServerPending = function (customStatus) {
+          return setTimeout(function () {
+            if (!isServerAwake) {
+              showOverlay('Server Processing Your Request', customStatus || 'Waking up server to complete your request...');
+            }
+          }, 1800);
+        };
+
+        window.notifyServerReady = function () {
+          markServerAwake();
+        };
+
+        // Service Worker registration
+        if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
+          window.addEventListener('load', function () {
+            navigator.serviceWorker.register('/sw.js').catch(function (err) {
+              console.log('SW registration note:', err);
+            });
+          });
+        }
+      })();
     })();
   </script>
 </body>
