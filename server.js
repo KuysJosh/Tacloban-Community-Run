@@ -3,12 +3,58 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const QRCode = require('qrcode');
 const { connectDB } = require('./config/db');
 const storage = require('./services/storage');
 
 const app = express();
 const PORT = parseInt(process.env.PORT, 10) || 3000;
+
+// Admin Authentication Configuration
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'cebumarathon2027';
+const ADMIN_SECRET = process.env.ADMIN_SECRET || 'cebu_marathon_tacloban_admin_secret_key_2027';
+
+function generateAdminToken(username) {
+  const expiresAt = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+  const payload = `${username}:${expiresAt}`;
+  const sig = crypto.createHmac('sha256', ADMIN_SECRET).update(payload).digest('hex');
+  return Buffer.from(`${payload}:${sig}`).toString('base64');
+}
+
+function verifyAdminToken(token) {
+  if (!token) return null;
+  try {
+    const raw = Buffer.from(token, 'base64').toString('utf8');
+    const [username, expiresAtStr, sig] = raw.split(':');
+    if (!username || !expiresAtStr || !sig) return null;
+    if (Date.now() > Number(expiresAtStr)) return null;
+    const expectedSig = crypto.createHmac('sha256', ADMIN_SECRET).update(`${username}:${expiresAtStr}`).digest('hex');
+    if (sig === expectedSig) {
+      return { username, expiresAt: Number(expiresAtStr) };
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+function requireAdminAuth(req, res, next) {
+  const authHeader = req.headers['authorization'] || '';
+  const token = authHeader.startsWith('Bearer ')
+    ? authHeader.slice(7)
+    : req.headers['x-admin-token'] || req.query.admin_token;
+  const user = verifyAdminToken(token);
+  if (!user) {
+    return res.status(401).json({
+      success: false,
+      message: 'Unauthorized. Marshal Admin authentication required.'
+    });
+  }
+  req.adminUser = user;
+  next();
+}
 
 // Ensure upload directory exists
 const UPLOADS_DIR = path.join(__dirname, 'public', 'uploads', 'proofs');
@@ -23,6 +69,42 @@ connectDB();
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Admin Login Endpoint
+app.post('/api/admin/login', (req, res) => {
+  const { username, password } = req.body || {};
+  if (!username || !password) {
+    return res.status(400).json({ success: false, message: 'Username and password are required.' });
+  }
+
+  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    const token = generateAdminToken(username);
+    return res.json({
+      success: true,
+      message: 'Admin authenticated successfully.',
+      token,
+      user: { username }
+    });
+  }
+
+  return res.status(401).json({
+    success: false,
+    message: 'Invalid admin username or password.'
+  });
+});
+
+// Admin Verify Token Endpoint
+app.get('/api/admin/verify', (req, res) => {
+  const authHeader = req.headers['authorization'] || '';
+  const token = authHeader.startsWith('Bearer ')
+    ? authHeader.slice(7)
+    : req.headers['x-admin-token'] || req.query.admin_token;
+  const user = verifyAdminToken(token);
+  if (!user) {
+    return res.status(401).json({ success: false, message: 'Invalid or expired session.' });
+  }
+  res.json({ success: true, user });
+});
 
 // Static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -123,101 +205,119 @@ const EVENT_INFO = {
 
 // Seed initial runner roster if empty so demo works out of the box
 async function seedInitialDataIfEmpty() {
-  const current = await storage.getRegistrations();
-  if (current.length === 0) {
-    console.log('🌱 Seeding initial demo registrations for Tacloban Leg...');
-    const samples = [
-      {
-        fullName: "Kenneth Ian Veloso",
-        email: "kenneth.veloso@example.com",
-        mobile: "09171234567",
-        gender: "Male",
-        birthDate: "1995-04-12",
-        age: 31,
-        bloodType: "O+",
-        category: "32KM",
-        categoryTitle: "32 KM - Peak LSD Grand Finale",
-        categoryDate: "December 19, 2026 (Saturday)",
-        runningClub: "Tacloban Bypass Running Club (TBRC)",
-        customClub: "",
-        emergencyName: "Maria Veloso",
-        emergencyPhone: "09187654321",
-        emergencyRelation: "Spouse",
-        medicalNotes: "No known allergies"
-      },
-      {
-        fullName: "Jessica Mae Romualdez",
-        email: "jessica.r@example.com",
-        mobile: "09289876543",
-        gender: "Female",
-        birthDate: "1998-08-20",
-        age: 28,
-        bloodType: "A+",
-        category: "21KM",
-        categoryTitle: "21 KM Half Marathon",
-        categoryDate: "November 28, 2026 (Saturday)",
-        runningClub: "Tacloban Grandstand Runners (TGR)",
-        customClub: "",
-        emergencyName: "Roberto Romualdez",
-        emergencyPhone: "09205551234",
-        emergencyRelation: "Parent",
-        medicalNotes: "Mild asthma, carries inhaler"
-      },
-      {
-        fullName: "Aldrin De Paz",
-        email: "aldrin.depaz@example.com",
-        mobile: "09391112233",
-        gender: "Male",
-        birthDate: "1992-11-03",
-        age: 34,
-        bloodType: "B+",
-        category: "ALL_LEGS",
-        categoryTitle: "All 4 Legs Series Pass (95 KM Total)",
-        categoryDate: "Nov 15 - Dec 19, 2026",
-        runningClub: "One Stride Tacloban (OST)",
-        customClub: "",
-        emergencyName: "Elena De Paz",
-        emergencyPhone: "09398889900",
-        emergencyRelation: "Sibling",
-        medicalNotes: "None"
-      },
-      {
-        fullName: "Charito Montilla",
-        email: "charito.m@example.com",
-        mobile: "09456781234",
-        gender: "Female",
-        birthDate: "2000-02-14",
-        age: 26,
-        bloodType: "O+",
-        category: "16KM",
-        categoryTitle: "16 KM Community Kickoff",
-        categoryDate: "November 15, 2026 (Sunday)",
-        runningClub: "Santa Fe Runners",
-        customClub: "",
-        emergencyName: "Danilo Montilla",
-        emergencyPhone: "09459990011",
-        emergencyRelation: "Parent",
-        medicalNotes: "None"
-      }
-    ];
+  try {
+    const current = await storage.getRegistrations();
+    if (current.length === 0) {
+      console.log('🌱 Seeding initial demo registrations for Tacloban Leg...');
+      const samples = [
+        {
+          fullName: "Kenneth Ian Veloso",
+          email: "kenneth.veloso@example.com",
+          mobile: "09171234567",
+          gender: "Male",
+          birthDate: "1995-04-12",
+          age: 31,
+          bloodType: "O+",
+          category: "32KM",
+          categoryTitle: "32 KM - Peak LSD Grand Finale",
+          categoryDate: "December 19, 2026 (Saturday)",
+          runningClub: "Tacloban Bypass Running Club (TBRC)",
+          customClub: "",
+          emergencyName: "Maria Veloso",
+          emergencyPhone: "09187654321",
+          emergencyRelation: "Spouse",
+          medicalNotes: "No known allergies",
+          cebuProofVerified: true,
+          verificationStatus: 'VERIFIED',
+          claimed: true,
+          claimedAt: new Date().toISOString()
+        },
+        {
+          fullName: "Jessica Mae Romualdez",
+          email: "jessica.r@example.com",
+          mobile: "09289876543",
+          gender: "Female",
+          birthDate: "1998-08-20",
+          age: 28,
+          bloodType: "A+",
+          category: "21KM",
+          categoryTitle: "21 KM Half Marathon",
+          categoryDate: "November 28, 2026 (Saturday)",
+          runningClub: "Tacloban Grandstand Runners (TGR)",
+          customClub: "",
+          emergencyName: "Roberto Romualdez",
+          emergencyPhone: "09205551234",
+          emergencyRelation: "Parent",
+          medicalNotes: "Mild asthma, carries inhaler",
+          cebuProofVerified: true,
+          verificationStatus: 'VERIFIED',
+          claimed: false
+        },
+        {
+          fullName: "Aldrin De Paz",
+          email: "aldrin.depaz@example.com",
+          mobile: "09391112233",
+          gender: "Male",
+          birthDate: "1992-11-03",
+          age: 34,
+          bloodType: "B+",
+          category: "ALL_LEGS",
+          categoryTitle: "All 4 Legs Series Pass (95 KM Total)",
+          categoryDate: "Nov 15 - Dec 19, 2026",
+          runningClub: "One Stride Tacloban (OST)",
+          customClub: "",
+          emergencyName: "Elena De Paz",
+          emergencyPhone: "09398889900",
+          emergencyRelation: "Sibling",
+          medicalNotes: "None",
+          cebuProofVerified: false,
+          verificationStatus: 'PENDING',
+          claimed: false
+        },
+        {
+          fullName: "Charito Montilla",
+          email: "charito.m@example.com",
+          mobile: "09456781234",
+          gender: "Female",
+          birthDate: "2000-02-14",
+          age: 26,
+          bloodType: "O+",
+          category: "16KM",
+          categoryTitle: "16 KM Community Kickoff",
+          categoryDate: "November 15, 2026 (Sunday)",
+          runningClub: "Santa Fe Runners",
+          customClub: "",
+          emergencyName: "Danilo Montilla",
+          emergencyPhone: "09459990011",
+          emergencyRelation: "Parent",
+          medicalNotes: "None",
+          cebuProofVerified: false,
+          verificationStatus: 'DISAPPROVED',
+          disapprovalReason: 'Proof photo is blurry; transaction number is unreadable',
+          claimed: false
+        }
+      ];
 
-    for (const item of samples) {
-      item.bibNumber = await storage.generateBibNumber(item.category);
-      const qrPayload = JSON.stringify({
-        bib: item.bibNumber,
-        name: item.fullName,
-        category: item.category,
-        club: item.runningClub,
-        event: "Cebu Marathon 2027 Tacloban Leg"
-      });
-      item.qrCodeDataUrl = await QRCode.toDataURL(qrPayload, {
-        width: 250,
-        margin: 2,
-        color: { dark: '#0b1a30', light: '#ffffff' }
-      });
-      await storage.createRegistration(item);
+      for (const item of samples) {
+        item.bibNumber = await storage.generateBibNumber(item.category);
+        const qrPayload = JSON.stringify({
+          bib: item.bibNumber,
+          name: item.fullName,
+          category: item.category,
+          club: item.runningClub,
+          event: "Cebu Marathon 2027 Tacloban Leg"
+        });
+        item.qrCodeDataUrl = await QRCode.toDataURL(qrPayload, {
+          width: 250,
+          margin: 2,
+          color: { dark: '#0b1a30', light: '#ffffff' }
+        });
+        await storage.createRegistration(item);
+      }
+      console.log('✅ Initial demo data seeded successfully.');
     }
-    console.log('✅ Initial demo data seeded successfully.');
+  } catch (err) {
+    console.warn('Note during seedInitialDataIfEmpty:', err.message);
   }
 }
 
@@ -485,9 +585,48 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// Get Registrations List with filters
+// Get Registrations List with filters (Admin authenticated or sanitized public search)
 app.get('/api/registrations', async (req, res) => {
   try {
+    const authHeader = req.headers['authorization'] || '';
+    const token = authHeader.startsWith('Bearer ')
+      ? authHeader.slice(7)
+      : req.headers['x-admin-token'] || req.query.admin_token;
+    const adminUser = verifyAdminToken(token);
+
+    // If request is from the public "Find My Pass" modal lookup:
+    if (!adminUser && req.query.search) {
+      const list = await storage.getRegistrations({ search: req.query.search });
+      // Only return public-safe fields (omit sensitive phone, emergency contact details)
+      const publicList = list.slice(0, 20).map(r => ({
+        _id: r._id,
+        bibNumber: r.bibNumber,
+        fullName: r.fullName,
+        category: r.category,
+        categoryTitle: r.categoryTitle,
+        categoryDate: r.categoryDate,
+        runningClub: r.runningClub,
+        desiredPace: r.desiredPace,
+        cebuProofVerified: Boolean(r.cebuProofVerified),
+        verificationStatus: r.verificationStatus || (r.cebuProofVerified ? 'VERIFIED' : 'PENDING'),
+        disapprovalReason: r.disapprovalReason || '',
+        claimed: Boolean(r.claimed)
+      }));
+      return res.json({
+        success: true,
+        count: publicList.length,
+        registrations: publicList
+      });
+    }
+
+    // Otherwise, admin authentication is required to list all registered runners
+    if (!adminUser) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized. Marshal Admin authentication required to view runner database.'
+      });
+    }
+
     const list = await storage.getRegistrations(req.query);
     res.json({
       success: true,
@@ -512,8 +651,8 @@ app.get('/api/registrations/:idOrBib', async (req, res) => {
   }
 });
 
-// Toggle Bib Claim / Kit Pick-up Status
-app.patch('/api/registrations/:idOrBib/claim', async (req, res) => {
+// Toggle Bib Claim / Check-In Status (Protected - Only allowed for verified runners)
+app.patch('/api/registrations/:idOrBib/claim', requireAdminAuth, async (req, res) => {
   try {
     const { claimed } = req.body;
     const record = await storage.toggleClaimStatus(req.params.idOrBib, claimed !== undefined ? claimed : null);
@@ -522,27 +661,41 @@ app.patch('/api/registrations/:idOrBib/claim', async (req, res) => {
     }
     res.json({
       success: true,
-      message: record.claimed ? 'Race Bib & Kit marked as CLAIMED.' : 'Race Bib status updated to UNCLAIMED.',
+      message: record.claimed ? 'Race Bib & Kit marked as CHECKED-IN.' : 'Race Bib status updated to NOT CHECKED-IN.',
       registration: record
     });
   } catch (error) {
+    if (error.code === 'UNVERIFIED_RUNNER') {
+      return res.status(400).json({
+        success: false,
+        message: error.message || 'Runner must be verified before checking in.'
+      });
+    }
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
-// Toggle Cebu Marathon Proof Verification
-app.patch('/api/registrations/:idOrBib/verify-proof', async (req, res) => {
+// Verify or Disapprove Cebu Marathon Proof (Protected)
+app.patch('/api/registrations/:idOrBib/verify-proof', requireAdminAuth, async (req, res) => {
   try {
-    const verified = req.body.verified !== undefined ? Boolean(req.body.verified) : true;
-    const updated = await storage.updateRegistration(req.params.idOrBib, {
-      cebuProofVerified: verified
+    const { status, verified, reason } = req.body || {};
+    const updated = await storage.verifyRegistration(req.params.idOrBib, {
+      status,
+      verified,
+      reason,
+      adminUser: req.adminUser ? req.adminUser.username : 'Admin'
     });
+
     if (!updated) {
       return res.status(404).json({ success: false, message: 'Runner not found.' });
     }
+
+    const isApproved = Boolean(updated.cebuProofVerified);
     res.json({
       success: true,
-      message: `Cebu Marathon proof ${verified ? 'verified' : 'marked unverified'}.`,
+      message: isApproved 
+        ? 'Cebu Marathon proof approved & runner verified successfully.' 
+        : (updated.verificationStatus === 'DISAPPROVED' ? 'Proof marked as disapproved.' : 'Proof marked as pending review.'),
       registration: updated
     });
   } catch (error) {
@@ -550,8 +703,8 @@ app.patch('/api/registrations/:idOrBib/verify-proof', async (req, res) => {
   }
 });
 
-// Delete Registration
-app.delete('/api/registrations/:idOrBib', async (req, res) => {
+// Delete Registration (Protected)
+app.delete('/api/registrations/:idOrBib', requireAdminAuth, async (req, res) => {
   try {
     await storage.deleteRegistration(req.params.idOrBib);
     res.json({ success: true, message: 'Registration deleted successfully.' });
@@ -560,7 +713,7 @@ app.delete('/api/registrations/:idOrBib', async (req, res) => {
   }
 });
 
-// Get Live Statistics & Leaderboard
+// Get Live Statistics & Leaderboard (Public / Admin)
 app.get('/api/stats', async (req, res) => {
   try {
     const stats = await storage.getStats();
@@ -570,8 +723,8 @@ app.get('/api/stats', async (req, res) => {
   }
 });
 
-// Export Masterlist as CSV
-app.get('/api/export-csv', async (req, res) => {
+// Export Masterlist as CSV (Protected)
+app.get('/api/export-csv', requireAdminAuth, async (req, res) => {
   try {
     const records = await storage.getRegistrations();
     const headers = [

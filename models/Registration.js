@@ -95,7 +95,26 @@ const registrationSchema = new mongoose.Schema({
   },
   cebuProofVerified: {
     type: Boolean,
-    default: false
+    default: false,
+    index: true
+  },
+  verificationStatus: {
+    type: String,
+    enum: ['PENDING', 'VERIFIED', 'DISAPPROVED'],
+    default: 'PENDING',
+    index: true
+  },
+  disapprovalReason: {
+    type: String,
+    default: ''
+  },
+  verifiedAt: {
+    type: Date,
+    default: null
+  },
+  verifiedBy: {
+    type: String,
+    default: ''
   },
   qrCodeDataUrl: {
     type: String,

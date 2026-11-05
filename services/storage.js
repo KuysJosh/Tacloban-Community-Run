@@ -90,6 +90,9 @@ async function createRegistration(data) {
   data.claimed = false;
   data.claimedAt = null;
   data.createdAt = new Date().toISOString();
+  data.cebuProofVerified = Boolean(data.cebuProofVerified);
+  data.verificationStatus = data.cebuProofVerified ? 'VERIFIED' : (data.verificationStatus || 'PENDING');
+  data.disapprovalReason = data.disapprovalReason || '';
 
   let savedRecord = null;
 
@@ -126,7 +129,7 @@ async function createRegistration(data) {
 
 // Get all registrations with filtering and search
 async function getRegistrations(query = {}) {
-  const { category, club, search, claimed } = query;
+  const { category, club, search, claimed, verified, verificationStatus } = query;
 
   if (getIsConnected()) {
     try {
@@ -135,6 +138,16 @@ async function getRegistrations(query = {}) {
       if (club && club !== 'ALL') filter.runningClub = club;
       if (claimed !== undefined && claimed !== '') {
         filter.claimed = claimed === 'true' || claimed === true;
+      }
+      if (verified !== undefined && verified !== '') {
+        filter.cebuProofVerified = verified === 'true' || verified === true;
+      }
+      if (verificationStatus && verificationStatus !== 'ALL') {
+        if (verificationStatus === 'UNVERIFIED') {
+          filter.cebuProofVerified = false;
+        } else {
+          filter.verificationStatus = verificationStatus;
+        }
       }
       if (search) {
         const regex = new RegExp(search.trim(), 'i');
@@ -165,6 +178,17 @@ async function getRegistrations(query = {}) {
     const isClaimed = claimed === 'true' || claimed === true;
     records = records.filter(r => Boolean(r.claimed) === isClaimed);
   }
+  if (verified !== undefined && verified !== '') {
+    const isVer = verified === 'true' || verified === true;
+    records = records.filter(r => Boolean(r.cebuProofVerified) === isVer);
+  }
+  if (verificationStatus && verificationStatus !== 'ALL') {
+    if (verificationStatus === 'UNVERIFIED') {
+      records = records.filter(r => !r.cebuProofVerified);
+    } else {
+      records = records.filter(r => (r.verificationStatus || (r.cebuProofVerified ? 'VERIFIED' : 'PENDING')) === verificationStatus);
+    }
+  }
   if (search) {
     const s = search.trim().toLowerCase();
     records = records.filter(r => 
@@ -177,19 +201,26 @@ async function getRegistrations(query = {}) {
   return records;
 }
 
+const mongoose = require('mongoose');
+
+// Helper to reliably find a document in Mongo by bibNumber or valid ObjectId
+async function findMongoDoc(idOrBib) {
+  if (typeof idOrBib !== 'string') return null;
+  if (idOrBib.startsWith('TBN-')) {
+    return await Registration.findOne({ bibNumber: idOrBib });
+  }
+  if (mongoose.Types.ObjectId.isValid(idOrBib)) {
+    const doc = await Registration.findById(idOrBib).catch(() => null);
+    if (doc) return doc;
+  }
+  return await Registration.findOne({ bibNumber: idOrBib });
+}
+
 // Find single registration by ID or Bib
 async function getRegistrationByIdOrBib(idOrBib) {
   if (getIsConnected()) {
     try {
-      let reg = null;
-      if (idOrBib.startsWith('TBN-')) {
-        reg = await Registration.findOne({ bibNumber: idOrBib });
-      } else {
-        reg = await Registration.findById(idOrBib).catch(() => null);
-        if (!reg) {
-          reg = await Registration.findOne({ bibNumber: idOrBib });
-        }
-      }
+      const reg = await findMongoDoc(idOrBib);
       if (reg) return reg.toObject();
     } catch (err) {
       console.warn('MongoDB search failed, using JSON fallback:', err.message);
@@ -200,21 +231,31 @@ async function getRegistrationByIdOrBib(idOrBib) {
   return localList.find(r => r._id === idOrBib || r.bibNumber === idOrBib) || null;
 }
 
-// Toggle or set bib claim / check-in status
+// Toggle or set bib claim / check-in status (Only allowed for verified runners)
 async function toggleClaimStatus(idOrBib, status = null) {
+  const currentRecord = await getRegistrationByIdOrBib(idOrBib);
+  if (!currentRecord) return null;
+
+  const isVerified = Boolean(currentRecord.cebuProofVerified);
+  const targetStatus = status !== null ? status : !currentRecord.claimed;
+
+  // Strict rule: runners must have verified proof before check-in can be marked true!
+  if (targetStatus && !isVerified) {
+    const err = new Error('Runner proof must be approved & verified before check-in.');
+    err.code = 'UNVERIFIED_RUNNER';
+    throw err;
+  }
+
   let record = null;
   const localList = readLocalData();
   const idx = localList.findIndex(r => r._id === idOrBib || r.bibNumber === idOrBib);
 
   if (getIsConnected()) {
     try {
-      let reg = await Registration.findOne({
-        $or: [{ _id: idOrBib.startsWith('local_') ? null : idOrBib }, { bibNumber: idOrBib }]
-      });
-
+      const reg = await findMongoDoc(idOrBib);
       if (reg) {
-        reg.claimed = status !== null ? status : !reg.claimed;
-        reg.claimedAt = reg.claimed ? new Date() : null;
+        reg.claimed = targetStatus;
+        reg.claimedAt = targetStatus ? new Date() : null;
         await reg.save();
         record = reg.toObject();
       }
@@ -225,14 +266,40 @@ async function toggleClaimStatus(idOrBib, status = null) {
 
   if (idx >= 0) {
     const current = localList[idx];
-    const newStatus = status !== null ? status : !current.claimed;
-    current.claimed = newStatus;
-    current.claimedAt = newStatus ? new Date().toISOString() : null;
+    current.claimed = targetStatus;
+    current.claimedAt = targetStatus ? new Date().toISOString() : null;
     writeLocalData(localList);
     if (!record) record = current;
   }
 
   return record;
+}
+
+// Manually verify or disapprove registration proof
+async function verifyRegistration(idOrBib, options = {}) {
+  const isApprove = options.status === 'VERIFIED' || options.verified === true;
+  const isDisapprove = options.status === 'DISAPPROVED' || options.verified === false;
+
+  const fields = {};
+  if (isApprove) {
+    fields.cebuProofVerified = true;
+    fields.verificationStatus = 'VERIFIED';
+    fields.disapprovalReason = '';
+    fields.verifiedAt = new Date().toISOString();
+    fields.verifiedBy = options.adminUser || 'Admin';
+  } else if (isDisapprove) {
+    fields.cebuProofVerified = false;
+    fields.verificationStatus = 'DISAPPROVED';
+    fields.disapprovalReason = options.reason || 'Cebu Marathon proof does not meet requirements.';
+    fields.claimed = false;
+    fields.claimedAt = null;
+  } else {
+    fields.cebuProofVerified = false;
+    fields.verificationStatus = 'PENDING';
+    fields.disapprovalReason = '';
+  }
+
+  return await updateRegistration(idOrBib, fields);
 }
 
 // Update registration fields (e.g. cebuProofVerified)
@@ -243,10 +310,7 @@ async function updateRegistration(idOrBib, fields) {
 
   if (getIsConnected()) {
     try {
-      let reg = await Registration.findOne({
-        $or: [{ _id: idOrBib.startsWith('local_') ? null : idOrBib }, { bibNumber: idOrBib }]
-      });
-
+      const reg = await findMongoDoc(idOrBib);
       if (reg) {
         Object.assign(reg, fields);
         await reg.save();
@@ -271,9 +335,13 @@ async function updateRegistration(idOrBib, fields) {
 async function deleteRegistration(idOrBib) {
   if (getIsConnected()) {
     try {
-      await Registration.deleteOne({
-        $or: [{ _id: idOrBib.startsWith('local_') ? null : idOrBib }, { bibNumber: idOrBib }]
-      });
+      if (idOrBib.startsWith('TBN-')) {
+        await Registration.deleteOne({ bibNumber: idOrBib });
+      } else if (mongoose.Types.ObjectId.isValid(idOrBib)) {
+        await Registration.deleteOne({ _id: idOrBib });
+      } else {
+        await Registration.deleteOne({ bibNumber: idOrBib });
+      }
     } catch (err) {
       console.warn('MongoDB delete failed:', err.message);
     }
@@ -290,7 +358,18 @@ async function getStats() {
   const all = await getRegistrations();
 
   const totalRunners = all.length;
-  const claimedCount = all.filter(r => r.claimed).length;
+
+  // Verified runners
+  const verifiedRunners = all.filter(r => Boolean(r.cebuProofVerified));
+  const totalVerified = verifiedRunners.length;
+  const verifiedCheckedIn = verifiedRunners.filter(r => Boolean(r.claimed)).length;
+  const verifiedNotCheckedIn = totalVerified - verifiedCheckedIn;
+
+  // Unverified runners (Pending & Disapproved)
+  const unverifiedRunners = all.filter(r => !r.cebuProofVerified);
+  const totalUnverified = unverifiedRunners.length;
+  const pendingReviewCount = unverifiedRunners.filter(r => r.verificationStatus !== 'DISAPPROVED').length;
+  const disapprovedCount = unverifiedRunners.filter(r => r.verificationStatus === 'DISAPPROVED').length;
 
   const categories = {
     '16KM': 0,
@@ -312,8 +391,14 @@ async function getStats() {
 
   return {
     totalRunners,
-    claimedCount,
-    unclaimedCount: totalRunners - claimedCount,
+    totalVerified,
+    verifiedCheckedIn,
+    verifiedNotCheckedIn,
+    totalUnverified,
+    pendingReviewCount,
+    disapprovedCount,
+    claimedCount: verifiedCheckedIn,
+    unclaimedCount: verifiedNotCheckedIn,
     categories,
     clubs
   };
@@ -324,6 +409,7 @@ module.exports = {
   getRegistrations,
   getRegistrationByIdOrBib,
   updateRegistration,
+  verifyRegistration,
   toggleClaimStatus,
   deleteRegistration,
   getStats,

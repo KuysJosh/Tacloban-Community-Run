@@ -1512,6 +1512,71 @@
       color: var(--mint);
     }
 
+    .checkin-steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 4px 0;
+    }
+
+    .checkin-step-item {
+      display: flex;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 10px 14px;
+      align-items: flex-start;
+    }
+
+    .checkin-step-num {
+      background: var(--gold);
+      color: #050f45;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 14px;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .checkin-step-content {
+      flex: 1;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #e2e8f0;
+    }
+
+    .checkin-step-content b {
+      color: #ffffff;
+    }
+
+    .checkin-step-content .step-title {
+      font-weight: 800;
+      color: var(--mint);
+      font-size: 13.5px;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .checkin-warning-box {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1.5px solid #ef4444;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      color: #fca5a5;
+      line-height: 1.45;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
     /* Emphasized Check-In Warning Strip on Pass Card */
     .pass-id-note-box {
       margin-top: 10px;
@@ -3054,6 +3119,31 @@
             </p>
           </div>
 
+          <!-- Step-by-Step Check-In Protocol Checklist -->
+          <div class="checkin-steps-list">
+            <div class="checkin-step-item">
+              <div class="checkin-step-num">1</div>
+              <div class="checkin-step-content">
+                <span class="step-title">⏱️ Arrive Early at Check-In Desk</span>
+                Check-in desks open <b>30 to 45 minutes before Gun Start</b> (03:30 AM for 16KM). Proceed directly to the <b>Official Marshal Check-in Station</b>.
+              </div>
+            </div>
+            <div class="checkin-step-item">
+              <div class="checkin-step-num">2</div>
+              <div class="checkin-step-content">
+                <span class="step-title">🪪 Present 1 or More Valid IDs</span>
+                Bring at least <b>1 physical government, school, or company photo ID</b>. The full name on your ID must match your registration.
+              </div>
+            </div>
+            <div class="checkin-step-item">
+              <div class="checkin-step-num">3</div>
+              <div class="checkin-step-content">
+                <span class="step-title">📱 Present Your Digital Run Pass</span>
+                Show your <b>Digital Run Pass QR Code</b> (downloaded or printed below) to event marshals to verify and approve your race check-in.
+              </div>
+            </div>
+          </div>
+
           <div class="id-badges-row">
             <div class="id-badges-title">Accepted Valid Identifications:</div>
             <div class="id-chips">
@@ -3067,8 +3157,11 @@
             </div>
           </div>
 
-          <div class="id-checkin-rule">
-            ⏱️ <b>Check-In Protocol:</b> Please arrive at the check-in desk <b>30 to 45 minutes before gun start</b>. Present your <b>Digital Run Pass QR</b> together with your <b>Valid ID</b> to event marshals. Unverified runners will not be permitted to start.
+          <div class="checkin-warning-box">
+            <span style="font-size:18px;">⛔</span>
+            <div>
+              <strong>Strict Check-in Policy:</strong> Runners without a valid photo ID will <strong>NOT</strong> be permitted to check in, receive an official bib, or participate in the run. This is strictly enforced for safety and verification.
+            </div>
           </div>
         </div>
 
