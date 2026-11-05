@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "migrate:atlas": "node scripts/migrate-to-atlas.js"
+    "migrate:atlas": "node scripts/migrate-to-atlas.js",
+    "clear:data": "node scripts/delete-all-runners.js"
   },
   "engines": {
     "node": ">=18.0.0"
