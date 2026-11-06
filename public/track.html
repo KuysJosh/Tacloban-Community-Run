@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Runner Status Tracker • Cebu Marathon 2027 Tacloban Leg</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,700;1,800;1,900&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Yellowtail&display=swap"
+    rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --navy-dark: #030b2c;
+      --navy: #06155a;
+      --navy-light: #091c78;
+      --deep-card: rgba(6, 18, 70, 0.88);
+      --cyan: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.35);
+      --mint: #38f8b8;
+      --mint-glow: rgba(56, 248, 184, 0.4);
+      --gold: #ffbe1a;
+      --gold-glow: rgba(255, 190, 26, 0.45);
+      --danger: #ff5757;
+      --danger-glow: rgba(255, 87, 87, 0.4);
+      --ink: #ffffff;
+      --mut: #b9c6f5;
+      --line: rgba(56, 189, 248, 0.2);
+      --line-highlight: rgba(56, 189, 248, 0.45);
+      color-scheme: dark;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Barlow', system-ui, sans-serif;
+      color: var(--ink);
+      background-color: var(--navy);
+      line-height: 1.5;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(circle at 15% 25%, rgba(56, 189, 248, 0.18), transparent 45%),
+        radial-gradient(circle at 85% 40%, rgba(56, 189, 248, 0.22), transparent 45%),
+        radial-gradient(circle at 50% 90%, rgba(255, 190, 26, 0.08), transparent 50%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='none' stroke='%2338c8ff' stroke-opacity='.085' stroke-width='2.2'%3E%3Cpath d='M0 50 50 0 100 50M0 100 50 50 100 100M50 50 0 0M50 100 100 50'/%3E%3C/svg%3E"),
+        linear-gradient(180deg, #091c78 0%, #06155a 45%, #030b2c 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: "Barlow Condensed", Impact, sans-serif;
+      font-style: italic;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: .95;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      height: 72px;
+      background: rgba(4, 13, 58, 0.94);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.18);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-brand-img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+      filter: none;
+      outline: none;
+      border: none;
+      transition: transform .2s;
+    }
+
+    .nav-brand-img:hover {
+      transform: scale(1.02);
+    }
+
+    .nav-tracker-badge {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--mint);
+      background: rgba(56, 248, 184, 0.12);
+      border: 1px solid rgba(56, 248, 184, 0.35);
+      border-radius: 999px;
+      padding: 3px 10px;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-nav-home {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      transition: all .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-nav-home:hover {
+      color: var(--cyan);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-nav-reg {
+      background: linear-gradient(135deg, #00d2ff, #00f2fe);
+      color: #030b2c;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 8px 18px;
+      border-radius: 6px;
+      transition: all .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-nav-reg:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0, 210, 255, 0.4);
+    }
+
+    /* ── TRACKER HERO / SEARCH SECTION ── */
+    .track-hero {
+      padding: 42px 0 28px;
+      text-align: center;
+    }
+
+    .track-hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .track-hero h1 {
+      font-size: clamp(34px, 5.5vw, 54px);
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      color: #ffffff;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    }
+
+    .track-hero h1 span {
+      color: var(--gold);
+    }
+
+    .track-hero-subtitle {
+      font-size: clamp(14px, 2.2vw, 16px);
+      color: var(--mut);
+      max-width: 660px;
+      margin: 0 auto 26px;
+      line-height: 1.55;
+    }
+
+    /* ── SEARCH CARD ── */
+    .search-card {
+      max-width: 720px;
+      margin: 0 auto 36px;
+      background: rgba(6, 18, 70, 0.85);
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
+      border-radius: 14px;
+      padding: 10px 12px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 25px rgba(56, 189, 248, 0.18);
+      display: flex;
+      gap: 8px;
+      transition: all .2s;
+    }
+
+    .search-card:focus-within {
+      border-color: var(--cyan);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.35);
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      font-size: 18px;
+      color: var(--cyan);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 12px 14px 12px 42px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 16px;
+      color: #ffffff;
+    }
+
+    .search-input::placeholder {
+      color: rgba(185, 198, 245, 0.55);
+    }
+
+    .btn-track-submit {
+      background: linear-gradient(135deg, #00f0ff, #38f8b8);
+      border: none;
+      color: #030b2c;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-style: italic;
+      font-size: 18px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 0 26px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .btn-track-submit:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 20px rgba(56, 248, 184, 0.45);
+    }
+
+    .btn-track-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── SEARCH RESULTS (MULTIPLE RUNNERS) ── */
+    .multi-results-wrap {
+      max-width: 820px;
+      margin: 0 auto 30px;
+      display: none;
+    }
+
+    .multi-results-box {
+      background: rgba(6, 18, 70, 0.85);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .multi-results-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--mut);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .runner-result-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      transition: all .15s;
+      cursor: pointer;
+    }
+
+    .runner-result-row:hover {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.35);
+      transform: translateX(3px);
+    }
+
+    .runner-res-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .runner-res-meta {
+      font-size: 12.5px;
+      color: var(--mut);
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* ── STATUS DASHBOARD CARD ── */
+    .track-result-wrap {
+      max-width: 860px;
+      margin: 0 auto 50px;
+      display: none;
+      animation: fadeIn .3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .status-dashboard-card {
+      background: rgba(5, 16, 62, 0.92);
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 35px rgba(56, 189, 248, 0.18);
+    }
+
+    /* Top Dashboard Header Banner */
+    .dash-header-banner {
+      background: linear-gradient(135deg, rgba(9, 28, 120, 0.8), rgba(4, 13, 58, 0.95));
+      border-bottom: 1px solid var(--line);
+      padding: 24px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .dash-runner-name-wrap h2 {
+      font-size: clamp(28px, 4.5vw, 38px);
+      letter-spacing: 0.5px;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .dash-pass-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--gold);
+      background: rgba(255, 190, 26, 0.12);
+      border: 1px solid rgba(255, 190, 26, 0.35);
+      border-radius: 6px;
+      padding: 4px 12px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .dash-pass-chip:hover {
+      background: rgba(255, 190, 26, 0.22);
+    }
+
+    .dash-overall-status {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .dash-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 999px;
+    }
+
+    .dash-status-pill.verified {
+      background: rgba(56, 248, 184, 0.18);
+      color: var(--mint);
+      border: 1.5px solid var(--mint);
+      box-shadow: 0 0 14px rgba(56, 248, 184, 0.3);
+    }
+
+    .dash-status-pill.pending {
+      background: rgba(255, 190, 26, 0.18);
+      color: var(--gold);
+      border: 1.5px solid var(--gold);
+      box-shadow: 0 0 14px rgba(255, 190, 26, 0.25);
+    }
+
+    .dash-status-pill.disapproved {
+      background: rgba(255, 87, 87, 0.18);
+      color: var(--danger);
+      border: 1.5px solid var(--danger);
+      box-shadow: 0 0 14px rgba(255, 87, 87, 0.3);
+    }
+
+    /* ── PROGRESS STEPPER ── */
+    .stepper-section {
+      padding: 28px 28px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(2, 8, 38, 0.5);
+    }
+
+    .stepper-title {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .stepper-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      position: relative;
+    }
+
+    .step-card {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px;
+      position: relative;
+      transition: all .2s;
+    }
+
+    .step-card.active-success {
+      background: rgba(56, 248, 184, 0.06);
+      border-color: rgba(56, 248, 184, 0.4);
+    }
+
+    .step-card.active-warning {
+      background: rgba(255, 190, 26, 0.06);
+      border-color: rgba(255, 190, 26, 0.4);
+    }
+
+    .step-card.active-danger {
+      background: rgba(255, 87, 87, 0.06);
+      border-color: rgba(255, 87, 87, 0.4);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .step-num-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .step-card.active-success .step-num-badge {
+      background: var(--mint);
+      color: #030b2c;
+    }
+
+    .step-card.active-warning .step-num-badge {
+      background: var(--gold);
+      color: #030b2c;
+    }
+
+    .step-card.active-danger .step-num-badge {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .step-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .step-desc {
+      font-size: 12px;
+      color: var(--mut);
+      line-height: 1.45;
+    }
+
+    .step-alert-reason {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: rgba(255, 87, 87, 0.14);
+      border-left: 3px solid var(--danger);
+      font-size: 11.5px;
+      color: #fecaca;
+      line-height: 1.4;
+    }
+
+    /* ── RUNNER DETAILS & PASS GRID ── */
+    .dash-content-grid {
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .details-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .details-heading {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--gold);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .info-list-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px 18px;
+    }
+
+    .info-item label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .info-item .val {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #f8fafc;
+      word-break: break-word;
+    }
+
+    .info-item .val.highlight {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--mint);
+    }
+
+    .club-val-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .club-val-img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+    }
+
+    /* ── OFFICIAL PASS PREVIEW ── */
+    .pass-holder-card {
+      background: linear-gradient(180deg, rgba(8, 26, 110, 0.9), rgba(3, 11, 44, 0.95));
+      border: 1.5px solid rgba(56, 189, 248, 0.4);
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .pass-preview-header {
+      margin-bottom: 10px;
+    }
+
+    .pass-preview-logo {
+      height: 38px;
+      width: auto;
+      object-fit: contain;
+      filter: none;
+      outline: none;
+      border: none;
+      margin-bottom: 4px;
+    }
+
+    .pass-sub-header {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--mint);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .pass-id-box {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed var(--gold);
+      border-radius: 6px;
+      padding: 6px 12px;
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pass-id-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--mut);
+    }
+
+    .pass-id-num {
+      font-size: 17px;
+      font-weight: 900;
+      color: var(--gold);
+      font-family: 'Barlow Condensed', monospace;
+      letter-spacing: 1px;
+    }
+
+    .pass-qr-wrap {
+      background: #ffffff;
+      padding: 10px;
+      border-radius: 8px;
+      width: 140px;
+      height: 140px;
+      margin: 12px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    }
+
+    .pass-qr-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .pass-actions-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .btn-pass-action {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #fff;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all .15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-pass-action:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--cyan);
+    }
+
+    /* ── CHECK-IN POLICY & ID REMINDER ── */
+    .policy-reminder-card {
+      margin: 0 28px 28px;
+      background: rgba(255, 87, 87, 0.08);
+      border: 1px solid rgba(255, 87, 87, 0.35);
+      border-radius: 12px;
+      padding: 16px 20px;
+    }
+
+    .policy-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      color: #ff9999;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .policy-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .id-chip {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 11.5px;
+      color: #e2e8f0;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* ── TOAST MESSAGE ── */
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(30px);
+      background: #030b2c;
+      border: 1.5px solid var(--mint);
+      color: #ffffff;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 700;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 248, 184, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all .25s ease-out;
+      z-index: 1000;
+    }
+
+    .toast-msg.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: auto;
+      background: #02071f;
+      border-top: 1px solid rgba(56, 189, 248, 0.15);
+      padding: 24px 0;
+      text-align: center;
+      font-size: 13px;
+      color: var(--mut);
+    }
+
+    footer a {
+      color: var(--cyan);
+      text-decoration: underline;
+    }
+
+    /* ── RESPONSIVE MEDIA QUERIES ── */
+    @media (max-width: 768px) {
+      .search-card {
+        flex-direction: column;
+        padding: 8px;
+      }
+
+      .btn-track-submit {
+        height: 46px;
+        justify-content: center;
+      }
+
+      .stepper-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .dash-content-grid {
+        grid-template-columns: 1fr;
+        padding: 18px;
+      }
+
+      .info-list-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dash-header-banner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .dash-overall-status {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ==============================================
+     NAVBAR
+============================================== -->
+  <nav>
+    <div class="wrap">
+      <a class="brand" href="/" aria-label="Cebu Marathon home">
+        <img src="Cebu Marathon 2027 Rainbow Logo.png" alt="Cebu Marathon 2027" class="nav-brand-img">
+        <span class="nav-tracker-badge">STATUS TRACKER</span>
+      </a>
+      <div class="nav-links">
+        <a class="btn-nav-home" href="/">
+          <span>← Back to Home</span>
+        </a>
+        <a class="btn-nav-reg" href="/#register">
+          <span>Register &gt;</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==============================================
+     TRACKER HERO & SEARCH
+============================================== -->
+  <main class="wrap">
+    <div class="track-hero">
+      <div class="track-hero-eyebrow">
+        <span>🔍 REGISTRATION MONITORING</span>
+      </div>
+      <h1>Track Your <span>Runner Status</span></h1>
+      <p class="track-hero-subtitle">
+        Monitor your Cebu Marathon proof verification, access your digital run pass with check-in QR code, and check your event morning readiness.
+      </p>
+
+      <!-- SEARCH FORM -->
+      <form class="search-card" id="trackerSearchForm" onsubmit="handleTrackSearch(event)">
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="trackQueryInput" class="search-input"
+            placeholder="Enter Pass ID (e.g. TBN-16-1001), Full Name, or Email..." autocomplete="off" autofocus>
+        </div>
+        <button type="submit" class="btn-track-submit" id="btnTrackSubmit">
+          <span>Track Status ➔</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- MULTIPLE SEARCH RESULTS (If search matches several runners) -->
+    <div class="multi-results-wrap" id="multiResultsWrap">
+      <div class="multi-results-box">
+        <div class="multi-results-title">
+          <span id="multiResultsCountText">Matching Registrations:</span>
+          <span style="font-size:12px;color:var(--cyan);">Click any runner to view full tracking</span>
+        </div>
+        <div id="multiResultsList"></div>
+      </div>
+    </div>
+
+    <!-- SINGLE RUNNER TRACKING DASHBOARD CARD -->
+    <div class="track-result-wrap" id="trackResultWrap">
+      <div class="status-dashboard-card" id="statusDashboardCard">
+        
+        <!-- DASHBOARD HEADER BANNER -->
+        <div class="dash-header-banner">
+          <div class="dash-runner-name-wrap">
+            <h2 id="dashRunnerName">JUAN DELA CRUZ</h2>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px;">
+              <span class="dash-pass-chip" onclick="copyPassIdToClipboard()" title="Click to copy Pass ID">
+                <span>Pass ID:</span>
+                <strong id="dashPassId">TBN-16-1001</strong>
+                <span style="font-size:11px;opacity:0.8;">📋</span>
+              </span>
+              <span style="font-size:13px;color:var(--mut);" id="dashRegDate">Registered Nov 6, 2026</span>
+            </div>
+          </div>
+          <div class="dash-overall-status">
+            <span style="font-size:11px;font-weight:700;color:var(--mut);letter-spacing:1px;text-transform:uppercase;">CURRENT STATUS</span>
+            <div id="dashStatusPill" class="dash-status-pill pending">
+              <span>⏳ PENDING ADMIN VERIFICATION</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3-STEP VISUAL PROGRESS STEPPER -->
+        <div class="stepper-section">
+          <div class="stepper-title">Verification &amp; Check-In Progress</div>
+          <div class="stepper-grid">
+            
+            <!-- STEP 1: REGISTRATION SUBMITTED -->
+            <div class="step-card active-success" id="step1Card">
+              <div class="step-header">
+                <div class="step-num-badge">✓</div>
+                <div class="step-title">Registration Submitted</div>
+              </div>
+              <div class="step-desc" id="step1Desc">
+                Registration details and Cebu Marathon proof uploaded successfully.
+              </div>
+            </div>
+
+            <!-- STEP 2: CEBU PROOF VERIFICATION -->
+            <div class="step-card active-warning" id="step2Card">
+              <div class="step-header">
+                <div class="step-num-badge" id="step2Badge">⏳</div>
+                <div class="step-title" id="step2Title">Proof Verification</div>
+              </div>
+              <div class="step-desc" id="step2Desc">
+                Marshals are currently reviewing your uploaded Cebu Marathon 2027 proof.
+              </div>
+              <div class="step-alert-reason" id="step2ReasonBox" style="display:none;">
+                <strong>Marshal Note:</strong> <span id="step2ReasonText"></span>
+              </div>
+            </div>
+
+            <!-- STEP 3: EVENT MORNING CHECK-IN -->
+            <div class="step-card" id="step3Card">
+              <div class="step-header">
+                <div class="step-num-badge" id="step3Badge">3</div>
+                <div class="step-title" id="step3Title">Event Day Check-In</div>
+              </div>
+              <div class="step-desc" id="step3Desc">
+                Check in with an event marshal on the morning of your run with your valid photo ID.
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- DASHBOARD DETAILS & PASS PREVIEW -->
+        <div class="dash-content-grid">
+          
+          <!-- LEFT: PARTICIPANT INFORMATION -->
+          <div class="details-box">
+            <div class="details-heading">
+              <span>📋</span> Runner Registration Details
+            </div>
+            <div class="info-list-grid">
+              <div class="info-item">
+                <label>Distance Category</label>
+                <div class="val highlight" id="infoCategory">16 KM Leg</div>
+              </div>
+              <div class="info-item">
+                <label>Target Pace</label>
+                <div class="val" id="infoPace" style="color:var(--gold);">6:30 min/KM</div>
+              </div>
+              <div class="info-item">
+                <label>Run Kickoff Date</label>
+                <div class="val" id="infoDate">Sunday, Nov 15, 2026</div>
+              </div>
+              <div class="info-item">
+                <label>Check-in &amp; Start Schedule</label>
+                <div class="val" id="infoSchedule">Check-in 03:30 AM &bull; Gun Start 04:00 AM</div>
+              </div>
+              <div class="info-item" style="grid-column:1 / -1;">
+                <label>Assigned Running Club</label>
+                <div class="club-val-wrap">
+                  <img id="infoClubImg" class="club-val-img" src="" alt="" style="display:none;">
+                  <span class="val" id="infoClubName">Tacloban Bypass Running Club</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <label>Check-In Status</label>
+                <div class="val" id="infoClaimedStatus">Not Yet Checked In</div>
+              </div>
+              <div class="info-item">
+                <label>Emergency Contact</label>
+                <div class="val" id="infoEmergency">Maria Dela Cruz (Spouse)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: OFFICIAL PASS PREVIEW CARD -->
+          <div class="pass-holder-card" id="passCardHolder">
+            <div class="pass-preview-header">
+              <img src="Cebu Marathon 2027 Rainbow Logo.png" alt="Cebu Marathon 2027" class="pass-preview-logo">
+              <div class="pass-sub-header">COMMUNITY RUN &bull; TACLOBAN LEG</div>
+            </div>
+            
+            <div class="pass-id-box">
+              <span class="pass-id-title">OFFICIAL PASS ID</span>
+              <span class="pass-id-num" id="passCardId">TBN-16-1001</span>
+            </div>
+
+            <div style="font-size:16px;font-weight:800;color:#fff;margin:6px 0;" id="passCardName">JUAN DELA CRUZ</div>
+            
+            <div class="pass-qr-wrap">
+              <img id="passCardQr" src="" alt="Check-in QR Code">
+            </div>
+
+            <div style="font-size:12px;color:var(--mut);">
+              Show this QR code to an event marshal on event morning along with your valid photo ID.
+            </div>
+
+            <div class="pass-actions-row">
+              <button type="button" class="btn-pass-action" onclick="downloadPassImage()">
+                <span>📥 Save Pass</span>
+              </button>
+              <button type="button" class="btn-pass-action" onclick="copyShareableLink()">
+                <span>🔗 Copy Link</span>
+              </button>
+              <button type="button" class="btn-pass-action" onclick="window.print()">
+                <span>🖨️ Print</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- STRICT CHECK-IN POLICY & ACCEPTED IDS -->
+        <div class="policy-reminder-card">
+          <div class="policy-top">
+            <span style="font-size:18px;">⛔</span>
+            <span>Strict Check-in Policy &amp; Identification Requirements</span>
+          </div>
+          <p style="font-size:13px;color:#f8fafc;line-height:1.5;margin-bottom:8px;">
+            Runners without a valid photo ID will <strong>NOT</strong> be permitted to check in or participate in the run. This is strictly enforced for safety, accountability, and verification. <em>No physical bib is distributed beforehand.</em>
+          </p>
+          <div style="font-size:11.5px;color:var(--gold);font-weight:700;margin-bottom:4px;">Accepted Valid Identifications:</div>
+          <div class="policy-chips">
+            <span class="id-chip">🪪 PhilSys National ID</span>
+            <span class="id-chip">🚗 Driver's License</span>
+            <span class="id-chip">🛂 Passport</span>
+            <span class="id-chip">🏢 Company / Work ID</span>
+            <span class="id-chip">🎓 Student ID</span>
+            <span class="id-chip">📜 UMID / SSS / GSIS</span>
+            <span class="id-chip">📮 PRC / Postal / Voter's ID</span>
+            <span class="id-chip">💳 Other Valid Photo IDs</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-msg" id="toastMsg">
+    <span id="toastIcon">✓</span>
+    <span id="toastText">Link copied to clipboard!</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <p>Cebu Marathon 2027 &bull; Tacloban Community Progressive Long Run Leg (16K &bull; 21K &bull; 26K &bull; 32K)</p>
+      <p style="margin-top:6px;font-size:12px;color:#64748b;">
+        Need to update your registration details or have questions? Contact event marshals or <a href="/">return to the main event page</a>.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var CLUB_LOGOS = {
+        'Tacloban Bypass Running Club': 'clubs/club_tbrc.png',
+        'Tacloban Grandstand Runners': 'clubs/club_tgr.png',
+        'Tacloban Runners Club': 'clubs/club_trc.png',
+        'Motion Runners': 'clubs/club_motion.png',
+        'One Stride Tacloban': 'clubs/club_ost.png',
+        'Alangalang Runners Club': 'clubs/club_alangalang.png',
+        'Santa Fe Runners': 'clubs/club_santafe.png'
+      };
+
+      var LEG_SCHEDULES = {
+        '16KM': { date: 'Sunday, November 15, 2026', schedule: 'Check-in 03:30 AM • Run Start 04:00 AM' },
+        '21KM': { date: 'Saturday, November 28, 2026', schedule: 'Check-in 03:00 AM • Run Start 03:30 AM' },
+        '26KM': { date: 'Saturday, December 5, 2026', schedule: 'Check-in 02:30 AM • Run Start 03:00 AM' },
+        '32KM': { date: 'Saturday, December 19, 2026', schedule: 'Check-in 02:00 AM • Run Start 02:30 AM' },
+        'ALL_LEGS': { date: 'All 4 Progressive Legs (Nov 15 - Dec 19)', schedule: 'Refer to individual leg kickoff times' }
+      };
+
+      var currentRecord = null;
+
+      function showToast(text, icon) {
+        var toast = document.getElementById('toastMsg');
+        document.getElementById('toastText').textContent = text;
+        document.getElementById('toastIcon').textContent = icon || '✓';
+        toast.classList.add('show');
+        setTimeout(function () {
+          toast.classList.remove('show');
+        }, 2800);
+      }
+
+      window.copyPassIdToClipboard = function () {
+        if (!currentRecord || !currentRecord.bibNumber) return;
+        navigator.clipboard.writeText(currentRecord.bibNumber).then(function () {
+          showToast('Pass ID ' + currentRecord.bibNumber + ' copied!', '📋');
+        }).catch(function () {
+          showToast('Pass ID: ' + currentRecord.bibNumber, '📋');
+        });
+      };
+
+      window.copyShareableLink = function () {
+        if (!currentRecord || !currentRecord.bibNumber) return;
+        var url = window.location.origin + '/track?bib=' + encodeURIComponent(currentRecord.bibNumber);
+        navigator.clipboard.writeText(url).then(function () {
+          showToast('Direct tracking link copied!', '🔗');
+        }).catch(function () {
+          showToast('Link: ' + url, '🔗');
+        });
+      };
+
+      window.downloadPassImage = function () {
+        var card = document.getElementById('passCardHolder');
+        if (!card || !window.html2canvas) {
+          window.print();
+          return;
+        }
+        showToast('Generating high-resolution pass...', '⏳');
+        html2canvas(card, {
+          backgroundColor: '#040d3a',
+          scale: 2,
+          useCORS: true
+        }).then(function (canvas) {
+          var link = document.createElement('a');
+          link.download = (currentRecord.bibNumber || 'Pass') + '-CebuMarathon2027.png';
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+          showToast('Pass image downloaded!', '📥');
+        }).catch(function (err) {
+          console.error(err);
+          window.print();
+        });
+      };
+
+      window.handleTrackSearch = async function (e) {
+        if (e) e.preventDefault();
+        var q = document.getElementById('trackQueryInput').value.trim();
+        if (!q) return;
+
+        var btn = document.getElementById('btnTrackSubmit');
+        btn.disabled = true;
+        btn.innerHTML = '<span>Searching...</span>';
+
+        // Update URL query string without reloading page
+        if (history.pushState) {
+          var newUrl = window.location.pathname + '?bib=' + encodeURIComponent(q);
+          window.history.pushState({ path: newUrl }, '', newUrl);
+        }
+
+        try {
+          var res = await fetch('/api/registrations?search=' + encodeURIComponent(q));
+          var data = await res.json();
+
+          btn.disabled = false;
+          btn.innerHTML = '<span>Track Status ➔</span>';
+
+          if (!data.success || !data.registrations || data.registrations.length === 0) {
+            // Also try direct /api/registrations/:idOrBib
+            var singleRes = await fetch('/api/registrations/' + encodeURIComponent(q));
+            var singleData = await singleRes.json();
+            if (singleData.success && singleData.registration) {
+              renderSingleRunner(singleData.registration);
+              return;
+            }
+
+            document.getElementById('trackResultWrap').style.display = 'none';
+            document.getElementById('multiResultsWrap').style.display = 'none';
+            showToast('No runner registration found for "' + q + '". Please check your Pass ID or Name.', '❌');
+            return;
+          }
+
+          if (data.registrations.length === 1) {
+            // Fetch complete record
+            fetchFullRecord(data.registrations[0].bibNumber || data.registrations[0]._id);
+          } else {
+            renderMultiResults(data.registrations);
+          }
+        } catch (err) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>Track Status ➔</span>';
+          showToast('Error searching: ' + err.message, '⚠️');
+        }
+      };
+
+      async function fetchFullRecord(idOrBib) {
+        try {
+          var res = await fetch('/api/registrations/' + encodeURIComponent(idOrBib));
+          var data = await res.json();
+          if (data.success && data.registration) {
+            renderSingleRunner(data.registration);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      function renderMultiResults(list) {
+        document.getElementById('trackResultWrap').style.display = 'none';
+        var wrap = document.getElementById('multiResultsWrap');
+        var container = document.getElementById('multiResultsList');
+        document.getElementById('multiResultsCountText').textContent = 'Found ' + list.length + ' Matching Runner(s):';
+
+        var html = '';
+        list.forEach(function (r) {
+          var isVer = Boolean(r.cebuProofVerified);
+          var pill = isVer
+            ? '<span style="color:var(--mint);font-weight:700;font-size:12px;">✓ Verified</span>'
+            : (r.verificationStatus === 'DISAPPROVED'
+              ? '<span style="color:var(--danger);font-weight:700;font-size:12px;">✕ Disapproved</span>'
+              : '<span style="color:var(--gold);font-weight:700;font-size:12px;">⏳ Pending Review</span>');
+
+          html += '<div class="runner-result-row" onclick="fetchFullRecord(\'' + r.bibNumber + '\')">' +
+            '<div>' +
+              '<div class="runner-res-name">' + r.fullName + '</div>' +
+              '<div class="runner-res-meta">' +
+                '<span style="color:var(--gold);font-weight:700;">' + r.bibNumber + '</span>' +
+                '&bull; <span>' + r.category + '</span>' +
+                '&bull; <span>' + (r.runningClub || 'Independent') + '</span>' +
+              '</div>' +
+            '</div>' +
+            '<div style="display:flex;align-items:center;gap:12px;">' +
+              pill +
+              '<span style="font-size:16px;color:var(--cyan);">➔</span>' +
+            '</div>' +
+          '</div>';
+        });
+
+        container.innerHTML = html;
+        wrap.style.display = 'block';
+        wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      window.fetchFullRecord = fetchFullRecord;
+
+      function renderSingleRunner(record) {
+        currentRecord = record;
+        document.getElementById('multiResultsWrap').style.display = 'none';
+        var wrap = document.getElementById('trackResultWrap');
+        wrap.style.display = 'block';
+
+        // Header info
+        document.getElementById('dashRunnerName').textContent = (record.fullName || 'RUNNER').toUpperCase();
+        document.getElementById('dashPassId').textContent = record.bibNumber || 'N/A';
+        
+        var regDateStr = 'Registration on file';
+        if (record.createdAt) {
+          try {
+            var d = new Date(record.createdAt);
+            regDateStr = 'Registered ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          } catch (e) {}
+        }
+        document.getElementById('dashRegDate').textContent = regDateStr;
+
+        // Status determinations
+        var isVerified = Boolean(record.cebuProofVerified);
+        var vStatus = record.verificationStatus || (isVerified ? 'VERIFIED' : 'PENDING');
+        var isClaimed = Boolean(record.claimed);
+
+        // Status Pill Top Right
+        var statusPill = document.getElementById('dashStatusPill');
+        if (vStatus === 'VERIFIED') {
+          statusPill.className = 'dash-status-pill verified';
+          statusPill.innerHTML = '<span>✓ CEBU PROOF VERIFIED</span>';
+        } else if (vStatus === 'DISAPPROVED') {
+          statusPill.className = 'dash-status-pill disapproved';
+          statusPill.innerHTML = '<span>✕ PROOF DISAPPROVED</span>';
+        } else {
+          statusPill.className = 'dash-status-pill pending';
+          statusPill.innerHTML = '<span>⏳ PENDING ADMIN REVIEW</span>';
+        }
+
+        // Stepper: Step 1
+        var step1Card = document.getElementById('step1Card');
+        step1Card.className = 'step-card active-success';
+        document.getElementById('step1Desc').textContent = 'Registered for ' + (record.category || 'Event') + ' (' + regDateStr + ').';
+
+        // Stepper: Step 2 (Proof)
+        var step2Card = document.getElementById('step2Card');
+        var step2Badge = document.getElementById('step2Badge');
+        var step2Title = document.getElementById('step2Title');
+        var step2Desc = document.getElementById('step2Desc');
+        var step2ReasonBox = document.getElementById('step2ReasonBox');
+
+        if (vStatus === 'VERIFIED') {
+          step2Card.className = 'step-card active-success';
+          step2Badge.textContent = '✓';
+          step2Title.textContent = 'Proof Approved & Verified';
+          step2Desc.textContent = 'Your Cebu Marathon registration proof has been validated by event marshals. You are officially verified!';
+          step2ReasonBox.style.display = 'none';
+        } else if (vStatus === 'DISAPPROVED') {
+          step2Card.className = 'step-card active-danger';
+          step2Badge.textContent = '✕';
+          step2Title.textContent = 'Proof Disapproved';
+          step2Desc.textContent = 'The uploaded proof did not meet the validation requirements. Please see the marshal note below.';
+          step2ReasonBox.style.display = 'block';
+          document.getElementById('step2ReasonText').textContent = record.disapprovalReason || 'Unclear proof screenshot or mismatched name. You can present proof in person to an event marshal on run day.';
+        } else {
+          step2Card.className = 'step-card active-warning';
+          step2Badge.textContent = '⏳';
+          step2Title.textContent = 'Proof Under Review';
+          step2Desc.textContent = 'Your proof is queued for verification by event marshals. Please check back before event day.';
+          step2ReasonBox.style.display = 'none';
+        }
+
+        // Stepper: Step 3 (Check-In)
+        var step3Card = document.getElementById('step3Card');
+        var step3Badge = document.getElementById('step3Badge');
+        var step3Title = document.getElementById('step3Title');
+        var step3Desc = document.getElementById('step3Desc');
+
+        var legInfo = LEG_SCHEDULES[record.category] || { date: record.categoryDate || 'Race Day', schedule: 'Arrive before run start' };
+
+        if (isClaimed) {
+          step3Card.className = 'step-card active-success';
+          step3Badge.textContent = '✓';
+          step3Title.textContent = 'Checked In & Ready';
+          step3Desc.textContent = 'You have successfully checked in on event morning! Have a strong and safe run!';
+        } else {
+          step3Card.className = 'step-card';
+          step3Badge.textContent = '3';
+          step3Title.textContent = 'Event Morning Check-In';
+          step3Desc.textContent = 'Pending check-in on event day (' + legInfo.schedule + '). Bring 1 or more valid photo IDs.';
+        }
+
+        // Details Left
+        document.getElementById('infoCategory').textContent = (record.category || '16KM') + ' (' + (record.categoryTitle || 'Progressive Run') + ')';
+        document.getElementById('infoPace').textContent = record.desiredPace || '6:30 min/KM';
+        document.getElementById('infoDate').textContent = legInfo.date;
+        document.getElementById('infoSchedule').textContent = legInfo.schedule;
+
+        var clubName = record.runningClub || 'Independent Runner';
+        document.getElementById('infoClubName').textContent = clubName;
+        var clubImg = document.getElementById('infoClubImg');
+        if (CLUB_LOGOS[clubName]) {
+          clubImg.src = CLUB_LOGOS[clubName];
+          clubImg.style.display = 'inline-block';
+        } else {
+          clubImg.style.display = 'none';
+        }
+
+        document.getElementById('infoClaimedStatus').innerHTML = isClaimed
+          ? '<span style="color:var(--mint);font-weight:700;">✓ Checked In on Event Morning</span>'
+          : '<span style="color:var(--mut);">Pending Check-In (Event Morning)</span>';
+
+        var emergencyStr = 'Not Provided';
+        if (record.emergencyName) {
+          emergencyStr = record.emergencyName + (record.emergencyRelation ? ' (' + record.emergencyRelation + ')' : '');
+        }
+        document.getElementById('infoEmergency').textContent = emergencyStr;
+
+        // Pass Card Preview
+        document.getElementById('passCardId').textContent = record.bibNumber || 'N/A';
+        document.getElementById('passCardName').textContent = (record.fullName || 'RUNNER').toUpperCase();
+        if (record.qrCodeDataUrl) {
+          document.getElementById('passCardQr').src = record.qrCodeDataUrl;
+        } else {
+          // Fallback simple QR
+          document.getElementById('passCardQr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(record.bibNumber || record.fullName);
+        }
+
+        wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      // Check on page load for ?bib= or ?id= or ?search=
+      window.addEventListener('DOMContentLoaded', function () {
+        var params = new URLSearchParams(window.location.search);
+        var q = params.get('bib') || params.get('id') || params.get('search') || params.get('q');
+        if (q) {
+          document.getElementById('trackQueryInput').value = q;
+          handleTrackSearch();
+        }
+      });
+    })();
+  </script>
+</body>
+
+</html>

@@ -2880,6 +2880,9 @@
         <img src="Cebu Marathon 2027 Rainbow Logo.png" alt="Cebu Marathon 2027" class="nav-brand-img">
       </a>
       <div class="nav-links">
+        <a class="btn-nav-find" href="/track">
+          <span>🔍</span> <span class="desktop-only">TRACK STATUS</span><span class="mobile-only">TRACK</span>
+        </a>
         <a class="btn-nav-register" href="#register">
           <span class="desktop-only">REGISTER NOW &gt;</span><span class="mobile-only">REGISTER &gt;</span>
         </a>
@@ -2952,6 +2955,10 @@
           <div class="hero-cta-group">
             <a class="btn-hero-reg" href="#register">
               <span>REGISTER FOR A LEG &gt;</span>
+            </a>
+            <a class="btn-hero-track" href="/track"
+              style="background:rgba(6,20,75,0.85);border:1.5px solid var(--cyan);padding:13px 22px;border-radius:6px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;text-transform:uppercase;letter-spacing:1px;display:inline-flex;align-items:center;gap:8px;transition:all .2s ease;text-decoration:none;box-shadow:0 4px 15px rgba(56,189,248,0.2);">
+              <span>🔍 TRACK STATUS</span>
             </a>
           </div>
         </div>
@@ -3316,6 +3323,10 @@
           <button type="button" class="btn-hero-reg" style="font-size:16px;padding:10px 24px;"
             onclick="downloadPassPng()"><span id="downloadPassBtnText">📥 Download Run Pass (Pending
               Review)</span></button>
+          <a id="btnTrackSubmittedPass" href="/track" class="btn-hero-pass"
+            style="font-size:16px;padding:10px 24px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+            <span>🔍 Track Verification Status &gt;</span>
+          </a>
           <button type="button" class="btn-hero-pass" style="font-size:16px;padding:10px 24px;"
             onclick="window.print()"><span>🖨️ Print Pass</span></button>
           <button type="button" class="btn-hero-reg"
@@ -4429,6 +4440,11 @@
 
           if (regRecord.qrCodeDataUrl) {
             document.getElementById('resQrImage').src = regRecord.qrCodeDataUrl;
+          }
+
+          var btnTrack = document.getElementById('btnTrackSubmittedPass');
+          if (btnTrack && regRecord.bibNumber) {
+            btnTrack.href = '/track?bib=' + encodeURIComponent(regRecord.bibNumber);
           }
 
           document.getElementById('formLayout').style.display = 'none';

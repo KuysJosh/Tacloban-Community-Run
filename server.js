@@ -611,7 +611,10 @@ app.get('/api/registrations', async (req, res) => {
         cebuProofVerified: Boolean(r.cebuProofVerified),
         verificationStatus: r.verificationStatus || (r.cebuProofVerified ? 'VERIFIED' : 'PENDING'),
         disapprovalReason: r.disapprovalReason || '',
-        claimed: Boolean(r.claimed)
+        claimed: Boolean(r.claimed),
+        claimedAt: r.claimedAt || null,
+        createdAt: r.createdAt || null,
+        qrCodeDataUrl: r.qrCodeDataUrl || null
       }));
       return res.json({
         success: true,
@@ -645,6 +648,21 @@ app.get('/api/registrations/:idOrBib', async (req, res) => {
     const record = await storage.getRegistrationByIdOrBib(req.params.idOrBib);
     if (!record) {
       return res.status(404).json({ success: false, message: 'Runner registration not found.' });
+    }
+    // Ensure QR code is present for digital pass and tracking
+    if (!record.qrCodeDataUrl) {
+      try {
+        record.qrCodeDataUrl = await QRCode.toDataURL(JSON.stringify({
+          bib: record.bibNumber,
+          name: record.fullName,
+          category: record.category,
+          club: record.runningClub,
+          verified: Boolean(record.cebuProofVerified),
+          claimed: Boolean(record.claimed)
+        }));
+      } catch (qrErr) {
+        console.warn('QR generation note:', qrErr.message);
+      }
     }
     res.json({ success: true, registration: record });
   } catch (error) {
@@ -781,6 +799,11 @@ app.get('/api/export-csv', requireAdminAuth, async (req, res) => {
 // Serve frontend SPA pages
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+// Dedicated Runner Status Tracking Page
+app.get(['/track', '/tracking', '/track-status', '/status'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'track.html'));
 });
 
 // Fallback to index.html for SPA routing
