@@ -135,10 +135,19 @@
       gap: 5px;
     }
 
+    .desktop-only {
+      display: inline !important;
+    }
+
+    .mobile-only {
+      display: none !important;
+    }
+
     .nav-links {
       display: flex;
       gap: 12px;
       align-items: center;
+      flex-shrink: 0;
     }
 
     .btn-nav-home {
@@ -151,6 +160,9 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      text-decoration: none;
     }
 
     .btn-nav-home:hover {
@@ -172,6 +184,9 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      text-decoration: none;
     }
 
     .btn-nav-reg:hover {
@@ -828,14 +843,98 @@
 
     /* ── RESPONSIVE MEDIA QUERIES ── */
     @media (max-width: 768px) {
+      .desktop-only {
+        display: none !important;
+      }
+
+      .mobile-only {
+        display: inline !important;
+      }
+
+      nav {
+        height: 60px;
+      }
+
+      nav .wrap {
+        padding: 0 12px;
+        gap: 6px;
+      }
+
+      .brand {
+        gap: 6px;
+        flex-shrink: 1;
+        min-width: 0;
+      }
+
+      .nav-brand-img {
+        height: 32px;
+        max-width: 120px;
+      }
+
+      .nav-tracker-badge {
+        display: none !important;
+      }
+
+      .nav-links {
+        gap: 6px;
+        flex-shrink: 0;
+      }
+
+      .btn-nav-home {
+        font-size: 12.5px;
+        padding: 6px 10px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        gap: 4px;
+        line-height: 1;
+      }
+
+      .btn-nav-reg {
+        font-size: 13px;
+        padding: 6px 12px;
+        letter-spacing: 0.3px;
+        gap: 4px;
+        line-height: 1;
+      }
+
+      .track-hero {
+        padding: 24px 0 16px;
+      }
+
+      .track-hero h1 {
+        font-size: clamp(26px, 7.5vw, 36px);
+        line-height: 1.05;
+        margin-bottom: 8px;
+      }
+
+      .track-hero-subtitle {
+        font-size: 13.5px;
+        margin-bottom: 18px;
+        padding: 0 6px;
+      }
+
       .search-card {
         flex-direction: column;
         padding: 8px;
+        gap: 8px;
+        border-radius: 12px;
+      }
+
+      .search-input {
+        font-size: 14.5px;
+        padding: 10px 10px 10px 38px;
       }
 
       .btn-track-submit {
-        height: 46px;
+        height: 44px;
+        font-size: 16px;
         justify-content: center;
+        width: 100%;
+        border-radius: 8px;
+      }
+
+      .stepper-section {
+        padding: 18px 16px;
       }
 
       .stepper-grid {
@@ -845,20 +944,62 @@
 
       .dash-content-grid {
         grid-template-columns: 1fr;
-        padding: 18px;
+        padding: 16px;
+        gap: 16px;
+      }
+
+      .details-box {
+        padding: 16px 14px;
       }
 
       .info-list-grid {
         grid-template-columns: 1fr;
+        gap: 10px;
       }
 
       .dash-header-banner {
         flex-direction: column;
         align-items: flex-start;
+        padding: 16px;
+        gap: 12px;
+      }
+
+      .dash-runner-name-wrap h2 {
+        font-size: 24px;
+      }
+
+      .dash-pass-chip {
+        font-size: 12px;
+        padding: 3px 10px;
       }
 
       .dash-overall-status {
         align-items: flex-start;
+        width: 100%;
+      }
+
+      .dash-status-pill {
+        font-size: 11.5px;
+        padding: 5px 12px;
+      }
+
+      .policy-reminder-card {
+        margin: 0 16px 18px;
+        padding: 14px;
+      }
+
+      .pass-holder-card {
+        padding: 16px 14px;
+      }
+
+      .pass-actions-row {
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .btn-pass-action {
+        font-size: 12px;
+        padding: 7px 6px;
       }
     }
   </style>
@@ -872,14 +1013,16 @@
     <div class="wrap">
       <a class="brand" href="/" aria-label="Cebu Marathon home">
         <img src="Cebu Marathon 2027 Rainbow Logo.png" alt="Cebu Marathon 2027" class="nav-brand-img">
-        <span class="nav-tracker-badge">STATUS TRACKER</span>
+        <span class="nav-tracker-badge desktop-only">STATUS TRACKER</span>
       </a>
       <div class="nav-links">
         <a class="btn-nav-home" href="/">
-          <span>← Back to Home</span>
+          <span class="desktop-only">← Back to Home</span>
+          <span class="mobile-only">← Home</span>
         </a>
         <a class="btn-nav-reg" href="/#register">
-          <span>Register &gt;</span>
+          <span class="desktop-only">REGISTER &gt;</span>
+          <span class="mobile-only">REGISTER &gt;</span>
         </a>
       </div>
     </div>
