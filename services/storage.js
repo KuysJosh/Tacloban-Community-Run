@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
 const { getIsConnected } = require('../config/db');
 const Registration = require('../models/Registration');
 
@@ -204,8 +205,6 @@ async function getRegistrations(query = {}) {
   }
   return records;
 }
-
-const mongoose = require('mongoose');
 
 // Helper to reliably find a document in Mongo by bibNumber or valid ObjectId
 async function findMongoDoc(idOrBib) {

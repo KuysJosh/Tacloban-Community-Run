@@ -583,6 +583,163 @@
       line-height: 1.4;
     }
 
+    /* ── RE-UPLOAD FOR RECONSIDERATION CARD ── */
+    .reupload-card {
+      margin: 20px 28px 0;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(13, 26, 75, 0.95) 100%);
+      border: 1.5px solid rgba(239, 68, 68, 0.5);
+      border-radius: 14px;
+      padding: 22px 24px;
+      box-shadow: 0 0 24px rgba(239, 68, 68, 0.22);
+      animation: fadeInReupload 0.35s ease;
+    }
+
+    @keyframes fadeInReupload {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reupload-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .reupload-icon-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(239, 68, 68, 0.22);
+      border: 1.5px solid #ef4444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .reupload-titles h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .reupload-titles p {
+      font-size: 13px;
+      color: #cbd5e1;
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    .reupload-dropzone-box {
+      border: 2px dashed rgba(239, 68, 68, 0.5);
+      background: rgba(5, 12, 45, 0.65);
+      border-radius: 10px;
+      padding: 22px 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .reupload-dropzone-box:hover, .reupload-dropzone-box.drag-over {
+      border-color: var(--mint);
+      background: rgba(56, 248, 184, 0.08);
+    }
+
+    .reupload-dropzone-box b {
+      display: block;
+      font-size: 15px;
+      color: #ffffff;
+      margin: 6px 0 3px;
+    }
+
+    .reupload-dropzone-box span {
+      display: block;
+      font-size: 12.5px;
+      color: var(--mut);
+    }
+
+    .reupload-preview-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(4, 12, 44, 0.85);
+      border: 1.5px solid var(--mint);
+      border-radius: 10px;
+      padding: 12px 16px;
+    }
+
+    .reupload-preview-card img {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+    }
+
+    .reupload-preview-meta {
+      flex: 1;
+    }
+
+    .reupload-preview-meta b {
+      display: block;
+      color: #ffffff;
+      font-size: 14px;
+      margin-bottom: 2px;
+      word-break: break-all;
+    }
+
+    .reupload-preview-meta span {
+      font-size: 12px;
+      color: var(--mut);
+    }
+
+    .btn-submit-reupload {
+      background: linear-gradient(135deg, #00d2ff 0%, #00f2fe 100%);
+      color: #030b2c;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all .2s ease;
+      box-shadow: 0 4px 15px rgba(0, 210, 255, 0.35);
+      margin-top: 14px;
+    }
+
+    .btn-submit-reupload:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 210, 255, 0.5);
+    }
+
+    .btn-submit-reupload:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .reupload-alert-err {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
     /* ── RUNNER DETAILS & PASS GRID ── */
     .dash-content-grid {
       padding: 28px;
@@ -1134,6 +1291,48 @@
           </div>
         </div>
 
+        <!-- RE-UPLOAD FOR RECONSIDERATION CARD (Only displayed when status is DISAPPROVED) -->
+        <div class="reupload-card" id="reuploadCard" style="display:none;">
+          <div class="reupload-header">
+            <div class="reupload-icon-badge">📸</div>
+            <div class="reupload-titles">
+              <h3>Re-upload Photo Proof for Reconsideration</h3>
+              <p>Your previous proof was declined by event marshals. Please attach a clear screenshot or photo of your Cebu Marathon 2027 confirmation email, official receipt, or portal e-ticket so marshals can reconsider and approve your runner pass.</p>
+            </div>
+          </div>
+
+          <!-- Upload Dropzone -->
+          <div class="reupload-dropzone-box" id="reuploadDropZone">
+            <input type="file" id="reuploadFileInput" accept="image/png,image/jpeg,image/jpg,image/webp" style="display:none;">
+            <div onclick="document.getElementById('reuploadFileInput').click()">
+              <span style="font-size:32px;display:block;margin-bottom:6px;">📤</span>
+              <b>Click to Upload or Drag &amp; Drop New Proof Photo</b>
+              <span>PNG, JPG, or WEBP (up to 25MB) &bull; Confirmation Email, E-Ticket, or Portal Screenshot</span>
+            </div>
+          </div>
+
+          <!-- Preview Area -->
+          <div class="reupload-preview-card" id="reuploadPreviewArea" style="display:none;">
+            <img id="reuploadThumbImg" src="" alt="Proof Preview" onclick="viewReuploadEnlarged()">
+            <div class="reupload-preview-meta">
+              <b id="reuploadFileName">proof.jpg</b>
+              <span id="reuploadFileSize">0.00 KB</span>
+              <div style="font-size:12px;color:var(--mint);font-weight:700;margin-top:2px;">✓ New photo attached &bull; Click to enlarge preview</div>
+            </div>
+            <button type="button" class="btn sm ghost" onclick="cancelReuploadFile()">Change</button>
+          </div>
+
+          <!-- Error Message -->
+          <div class="reupload-alert-err" id="reuploadErrMsg" style="display:none;"></div>
+
+          <!-- Submit Button -->
+          <div style="display:flex;justify-content:flex-end;margin-top:6px;">
+            <button type="button" class="btn-submit-reupload" id="btnSubmitReupload" onclick="submitProofReupload()" disabled>
+              <span>Submit New Proof for Reconsideration ➔</span>
+            </button>
+          </div>
+        </div>
+
         <!-- DASHBOARD DETAILS & PASS PREVIEW -->
         <div class="dash-content-grid">
           
@@ -1479,25 +1678,39 @@
         var step2Desc = document.getElementById('step2Desc');
         var step2ReasonBox = document.getElementById('step2ReasonBox');
 
+        var reuploadCard = document.getElementById('reuploadCard');
+
         if (vStatus === 'VERIFIED') {
           step2Card.className = 'step-card active-success';
           step2Badge.textContent = '✓';
           step2Title.textContent = 'Proof Approved & Verified';
           step2Desc.textContent = 'Your Cebu Marathon registration proof has been validated by event marshals. You are officially verified!';
           step2ReasonBox.style.display = 'none';
+          if (reuploadCard) reuploadCard.style.display = 'none';
         } else if (vStatus === 'DISAPPROVED') {
           step2Card.className = 'step-card active-danger';
           step2Badge.textContent = '✕';
-          step2Title.textContent = 'Proof Disapproved';
-          step2Desc.textContent = 'The uploaded proof did not meet the validation requirements. Please see the marshal note below.';
+          step2Title.textContent = 'Proof Disapproved • Action Required';
+          step2Desc.textContent = 'The uploaded proof did not meet validation requirements. Please re-upload your photo proof below for reconsideration.';
           step2ReasonBox.style.display = 'block';
-          document.getElementById('step2ReasonText').textContent = record.disapprovalReason || 'Unclear proof screenshot or mismatched name. You can present proof in person to an event marshal on run day.';
+          document.getElementById('step2ReasonText').textContent = record.disapprovalReason || 'Unclear proof screenshot or mismatched name. Please attach a clearer photo below.';
+          if (reuploadCard) {
+            reuploadCard.style.display = 'block';
+            resetReuploadForm();
+          }
         } else {
           step2Card.className = 'step-card active-warning';
           step2Badge.textContent = '⏳';
-          step2Title.textContent = 'Proof Under Review';
-          step2Desc.textContent = 'Your proof is queued for verification by event marshals. Please check back before event day.';
+          if (record.reconsiderationCount > 0) {
+            step2Title.textContent = 'Proof Resubmitted • Under Review';
+            step2Desc.textContent = 'Your new photo proof was submitted for reconsideration and is currently awaiting marshal review.';
+            statusPill.innerHTML = '<span>⏳ RESUBMITTED • PENDING REVIEW</span>';
+          } else {
+            step2Title.textContent = 'Proof Under Review';
+            step2Desc.textContent = 'Your proof is queued for verification by event marshals. Please check back before event day.';
+          }
           step2ReasonBox.style.display = 'none';
+          if (reuploadCard) reuploadCard.style.display = 'none';
         }
 
         // Stepper: Step 3 (Check-In)
@@ -1559,6 +1772,209 @@
         wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
+      // ── RE-UPLOAD PROOF FOR RECONSIDERATION HANDLERS ──
+      var reuploadBase64 = '';
+      var reuploadFileInput = document.getElementById('reuploadFileInput');
+      var reuploadDropZone = document.getElementById('reuploadDropZone');
+      var reuploadPreviewArea = document.getElementById('reuploadPreviewArea');
+      var reuploadThumbImg = document.getElementById('reuploadThumbImg');
+      var reuploadFileName = document.getElementById('reuploadFileName');
+      var reuploadFileSize = document.getElementById('reuploadFileSize');
+      var reuploadErrMsg = document.getElementById('reuploadErrMsg');
+      var btnSubmitReupload = document.getElementById('btnSubmitReupload');
+
+      function resetReuploadForm() {
+        reuploadBase64 = '';
+        if (reuploadFileInput) reuploadFileInput.value = '';
+        if (reuploadDropZone) {
+          reuploadDropZone.style.display = 'block';
+          reuploadDropZone.classList.remove('drag-over');
+        }
+        if (reuploadPreviewArea) reuploadPreviewArea.style.display = 'none';
+        if (reuploadErrMsg) {
+          reuploadErrMsg.style.display = 'none';
+          reuploadErrMsg.textContent = '';
+        }
+        if (btnSubmitReupload) {
+          btnSubmitReupload.disabled = true;
+          btnSubmitReupload.innerHTML = '<span>Submit New Proof for Reconsideration ➔</span>';
+        }
+      }
+
+      function handleReuploadFile(file) {
+        if (!file) return;
+        if (!file.type || !file.type.match(/^image\//i)) {
+          showReuploadError('Please select a valid image file (PNG, JPG, or WEBP).');
+          return;
+        }
+        if (file.size > 25 * 1024 * 1024) {
+          showReuploadError('Image exceeds 25MB limit. Please upload a smaller photo.');
+          return;
+        }
+        hideReuploadError();
+
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          var rawDataUrl = e.target.result;
+          var img = new Image();
+          img.onload = function () {
+            var maxDim = 1600;
+            var w = img.width;
+            var h = img.height;
+            var needsResize = (w > maxDim || h > maxDim || file.size > 800 * 1024);
+            var finalDataUrl = rawDataUrl;
+
+            if (needsResize) {
+              if (w > maxDim || h > maxDim) {
+                if (w > h) {
+                  h = Math.round((h * maxDim) / w);
+                  w = maxDim;
+                } else {
+                  w = Math.round((w * maxDim) / h);
+                  h = maxDim;
+                }
+              }
+              var canvas = document.createElement('canvas');
+              canvas.width = w;
+              canvas.height = h;
+              var ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, w, h);
+              var outputMime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+              finalDataUrl = canvas.toDataURL(outputMime, 0.86);
+              if (finalDataUrl.length > 2 * 1024 * 1024) {
+                finalDataUrl = canvas.toDataURL('image/jpeg', 0.86);
+              }
+            }
+
+            reuploadBase64 = finalDataUrl;
+            reuploadThumbImg.src = finalDataUrl;
+            reuploadFileName.textContent = file.name;
+            var estBytes = Math.round(finalDataUrl.length * 0.75);
+            reuploadFileSize.textContent = (estBytes / (1024 * 1024) >= 1)
+              ? (estBytes / (1024 * 1024)).toFixed(2) + ' MB'
+              : Math.round(estBytes / 1024) + ' KB';
+
+            reuploadDropZone.style.display = 'none';
+            reuploadPreviewArea.style.display = 'flex';
+            btnSubmitReupload.disabled = false;
+          };
+
+          img.onerror = function () {
+            reuploadBase64 = rawDataUrl;
+            reuploadThumbImg.src = rawDataUrl;
+            reuploadFileName.textContent = file.name;
+            reuploadFileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+            reuploadDropZone.style.display = 'none';
+            reuploadPreviewArea.style.display = 'flex';
+            btnSubmitReupload.disabled = false;
+          };
+
+          img.src = rawDataUrl;
+        };
+
+        reader.onerror = function () {
+          showReuploadError('Could not read image file. Please try another image.');
+        };
+
+        reader.readAsDataURL(file);
+      }
+
+      function showReuploadError(msg) {
+        if (reuploadErrMsg) {
+          reuploadErrMsg.textContent = msg;
+          reuploadErrMsg.style.display = 'block';
+        }
+      }
+
+      function hideReuploadError() {
+        if (reuploadErrMsg) {
+          reuploadErrMsg.textContent = '';
+          reuploadErrMsg.style.display = 'none';
+        }
+      }
+
+      window.cancelReuploadFile = function () {
+        resetReuploadForm();
+      };
+
+      window.submitProofReupload = async function () {
+        if (!currentRecord || !currentRecord.bibNumber) {
+          showReuploadError('Runner identification is missing. Please re-search your pass ID.');
+          return;
+        }
+        if (!reuploadBase64) {
+          showReuploadError('Please attach a photo proof before submitting.');
+          return;
+        }
+
+        btnSubmitReupload.disabled = true;
+        btnSubmitReupload.innerHTML = '<span>Uploading Proof &amp; Submitting...</span>';
+        hideReuploadError();
+
+        try {
+          var res = await fetch('/api/registrations/' + encodeURIComponent(currentRecord.bibNumber) + '/reupload-proof', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cebuProofImage: reuploadBase64 })
+          });
+
+          var data = await res.json();
+          if (!res.ok || !data.success) {
+            throw new Error(data.message || 'Failed to submit proof for reconsideration.');
+          }
+
+          showToast('✓ Proof resubmitted for reconsideration! Status is now Pending Review.', '📤');
+          
+          // Re-render dashboard with updated record
+          if (data.registration) {
+            renderSingleRunner(data.registration);
+          } else {
+            fetchFullRecord(currentRecord.bibNumber);
+          }
+        } catch (err) {
+          btnSubmitReupload.disabled = false;
+          btnSubmitReupload.innerHTML = '<span>Submit New Proof for Reconsideration ➔</span>';
+          showReuploadError('Error: ' + err.message);
+        }
+      };
+
+      if (reuploadDropZone) {
+        reuploadDropZone.addEventListener('dragover', function (e) {
+          e.preventDefault();
+          reuploadDropZone.classList.add('drag-over');
+        });
+        reuploadDropZone.addEventListener('dragleave', function (e) {
+          e.preventDefault();
+          reuploadDropZone.classList.remove('drag-over');
+        });
+        reuploadDropZone.addEventListener('drop', function (e) {
+          e.preventDefault();
+          reuploadDropZone.classList.remove('drag-over');
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleReuploadFile(e.dataTransfer.files[0]);
+          }
+        });
+      }
+
+      if (reuploadFileInput) {
+        reuploadFileInput.addEventListener('change', function (e) {
+          if (e.target.files && e.target.files[0]) {
+            handleReuploadFile(e.target.files[0]);
+          }
+        });
+      }
+
+      window.viewReuploadEnlarged = function () {
+        if (reuploadBase64) {
+          document.getElementById('trackProofModalImg').src = reuploadBase64;
+          document.getElementById('trackProofModal').style.display = 'flex';
+        }
+      };
+
+      window.closeTrackProofModal = function () {
+        document.getElementById('trackProofModal').style.display = 'none';
+      };
+
       // Check on page load for ?bib= or ?id= or ?search=
       window.addEventListener('DOMContentLoaded', function () {
         var params = new URLSearchParams(window.location.search);
@@ -1570,6 +1986,15 @@
       });
     })();
   </script>
+
+  <!-- ENLARGED PROOF LIGHTBOX MODAL -->
+  <div id="trackProofModal" style="display:none;position:fixed;inset:0;background:rgba(2,6,28,0.88);backdrop-filter:blur(8px);z-index:99999;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)closeTrackProofModal()">
+    <div style="position:relative;background:#061246;border:1.5px solid var(--line-highlight);border-radius:12px;padding:20px;max-width:92vw;max-height:92vh;display:flex;flex-direction:column;align-items:center;box-shadow:0 0 30px rgba(0,0,0,0.8);">
+      <button type="button" onclick="closeTrackProofModal()" style="position:absolute;top:10px;right:14px;background:none;border:none;color:#cbd5e1;font-size:26px;cursor:pointer;line-height:1;">&times;</button>
+      <h4 style="margin:0 0 12px;color:var(--gold);font-size:16px;">Photo Proof Inspection</h4>
+      <img id="trackProofModalImg" src="" alt="Enlarged Proof" style="max-width:100%;max-height:75vh;object-fit:contain;border-radius:6px;border:1px solid rgba(255,255,255,0.15);">
+    </div>
+  </div>
 </body>
 
 </html>

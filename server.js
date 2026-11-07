@@ -761,6 +761,75 @@ app.get('/api/registrations/:idOrBib/proof', async (req, res) => {
   }
 });
 
+// Re-upload Photo Proof for Reconsideration (Used by runners on tracking page when status is DISAPPROVED)
+app.post('/api/registrations/:idOrBib/reupload-proof', async (req, res) => {
+  try {
+    const { idOrBib } = req.params;
+    const { cebuProofImage } = req.body || {};
+
+    if (!cebuProofImage || typeof cebuProofImage !== 'string' || !cebuProofImage.startsWith('data:image/')) {
+      return res.status(400).json({
+        success: false,
+        message: 'A valid photo proof image (PNG, JPG, or WEBP) is required for reconsideration.'
+      });
+    }
+
+    const record = await storage.getRegistrationByIdOrBib(idOrBib);
+    if (!record) {
+      return res.status(404).json({
+        success: false,
+        message: 'Runner registration record not found.'
+      });
+    }
+
+    const parsed = extractBase64Image(cebuProofImage);
+    if (!parsed || !parsed.buffer || parsed.buffer.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'The uploaded photo could not be read or is corrupted. Please try another image.'
+      });
+    }
+
+    // Save newly uploaded proof file to disk
+    const safeBib = (record.bibNumber || 'RUNNER').replace(/[^a-zA-Z0-9_-]/g, '_');
+    const fileName = `${safeBib}_cebu_proof_${Date.now()}.${parsed.ext}`;
+    const filePath = path.join(UPLOADS_DIR, fileName);
+    try {
+      fs.writeFileSync(filePath, parsed.buffer);
+      console.log(`✅ Saved reconsideration proof image to disk: ${fileName} (${parsed.buffer.length} bytes)`);
+    } catch (fsErr) {
+      console.warn('Could not write disk file for re-uploaded proof:', fsErr.message);
+    }
+
+    const savedProofPath = `/uploads/proofs/${fileName}`;
+
+    // Update runner status back to PENDING review with cleared rejection reason
+    const updatePayload = {
+      cebuProofImage: savedProofPath,
+      cebuProofDataUrl: parsed.dataUrl,
+      cebuProofVerified: false,
+      verificationStatus: 'PENDING',
+      disapprovalReason: '',
+      reconsideredAt: new Date(),
+      reconsiderationCount: (record.reconsiderationCount || 0) + 1
+    };
+
+    const updated = await storage.updateRegistration(idOrBib, updatePayload);
+
+    return res.json({
+      success: true,
+      message: 'New photo proof submitted successfully for reconsideration. Your registration is now pending marshal review.',
+      registration: updated
+    });
+  } catch (error) {
+    console.error('Re-upload proof error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error while processing re-uploaded proof: ' + error.message
+    });
+  }
+});
+
 // Automatic recovery for static /uploads/proofs/:fileName if Render disk restarted
 app.get('/uploads/proofs/:fileName', async (req, res, next) => {
   const localFile = path.join(UPLOADS_DIR, req.params.fileName);

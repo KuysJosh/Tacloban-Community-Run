@@ -113,6 +113,14 @@ const registrationSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  reconsideredAt: {
+    type: Date,
+    default: null
+  },
+  reconsiderationCount: {
+    type: Number,
+    default: 0
+  },
   verifiedAt: {
     type: Date,
     default: null

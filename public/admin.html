@@ -801,6 +801,7 @@ async function loadUnverifiedRunners() {
               <div class="reason-box">Reason: ${escapeHtml(r.disapprovalReason || 'Unsatisfactory proof')}</div>
             ` : `
               <span class="tag-status tag-pending">⏳ Pending Review</span>
+              ${r.reconsiderationCount > 0 ? `<div style="margin-top:4px;"><span class="tag-status" style="background:rgba(56,189,248,0.18);color:#38bdf8;border:1px solid #38bdf8;font-size:10.5px;padding:2px 7px;">🔄 Resubmitted (${r.reconsiderationCount})</span></div>` : ''}
             `}
           </td>
           <td>
