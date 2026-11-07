@@ -117,6 +117,9 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:7
 .tab-badge.badge-mint{
   background:rgba(16,185,129,.25);color:#6ee7b7;border:1px solid rgba(16,185,129,.4);
 }
+.tab-badge.badge-red{
+  background:rgba(239,68,68,.25);color:#fca5a5;border:1px solid rgba(239,68,68,.4);
+}
 
 .tab-pane{display:none;}
 .tab-pane.active{display:block;}
@@ -280,17 +283,17 @@ tr:hover td{background:rgba(255,255,255,.04)}
     </div>
 
     <!-- Pending Proof Review -->
-    <div class="stat-card highlight-pending">
+    <div class="stat-card highlight-pending" onclick="switchAdminTab('pending')" style="cursor:pointer;" title="Click to open Pending Review List">
       <div class="stat-label">Awaiting Verification</div>
       <div class="stat-val val-cyan" id="statPendingReview">0</div>
-      <div class="stat-sub">Require Photo Proof Review</div>
+      <div class="stat-sub">Require Photo Proof Review ➔</div>
     </div>
 
     <!-- Disapproved Runners -->
-    <div class="stat-card highlight-disapproved">
+    <div class="stat-card highlight-disapproved" onclick="switchAdminTab('disapproved')" style="cursor:pointer;" title="Click to open Declined Proofs">
       <div class="stat-label">Disapproved Proofs</div>
       <div class="stat-val val-red" id="statDisapproved">0</div>
-      <div class="stat-sub">Failed Review • Can Re-verify</div>
+      <div class="stat-sub">Failed Review • Can Re-upload ➔</div>
     </div>
 
     <!-- Total Submissions -->
@@ -301,15 +304,19 @@ tr:hover td{background:rgba(255,255,255,.04)}
     </div>
   </div>
 
-  <!-- TABS NAVIGATION (Requirements 4 & 5) -->
+  <!-- TABS NAVIGATION -->
   <div class="admin-tabs">
     <button type="button" class="tab-btn active" id="tabBtnVerified" onclick="switchAdminTab('verified')">
       <span>✓ Verified Runners (Check-In Desk)</span>
       <span class="tab-badge badge-mint" id="badgeVerifiedCount">0</span>
     </button>
-    <button type="button" class="tab-btn" id="tabBtnUnverified" onclick="switchAdminTab('unverified')">
-      <span>⏳ Unverified &amp; Pending Proofs</span>
-      <span class="tab-badge badge-amber" id="badgeUnverifiedCount">0</span>
+    <button type="button" class="tab-btn" id="tabBtnPending" onclick="switchAdminTab('pending')">
+      <span>⏳ Pending Review List</span>
+      <span class="tab-badge badge-amber" id="badgePendingCount">0</span>
+    </button>
+    <button type="button" class="tab-btn" id="tabBtnDisapproved" onclick="switchAdminTab('disapproved')">
+      <span>❌ Declined Proofs</span>
+      <span class="tab-badge badge-red" id="badgeDisapprovedCount">0</span>
     </button>
   </div>
 
@@ -376,18 +383,13 @@ tr:hover td{background:rgba(255,255,255,.04)}
     </div>
   </div>
 
-  <!-- TAB 2: UNVERIFIED RUNNERS & PENDING PROOF (Requirement 5) -->
-  <div class="tab-pane" id="paneUnverified">
-    <!-- Toolbar for Unverified Runners -->
+  <!-- TAB 2: PENDING REVIEW LIST (Includes initial registrations & reconsidered re-uploads) -->
+  <div class="tab-pane" id="panePending">
+    <!-- Toolbar for Pending Review -->
     <div class="toolbar">
       <div class="filters">
-        <input type="text" id="searchUnverified" placeholder="Search unverified runner name, pass ID, mobile..." oninput="debounceLoadUnverified()">
-        <select id="subStatusUnverified" onchange="loadUnverifiedRunners()">
-          <option value="ALL">All Unverified (Pending &amp; Disapproved)</option>
-          <option value="PENDING">⏳ Pending Review Only</option>
-          <option value="DISAPPROVED">❌ Disapproved Only</option>
-        </select>
-        <select id="catUnverified" onchange="loadUnverifiedRunners()">
+        <input type="text" id="searchPending" placeholder="Search pending runner name, pass ID, mobile..." oninput="debounceLoadPending()">
+        <select id="catPending" onchange="loadPendingRunners()">
           <option value="ALL">All Distances</option>
           <option value="16KM">16 KM</option>
           <option value="21KM">21 KM</option>
@@ -396,11 +398,11 @@ tr:hover td{background:rgba(255,255,255,.04)}
         </select>
       </div>
       <div style="display:flex;gap:8px;">
-        <button type="button" class="btn sm ghost" onclick="loadUnverifiedRunners()"><span>🔄 Refresh</span></button>
+        <button type="button" class="btn sm ghost" onclick="loadPendingRunners()"><span>🔄 Refresh</span></button>
       </div>
     </div>
 
-    <!-- Unverified Runners Table -->
+    <!-- Pending Review Table -->
     <div class="table-card">
       <div class="tbl-wrap">
         <table>
@@ -416,8 +418,51 @@ tr:hover td{background:rgba(255,255,255,.04)}
               <th>Verification Action</th>
             </tr>
           </thead>
-          <tbody id="tbodyUnverified">
-            <tr><td colspan="8" style="text-align:center;padding:30px;">Loading unverified runners...</td></tr>
+          <tbody id="tbodyPending">
+            <tr><td colspan="8" style="text-align:center;padding:30px;">Loading pending registrations...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: DECLINED / DISAPPROVED LIST (Declined registrations awaiting runner re-upload) -->
+  <div class="tab-pane" id="paneDisapproved">
+    <!-- Toolbar for Declined Proofs -->
+    <div class="toolbar">
+      <div class="filters">
+        <input type="text" id="searchDisapproved" placeholder="Search declined runner name, pass ID, mobile..." oninput="debounceLoadDisapproved()">
+        <select id="catDisapproved" onchange="loadDisapprovedRunners()">
+          <option value="ALL">All Distances</option>
+          <option value="16KM">16 KM</option>
+          <option value="21KM">21 KM</option>
+          <option value="26KM">26 KM</option>
+          <option value="32KM">32 KM</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button type="button" class="btn sm ghost" onclick="loadDisapprovedRunners()"><span>🔄 Refresh</span></button>
+      </div>
+    </div>
+
+    <!-- Declined Proofs Table -->
+    <div class="table-card">
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Pass ID</th>
+              <th>Runner Name</th>
+              <th>Distance</th>
+              <th>Running Group</th>
+              <th>Contact Info</th>
+              <th>Declined Proof Photo</th>
+              <th>Decline Reason &amp; Tracking</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyDisapproved">
+            <tr><td colspan="8" style="text-align:center;padding:30px;">Loading declined registrations...</td></tr>
           </tbody>
         </table>
       </div>
@@ -592,10 +637,12 @@ function handleAdminLogout() {
 function switchAdminTab(tabName) {
   activeTab = tabName;
   document.getElementById('tabBtnVerified').classList.toggle('active', tabName === 'verified');
-  document.getElementById('tabBtnUnverified').classList.toggle('active', tabName === 'unverified');
+  document.getElementById('tabBtnPending').classList.toggle('active', tabName === 'pending');
+  document.getElementById('tabBtnDisapproved').classList.toggle('active', tabName === 'disapproved');
 
   document.getElementById('paneVerified').classList.toggle('active', tabName === 'verified');
-  document.getElementById('paneUnverified').classList.toggle('active', tabName === 'unverified');
+  document.getElementById('panePending').classList.toggle('active', tabName === 'pending');
+  document.getElementById('paneDisapproved').classList.toggle('active', tabName === 'disapproved');
 
   loadActiveTabData();
 }
@@ -603,8 +650,10 @@ function switchAdminTab(tabName) {
 function loadActiveTabData() {
   if (activeTab === 'verified') {
     loadVerifiedRunners();
-  } else {
-    loadUnverifiedRunners();
+  } else if (activeTab === 'pending') {
+    loadPendingRunners();
+  } else if (activeTab === 'disapproved') {
+    loadDisapprovedRunners();
   }
   loadStats();
 }
@@ -614,9 +663,15 @@ function debounceLoadVerified() {
   debounceTimerVerified = setTimeout(loadVerifiedRunners, 300);
 }
 
-function debounceLoadUnverified() {
-  clearTimeout(debounceTimerUnverified);
-  debounceTimerUnverified = setTimeout(loadUnverifiedRunners, 300);
+let debounceTimerPending, debounceTimerDisapproved;
+function debounceLoadPending() {
+  clearTimeout(debounceTimerPending);
+  debounceTimerPending = setTimeout(loadPendingRunners, 300);
+}
+
+function debounceLoadDisapproved() {
+  clearTimeout(debounceTimerDisapproved);
+  debounceTimerDisapproved = setTimeout(loadDisapprovedRunners, 300);
 }
 
 // ── LOAD STATS (Requirement 3) ──
@@ -635,7 +690,8 @@ async function loadStats() {
 
       // Update badge counts on tabs
       document.getElementById('badgeVerifiedCount').textContent = s.totalVerified || 0;
-      document.getElementById('badgeUnverifiedCount').textContent = (s.totalUnverified || (s.pendingReviewCount + s.disapprovedCount)) || 0;
+      document.getElementById('badgePendingCount').textContent = s.pendingReviewCount || 0;
+      document.getElementById('badgeDisapprovedCount').textContent = s.disapprovedCount || 0;
     }
   } catch (err) {
     console.error('Error loading stats:', err);
@@ -734,21 +790,21 @@ async function loadVerifiedRunners() {
   }
 }
 
-// ── TAB 2: LOAD UNVERIFIED RUNNERS (Requirement 4 & 5) ──
-async function loadUnverifiedRunners() {
+// ── TAB 2: LOAD PENDING RUNNERS (Awaiting Initial or Reconsidered Proof Review) ──
+async function loadPendingRunners() {
   if (!currentAuthToken) return;
 
-  const search = document.getElementById('searchUnverified').value.trim();
-  const subStatus = document.getElementById('subStatusUnverified').value;
-  const category = document.getElementById('catUnverified').value;
+  const search = document.getElementById('searchPending') ? document.getElementById('searchPending').value.trim() : '';
+  const category = document.getElementById('catPending') ? document.getElementById('catPending').value : 'ALL';
 
   const params = new URLSearchParams();
-  params.append('verified', 'false'); // Only unverified runners!
-  if (subStatus && subStatus !== 'ALL') params.append('verificationStatus', subStatus);
+  params.append('verified', 'false');
+  params.append('verificationStatus', 'PENDING');
   if (category && category !== 'ALL') params.append('category', category);
   if (search) params.append('search', search);
 
-  const tbody = document.getElementById('tbodyUnverified');
+  const tbody = document.getElementById('tbodyPending');
+  if (!tbody) return;
 
   try {
     const res = await fetch('/api/registrations?' + params.toString(), {
@@ -763,13 +819,12 @@ async function loadUnverifiedRunners() {
     const data = await res.json();
 
     if (!data.success || !data.registrations || data.registrations.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--mint);">✓ No unverified runners found! All registrations have been verified.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--mint);">✓ No pending registrations to review! All submissions have been processed.</td></tr>';
       return;
     }
 
     let rows = '';
     data.registrations.forEach(r => {
-      const isDisapproved = r.verificationStatus === 'DISAPPROVED';
       rows += `
         <tr>
           <td><span class="bib-pill">${escapeHtml(r.bibNumber)}</span></td>
@@ -796,29 +851,17 @@ async function loadUnverifiedRunners() {
             ` : `<span style="color:#f87171;font-size:12px;font-weight:700;">⚠️ No proof attached</span>`}
           </td>
           <td>
-            ${isDisapproved ? `
-              <span class="tag-status tag-disapproved">❌ Disapproved</span>
-              <div class="reason-box">Reason: ${escapeHtml(r.disapprovalReason || 'Unsatisfactory proof')}</div>
-            ` : `
-              <span class="tag-status tag-pending">⏳ Pending Review</span>
-              ${r.reconsiderationCount > 0 ? `<div style="margin-top:4px;"><span class="tag-status" style="background:rgba(56,189,248,0.18);color:#38bdf8;border:1px solid #38bdf8;font-size:10.5px;padding:2px 7px;">🔄 Resubmitted (${r.reconsiderationCount})</span></div>` : ''}
-            `}
+            <span class="tag-status tag-pending">⏳ Pending Review</span>
+            ${r.reconsiderationCount > 0 ? `<div style="margin-top:4px;"><span class="tag-status" style="background:rgba(56,189,248,0.22);color:#38bdf8;border:1px solid #38bdf8;font-size:10.5px;padding:2px 7px;">🔄 Re-uploaded for Reconsideration (${r.reconsiderationCount})</span></div>` : ''}
           </td>
           <td>
-            <!-- ACTION BUTTONS: MANUALLY VERIFY / APPROVE (Requirement 4 & 5) -->
             <div style="display:flex;gap:6px;flex-wrap:wrap;">
               <button type="button" class="btn sm mint" style="padding:5px 12px;font-size:13px;" title="Approve Cebu Marathon proof and enable runner check-in" onclick="manuallyVerifyRunner('${r.bibNumber}')">
                 <span>✓ Approve &amp; Verify</span>
               </button>
-              ${!isDisapproved ? `
-                <button type="button" class="btn sm danger" style="padding:5px 10px;font-size:13px;" title="Reject proof and ask runner for valid ID/proof" onclick="openDisapproveModal('${r.bibNumber}', '${escapeHtml(r.fullName)}')">
-                  <span>✕ Disapprove</span>
-                </button>
-              ` : `
-                <button type="button" class="btn sm ghost" style="padding:5px 8px;font-size:12px;" title="Edit reason" onclick="openDisapproveModal('${r.bibNumber}', '${escapeHtml(r.fullName)}')">
-                  <span>Edit Reason</span>
-                </button>
-              `}
+              <button type="button" class="btn sm danger" style="padding:5px 10px;font-size:13px;" title="Decline proof and request clearer photo" onclick="openDisapproveModal('${r.bibNumber}', '${escapeHtml(r.fullName)}')">
+                <span>✕ Decline</span>
+              </button>
               <button class="btn sm danger-outline" style="padding:5px 8px;font-size:13px;" title="Delete" onclick="deleteRunner('${r.bibNumber}')">
                 <span>🗑️</span>
               </button>
@@ -830,8 +873,97 @@ async function loadUnverifiedRunners() {
 
     tbody.innerHTML = rows;
   } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:20px;color:#ff7a8e;">Error loading unverified runners: ${err.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:20px;color:#ff7a8e;">Error loading pending runners: ${err.message}</td></tr>`;
   }
+}
+
+// ── TAB 3: LOAD DECLINED / DISAPPROVED RUNNERS (Awaiting runner re-upload on track page) ──
+async function loadDisapprovedRunners() {
+  if (!currentAuthToken) return;
+
+  const search = document.getElementById('searchDisapproved') ? document.getElementById('searchDisapproved').value.trim() : '';
+  const category = document.getElementById('catDisapproved') ? document.getElementById('catDisapproved').value : 'ALL';
+
+  const params = new URLSearchParams();
+  params.append('verified', 'false');
+  params.append('verificationStatus', 'DISAPPROVED');
+  if (category && category !== 'ALL') params.append('category', category);
+  if (search) params.append('search', search);
+
+  const tbody = document.getElementById('tbodyDisapproved');
+  if (!tbody) return;
+
+  try {
+    const res = await fetch('/api/registrations?' + params.toString(), {
+      headers: getAuthHeaders()
+    });
+
+    if (res.status === 401) {
+      showLoginOverlay();
+      return;
+    }
+
+    const data = await res.json();
+
+    if (!data.success || !data.registrations || data.registrations.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--mint);">✓ No declined registrations on file. All runners are either verified or pending review.</td></tr>';
+      return;
+    }
+
+    let rows = '';
+    data.registrations.forEach(r => {
+      rows += `
+        <tr>
+          <td><span class="bib-pill">${escapeHtml(r.bibNumber)}</span></td>
+          <td>
+            <strong style="color:#fff;font-size:16px;">${escapeHtml(r.fullName)}</strong>
+            <div style="font-size:12px;color:var(--mut);">${escapeHtml(r.gender || '')} &bull; Age: ${r.age || 'N/A'}</div>
+          </td>
+          <td><b style="color:var(--cyan);font-family:'Barlow Condensed';font-style:italic;font-size:18px;">${r.category}</b></td>
+          <td style="font-size:14px;color:#cbd5e1;">${escapeHtml(r.runningClub)}</td>
+          <td style="font-size:13px;">
+            <div>${escapeHtml(r.mobile)}</div>
+            <div style="color:#8fa0dd;">${escapeHtml(r.email)}</div>
+          </td>
+          <td>
+            ${r.cebuProofImage ? `
+              <div style="display:flex;align-items:center;gap:8px;">
+                <img src="${r.cebuProofImage}" alt="Proof" style="width:44px;height:44px;object-fit:cover;border-radius:4px;border:1.5px solid var(--danger);cursor:pointer;" onclick="openProofModal('${encodeURIComponent(r.cebuProofImage)}', '${escapeHtml(r.fullName)}', '${escapeHtml(r.bibNumber)}', false)" onerror="this.onerror=null;this.src='/api/registrations/${encodeURIComponent(r.bibNumber)}/proof';">
+                <div>
+                  <button type="button" class="btn sm ghost" style="padding:3px 7px;font-size:11px;" onclick="openProofModal('${encodeURIComponent(r.cebuProofImage)}', '${escapeHtml(r.fullName)}', '${escapeHtml(r.bibNumber)}', false)">
+                    <span>Zoom 🔍</span>
+                  </button>
+                </div>
+              </div>
+            ` : `<span style="color:#f87171;font-size:12px;font-weight:700;">⚠️ No proof attached</span>`}
+          </td>
+          <td>
+            <span class="tag-status tag-disapproved">❌ Declined</span>
+            <div class="reason-box">Reason: ${escapeHtml(r.disapprovalReason || 'Unsatisfactory proof')}</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:4px;">⏳ Waiting for runner to re-upload on tracking page</div>
+          </td>
+          <td>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn sm mint" style="padding:5px 12px;font-size:13px;" title="Approve Cebu Marathon proof and enable runner check-in" onclick="manuallyVerifyRunner('${r.bibNumber}')">
+                <span>✓ Approve</span>
+              </button>
+              <button type="button" class="btn sm ghost" style="padding:5px 8px;font-size:12px;" title="Edit reason" onclick="openDisapproveModal('${r.bibNumber}', '${escapeHtml(r.fullName)}')">
+                <span>Edit Reason</span>
+              </button>
+              <button class="btn sm danger-outline" style="padding:5px 8px;font-size:13px;" title="Delete" onclick="deleteRunner('${r.bibNumber}')">
+                <span>🗑️</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+
+    tbody.innerHTML = rows;
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:20px;color:#ff7a8e;">Error loading declined runners: ${err.message}</td></tr>`;
+  }
+}
 }
 
 // ── VERIFICATION ACTIONS (Approve / Disapprove) ──
