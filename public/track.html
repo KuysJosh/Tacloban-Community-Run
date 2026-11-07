@@ -285,6 +285,65 @@
       color: rgba(185, 198, 245, 0.55);
     }
 
+    .btn-clear-search {
+      position: absolute;
+      right: 14px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #fff;
+      font-size: 15px;
+      line-height: 1;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .btn-clear-search:hover {
+      background: rgba(255, 87, 87, 0.45);
+    }
+
+    .search-quick-hints {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: -22px;
+      margin-bottom: 34px;
+    }
+
+    .hint-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--mut);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hint-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--cyan);
+      font-family: 'Barlow', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .hint-chip:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: #fff;
+    }
+
     .btn-track-submit {
       background: linear-gradient(135deg, #00f0ff, #38f8b8);
       border: none;
@@ -889,8 +948,15 @@
 
     .pass-actions-row {
       display: flex;
+      flex-direction: column;
       gap: 8px;
       margin-top: 14px;
+    }
+
+    .pass-sub-actions-row {
+      display: flex;
+      gap: 8px;
+      width: 100%;
     }
 
     .btn-pass-action {
@@ -900,7 +966,7 @@
       color: #fff;
       font-size: 12.5px;
       font-weight: 700;
-      padding: 8px 10px;
+      padding: 9px 12px;
       border-radius: 6px;
       cursor: pointer;
       transition: all .15s;
@@ -908,11 +974,32 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
+      white-space: nowrap;
     }
 
     .btn-pass-action:hover {
       background: rgba(56, 189, 248, 0.2);
       border-color: var(--cyan);
+    }
+
+    .btn-pass-action.primary {
+      background: linear-gradient(135deg, #00f0ff, #38f8b8);
+      border: none;
+      color: #030b2c;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-style: italic;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 11px 16px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(56, 248, 184, 0.35);
+    }
+
+    .btn-pass-action.primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(56, 248, 184, 0.5);
     }
 
     /* ── CHECK-IN POLICY & ID REMINDER ── */
@@ -998,7 +1085,7 @@
       text-decoration: underline;
     }
 
-    /* ── RESPONSIVE MEDIA QUERIES ── */
+    /* ── RESPONSIVE MEDIA QUERIES (ORGANIZED & ULTRA-CLEAN MOBILE VIEW) ── */
     @media (max-width: 768px) {
       .desktop-only {
         display: none !important;
@@ -1008,13 +1095,21 @@
         display: inline !important;
       }
 
+      .wrap {
+        padding: 0 14px;
+      }
+
+      /* Clean Mobile Navbar */
       nav {
-        height: 60px;
+        height: 58px;
       }
 
       nav .wrap {
         padding: 0 12px;
-        gap: 6px;
+        gap: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
 
       .brand {
@@ -1025,7 +1120,8 @@
 
       .nav-brand-img {
         height: 32px;
-        max-width: 120px;
+        max-width: 130px;
+        object-fit: contain;
       }
 
       .nav-tracker-badge {
@@ -1033,41 +1129,60 @@
       }
 
       .nav-links {
+        display: flex;
+        align-items: center;
         gap: 6px;
         flex-shrink: 0;
       }
 
       .btn-nav-home {
         font-size: 12.5px;
-        padding: 6px 10px;
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.18);
+        font-weight: 700;
+        padding: 7px 11px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 6px;
         gap: 4px;
         line-height: 1;
+        white-space: nowrap !important;
+        flex-shrink: 0;
       }
 
       .btn-nav-reg {
         font-size: 13px;
-        padding: 6px 12px;
+        font-weight: 800;
+        padding: 7px 12px;
         letter-spacing: 0.3px;
+        border-radius: 6px;
         gap: 4px;
         line-height: 1;
+        white-space: nowrap !important;
+        flex-shrink: 0;
       }
 
+      /* Hero & Search */
       .track-hero {
-        padding: 24px 0 16px;
+        padding: 22px 0 12px;
       }
 
-      .track-hero h1 {
-        font-size: clamp(26px, 7.5vw, 36px);
-        line-height: 1.05;
+      .track-hero-eyebrow {
+        font-size: 11px;
+        padding: 3px 12px;
         margin-bottom: 8px;
       }
 
+      .track-hero h1 {
+        font-size: clamp(26px, 7vw, 34px);
+        line-height: 1.05;
+        margin-bottom: 8px;
+        letter-spacing: 0.3px;
+      }
+
       .track-hero-subtitle {
-        font-size: 13.5px;
-        margin-bottom: 18px;
-        padding: 0 6px;
+        font-size: 13px;
+        margin-bottom: 16px;
+        padding: 0 4px;
+        line-height: 1.45;
       }
 
       .search-card {
@@ -1075,23 +1190,128 @@
         padding: 8px;
         gap: 8px;
         border-radius: 12px;
+        margin-bottom: 20px;
       }
 
       .search-input {
-        font-size: 14.5px;
-        padding: 10px 10px 10px 38px;
+        font-size: 16px !important; /* Prevents auto-zoom in mobile Safari */
+        padding: 11px 36px 11px 38px;
+        height: 46px;
+      }
+
+      .btn-clear-search {
+        right: 10px;
+        width: 26px;
+        height: 26px;
       }
 
       .btn-track-submit {
-        height: 44px;
+        height: 46px;
         font-size: 16px;
         justify-content: center;
         width: 100%;
         border-radius: 8px;
       }
 
+      .search-quick-hints {
+        gap: 6px;
+        margin-top: -12px;
+        margin-bottom: 22px;
+      }
+
+      .hint-title {
+        font-size: 11px;
+        width: 100%;
+        margin-bottom: 2px;
+      }
+
+      .hint-chip {
+        font-size: 11.5px;
+        padding: 4px 9px;
+      }
+
+      /* Multi Results List */
+      .multi-results-wrap {
+        margin: 0 0 24px;
+      }
+
+      .multi-results-box {
+        padding: 14px;
+        border-radius: 12px;
+      }
+
+      .runner-result-row {
+        padding: 10px 12px;
+        border-radius: 8px;
+      }
+
+      .runner-res-name {
+        font-size: 15px;
+      }
+
+      .runner-res-meta {
+        font-size: 12px;
+        gap: 6px;
+      }
+
+      /* Dashboard Card */
+      .track-result-wrap {
+        margin: 0 auto 36px;
+      }
+
+      .status-dashboard-card {
+        border-radius: 14px;
+      }
+
+      /* Header Banner - Hierarchy on Mobile */
+      .dash-header-banner {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px 14px;
+        gap: 12px;
+      }
+
+      .dash-overall-status {
+        order: -1; /* Display status badge at the very top */
+        width: 100%;
+        align-items: stretch;
+      }
+
+      .dash-overall-status span:first-child {
+        display: none; /* Hide redundant "CURRENT STATUS" label on mobile */
+      }
+
+      .dash-status-pill {
+        width: 100%;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 800;
+        padding: 8px 12px;
+        letter-spacing: 0.5px;
+        border-radius: 8px;
+      }
+
+      .dash-runner-name-wrap h2 {
+        font-size: 22px;
+        line-height: 1.15;
+        margin-bottom: 6px;
+        word-break: break-word;
+      }
+
+      .dash-pass-chip {
+        font-size: 12px;
+        padding: 4px 10px;
+      }
+
+      /* Progress Stepper on Mobile */
       .stepper-section {
-        padding: 18px 16px;
+        padding: 16px 14px;
+      }
+
+      .stepper-title {
+        font-size: 11px;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
       }
 
       .stepper-grid {
@@ -1099,64 +1319,270 @@
         gap: 10px;
       }
 
+      .step-card {
+        padding: 12px 14px;
+        border-radius: 10px;
+      }
+
+      .step-header {
+        gap: 8px;
+        margin-bottom: 4px;
+      }
+
+      .step-num-badge {
+        width: 24px;
+        height: 24px;
+        font-size: 11px;
+      }
+
+      .step-title {
+        font-size: 13.5px;
+      }
+
+      .step-desc {
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .step-alert-reason {
+        margin-top: 8px;
+        padding: 8px 10px;
+        font-size: 11.5px;
+        border-radius: 6px;
+      }
+
+      /* Re-upload Card on Mobile */
+      .reupload-card {
+        margin: 14px 14px 0;
+        padding: 16px 14px;
+        border-radius: 12px;
+      }
+
+      .reupload-header {
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .reupload-icon-badge {
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
+        border-radius: 10px;
+      }
+
+      .reupload-titles h3 {
+        font-size: 16px;
+        line-height: 1.2;
+      }
+
+      .reupload-titles p {
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .reupload-dropzone-box {
+        padding: 16px 12px;
+        border-radius: 8px;
+      }
+
+      .reupload-dropzone-box b {
+        font-size: 13.5px;
+        margin: 4px 0 2px;
+      }
+
+      .reupload-dropzone-box span {
+        font-size: 11.5px;
+      }
+
+      .reupload-preview-card {
+        padding: 10px 12px;
+        gap: 10px;
+        border-radius: 8px;
+      }
+
+      .reupload-preview-card img {
+        width: 52px;
+        height: 52px;
+        border-radius: 6px;
+      }
+
+      .reupload-preview-meta b {
+        font-size: 13px;
+      }
+
+      .reupload-preview-meta span {
+        font-size: 11.5px;
+      }
+
+      .btn-submit-reupload {
+        width: 100%;
+        height: 46px;
+        font-size: 14px;
+        padding: 0 16px;
+        margin-top: 12px;
+        border-radius: 8px;
+      }
+
+      /* Content Grid (Details & Pass Preview) */
       .dash-content-grid {
         grid-template-columns: 1fr;
-        padding: 16px;
-        gap: 16px;
+        padding: 14px;
+        gap: 14px;
       }
 
       .details-box {
-        padding: 16px 14px;
-      }
-
-      .info-list-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-
-      .dash-header-banner {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 16px;
-        gap: 12px;
-      }
-
-      .dash-runner-name-wrap h2 {
-        font-size: 24px;
-      }
-
-      .dash-pass-chip {
-        font-size: 12px;
-        padding: 3px 10px;
-      }
-
-      .dash-overall-status {
-        align-items: flex-start;
-        width: 100%;
-      }
-
-      .dash-status-pill {
-        font-size: 11.5px;
-        padding: 5px 12px;
-      }
-
-      .policy-reminder-card {
-        margin: 0 16px 18px;
         padding: 14px;
+        border-radius: 12px;
       }
 
+      .details-heading {
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+
+      /* 2-Column Clean Info Grid */
+      .info-list-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .info-item {
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 8px;
+        padding: 9px 11px;
+      }
+
+      .info-item.full-width {
+        grid-column: 1 / -1;
+      }
+
+      .info-item label {
+        font-size: 10.5px;
+        letter-spacing: 0.6px;
+        margin-bottom: 2px;
+      }
+
+      .info-item .val {
+        font-size: 13.5px;
+        line-height: 1.3;
+      }
+
+      .info-item .val.highlight {
+        font-size: 14.5px;
+      }
+
+      /* Pass Preview Card */
       .pass-holder-card {
         padding: 16px 14px;
+        border-radius: 12px;
+      }
+
+      .pass-preview-logo {
+        height: 30px;
+      }
+
+      .pass-sub-header {
+        font-size: 12px;
+      }
+
+      .pass-id-box {
+        padding: 6px 10px;
+        margin: 8px 0;
+      }
+
+      .pass-id-num {
+        font-size: 16px;
+      }
+
+      .pass-qr-wrap {
+        width: 130px;
+        height: 130px;
+        padding: 8px;
+        margin: 10px auto;
+        border-radius: 8px;
       }
 
       .pass-actions-row {
-        flex-wrap: wrap;
-        gap: 6px;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .pass-sub-actions-row {
+        display: flex;
+        gap: 8px;
+        width: 100%;
       }
 
       .btn-pass-action {
+        height: 42px;
+        font-size: 12.5px;
+        border-radius: 6px;
+      }
+
+      .btn-pass-action.primary {
+        height: 46px;
+        font-size: 14px;
+        width: 100%;
+        border-radius: 8px;
+      }
+
+      /* Policy Card */
+      .policy-reminder-card {
+        margin: 0 14px 18px;
+        padding: 14px;
+        border-radius: 12px;
+      }
+
+      .policy-top {
+        font-size: 13px;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+
+      .policy-reminder-card p {
         font-size: 12px;
-        padding: 7px 6px;
+        line-height: 1.45;
+        margin-bottom: 8px;
+      }
+
+      .policy-chips {
+        justify-content: center;
+        margin-top: 6px;
+      }
+
+      .id-chip {
+        font-size: 13px !important;
+        padding: 6px 14px !important;
+      }
+    }
+
+    /* Extra Small Screen Adjustments (< 380px) */
+    @media (max-width: 380px) {
+      nav .wrap {
+        padding: 0 8px;
+        gap: 6px;
+      }
+      .nav-brand-img {
+        height: 28px;
+        max-width: 110px;
+      }
+      .btn-nav-home {
+        font-size: 11.5px;
+        padding: 6px 8px;
+      }
+      .btn-nav-reg {
+        font-size: 12px;
+        padding: 6px 9px;
+      }
+      .track-hero h1 {
+        font-size: 24px;
+      }
+      .info-list-grid {
+        grid-template-columns: 1fr;
+      }
+      .pass-sub-actions-row {
+        flex-direction: column;
       }
     }
   </style>
@@ -1203,12 +1629,21 @@
         <div class="search-input-wrap">
           <span class="search-icon">🔍</span>
           <input type="text" id="trackQueryInput" class="search-input"
-            placeholder="Enter Pass ID (e.g. TBN-16-1001), Full Name, or Email..." autocomplete="off" autofocus>
+            placeholder="Enter Pass ID, Full Name, or Email..." autocomplete="off" autofocus>
+          <button type="button" id="btnClearSearch" class="btn-clear-search" onclick="clearSearchInput()" aria-label="Clear search">&times;</button>
         </div>
         <button type="submit" class="btn-track-submit" id="btnTrackSubmit">
           <span>Track Status ➔</span>
         </button>
       </form>
+
+      <!-- SEARCH HELPER CHIPS -->
+      <div class="search-quick-hints">
+        <span class="hint-title">Search Tips:</span>
+        <button type="button" class="hint-chip" onclick="quickFillSearch('TBN-16-1001')">Pass ID (e.g. TBN-16-1001)</button>
+        <button type="button" class="hint-chip" onclick="focusSearchInput('Runner Name')">Runner Name</button>
+        <button type="button" class="hint-chip" onclick="focusSearchInput('Email Address')">Email Address</button>
+      </div>
     </div>
 
     <!-- MULTIPLE SEARCH RESULTS (If search matches several runners) -->
@@ -1355,21 +1790,21 @@
                 <div class="val" id="infoDate">Sunday, Nov 15, 2026</div>
               </div>
               <div class="info-item">
+                <label>Check-In Status</label>
+                <div class="val" id="infoClaimedStatus">Not Yet Checked In</div>
+              </div>
+              <div class="info-item full-width" style="grid-column:1 / -1;">
                 <label>Check-in &amp; Start Schedule</label>
                 <div class="val" id="infoSchedule">Check-in 03:30 AM &bull; Gun Start 04:00 AM</div>
               </div>
-              <div class="info-item" style="grid-column:1 / -1;">
+              <div class="info-item full-width" style="grid-column:1 / -1;">
                 <label>Assigned Running Club</label>
                 <div class="club-val-wrap">
                   <img id="infoClubImg" class="club-val-img" src="" alt="" style="display:none;">
                   <span class="val" id="infoClubName">Tacloban Bypass Running Club</span>
                 </div>
               </div>
-              <div class="info-item">
-                <label>Check-In Status</label>
-                <div class="val" id="infoClaimedStatus">Not Yet Checked In</div>
-              </div>
-              <div class="info-item">
+              <div class="info-item full-width" style="grid-column:1 / -1;">
                 <label>Emergency Contact</label>
                 <div class="val" id="infoEmergency">Maria Dela Cruz (Spouse)</div>
               </div>
@@ -1399,15 +1834,17 @@
             </div>
 
             <div class="pass-actions-row">
-              <button type="button" class="btn-pass-action" onclick="downloadPassImage()">
-                <span>📥 Save Pass</span>
+              <button type="button" class="btn-pass-action primary" onclick="downloadPassImage()">
+                <span>📥 Save Pass to Gallery</span>
               </button>
-              <button type="button" class="btn-pass-action" onclick="copyShareableLink()">
-                <span>🔗 Copy Link</span>
-              </button>
-              <button type="button" class="btn-pass-action" onclick="window.print()">
-                <span>🖨️ Print</span>
-              </button>
+              <div class="pass-sub-actions-row">
+                <button type="button" class="btn-pass-action" onclick="copyShareableLink()">
+                  <span>🔗 Copy Link</span>
+                </button>
+                <button type="button" class="btn-pass-action" onclick="window.print()">
+                  <span>🖨️ Print</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -1478,6 +1915,42 @@
         setTimeout(function () {
           toast.classList.remove('show');
         }, 2800);
+      }
+
+      window.clearSearchInput = function () {
+        var input = document.getElementById('trackQueryInput');
+        if (input) {
+          input.value = '';
+          input.focus();
+          toggleClearBtn();
+        }
+      };
+
+      window.quickFillSearch = function (sampleVal) {
+        var input = document.getElementById('trackQueryInput');
+        if (input) {
+          input.value = sampleVal;
+          toggleClearBtn();
+          handleTrackSearch();
+        }
+      };
+
+      window.focusSearchInput = function (hint) {
+        var input = document.getElementById('trackQueryInput');
+        if (input) {
+          input.focus();
+          if (hint) {
+            showToast('Type your ' + hint + ' to look up your status', '🔍');
+          }
+        }
+      };
+
+      function toggleClearBtn() {
+        var btn = document.getElementById('btnClearSearch');
+        var input = document.getElementById('trackQueryInput');
+        if (btn && input) {
+          btn.style.display = input.value.trim().length > 0 ? 'flex' : 'none';
+        }
       }
 
       window.copyPassIdToClipboard = function () {
@@ -1970,10 +2443,17 @@
 
       // Check on page load for ?bib= or ?id= or ?search=
       window.addEventListener('DOMContentLoaded', function () {
+        var qInput = document.getElementById('trackQueryInput');
+        if (qInput) {
+          qInput.addEventListener('input', toggleClearBtn);
+          toggleClearBtn();
+        }
+
         var params = new URLSearchParams(window.location.search);
         var q = params.get('bib') || params.get('id') || params.get('search') || params.get('q');
         if (q) {
-          document.getElementById('trackQueryInput').value = q;
+          if (qInput) qInput.value = q;
+          toggleClearBtn();
           handleTrackSearch();
         }
       });
