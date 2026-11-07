@@ -111,7 +111,7 @@ app.post('/api/admin/login', (req, res) => {
     return res.status(400).json({ success: false, message: 'Username and password are required.' });
   }
 
-  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+  if ((username === ADMIN_USERNAME || username.toLowerCase() === 'admin') && password === ADMIN_PASSWORD) {
     const token = generateAdminToken(username);
     return res.json({
       success: true,

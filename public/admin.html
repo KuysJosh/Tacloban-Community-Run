@@ -239,7 +239,7 @@ tr:hover td{background:rgba(255,255,255,.04)}
     </form>
 
     <div class="login-hint">
-      <strong>Event Marshal Access:</strong> Default credentials: <code>admin</code> / <code>cebumarathon2027</code>
+      <strong>Event Marshal Access:</strong> Username: <code>TaclobanComRun@2031</code> (or <code>admin</code>) &bull; Password: <code>cebumarathon2027</code>
     </div>
   </div>
 </div>
@@ -558,10 +558,18 @@ async function checkAdminAuth() {
       updateAdminUserUI();
       return true;
     } else {
+      currentAuthToken = '';
+      localStorage.removeItem('marathon_admin_token');
+      localStorage.removeItem('marathon_admin_user');
+      sessionStorage.removeItem('marathon_admin_token');
       showLoginOverlay();
       return false;
     }
   } catch (err) {
+    currentAuthToken = '';
+    localStorage.removeItem('marathon_admin_token');
+    localStorage.removeItem('marathon_admin_user');
+    sessionStorage.removeItem('marathon_admin_token');
     showLoginOverlay();
     return false;
   }
@@ -963,7 +971,6 @@ async function loadDisapprovedRunners() {
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:20px;color:#ff7a8e;">Error loading declined runners: ${err.message}</td></tr>`;
   }
-}
 }
 
 // ── VERIFICATION ACTIONS (Approve / Disapprove) ──
