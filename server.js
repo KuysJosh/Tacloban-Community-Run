@@ -504,11 +504,31 @@ app.post('/api/register', async (req, res) => {
       });
     }
 
-    if (!cebuProofImage) {
+    // Photo proof of Cebu Marathon 2027 registration is strictly required
+    if (!cebuProofImage || typeof cebuProofImage !== 'string' || !cebuProofImage.trim()) {
       return res.status(400).json({
         success: false,
-        message: 'Photo proof of Cebu Marathon 2027 registration is required. Please attach a photo/screenshot of your registration confirmation.'
+        message: 'Photo proof of Cebu Marathon 2027 registration is strictly required. Please attach a photo/screenshot of your registration confirmation.'
       });
+    }
+
+    const isDataUrl = cebuProofImage.startsWith('data:image/');
+    const isPath = cebuProofImage.startsWith('/uploads/proofs/');
+    if (!isDataUrl && !isPath) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid photo proof format. Please attach a valid image file (PNG, JPG, or WEBP).'
+      });
+    }
+
+    if (isDataUrl) {
+      const testParsed = extractBase64Image(cebuProofImage);
+      if (!testParsed || !testParsed.buffer || testParsed.buffer.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: 'The uploaded photo proof could not be decoded or is empty. Please attach a valid image file.'
+        });
+      }
     }
 
     // Progressive Race Schedule Check: Cannot register for a leg unless previous legs are done

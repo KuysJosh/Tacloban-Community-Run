@@ -91,7 +91,8 @@ const registrationSchema = new mongoose.Schema({
   },
   cebuProofImage: {
     type: String,
-    default: ''
+    required: [true, 'Photo proof of Cebu Marathon 2027 registration is required'],
+    trim: true
   },
   cebuProofDataUrl: {
     type: String,

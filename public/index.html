@@ -1045,6 +1045,19 @@
       background: rgba(13, 42, 156, 0.4);
     }
 
+    .proof-box-container.error-state {
+      border: 2px dashed #ff3366 !important;
+      background: rgba(255, 51, 102, 0.12) !important;
+      box-shadow: 0 0 20px rgba(255, 51, 102, 0.45) !important;
+      animation: shakeDropzone 0.45s ease-in-out;
+    }
+
+    @keyframes shakeDropzone {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
     .proof-dropzone {
       text-align: center;
       cursor: pointer;
@@ -3521,12 +3534,15 @@
 
           <!-- PHOTO PROOF OF CEBU MARATHON REGISTRATION -->
           <div class="f full">
-            <label class="lab">
-              Attach Photo Proof of Cebu Marathon 2027 Registration <span style="color:#ff7a8e">*</span>
-            </label>
-            <p style="font-size:13px;color:var(--mut);margin-bottom:6px;">
-              Please attach a screenshot or photo of your official confirmation email, registration portal ticket, or
-              race receipt verifying that you are already registered in the upcoming Cebu Marathon.
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
+              <label class="lab" style="margin-bottom:0;display:flex;align-items:center;gap:8px;">
+                <span>Attach Photo Proof of Cebu Marathon 2027 Registration</span>
+                <span class="proof-req-badge" style="background:#ff3366;color:#ffffff;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:12px;letter-spacing:0.5px;text-transform:uppercase;box-shadow:0 0 10px rgba(255,51,102,0.45);display:inline-block;vertical-align:middle;">REQUIRED *</span>
+              </label>
+              <span style="font-size:12px;color:#ff9eb0;font-weight:700;">⚠️ Registration will not proceed without proof</span>
+            </div>
+            <p style="font-size:13px;color:var(--mut);margin-bottom:8px;line-height:1.45;">
+              Please attach an official screenshot or photo of your Cebu Marathon 2027 confirmation email, registration portal ticket, or race receipt. This training leg is exclusively open to verified Cebu Marathon runners.
             </p>
 
             <div class="proof-box-container" id="proofDropZone">
@@ -3534,8 +3550,9 @@
                 style="display:none;">
               <div class="proof-dropzone" onclick="document.getElementById('cebuProofFile').click()">
                 <span class="proof-dropzone-icon">📷</span>
-                <b>Click to Upload or Drag &amp; Drop Photo Proof</b>
-                <span>PNG, JPG, or WEBP (up to 8MB)</span>
+                <b>Click to Upload or Drag &amp; Drop Photo Proof <span style="color:#ff5c77;">* (Required)</span></b>
+                <span>PNG, JPG, or WEBP (up to 25MB) &bull; Confirmation Email, E-Ticket, or Portal Screenshot</span>
+                <div style="margin-top:6px;font-size:12px;color:#ff9eb0;font-weight:600;">⚠️ Mandatory: Photo proof is required to submit registration</div>
               </div>
             </div>
 
@@ -3551,7 +3568,7 @@
               <button type="button" class="proof-btn-remove" onclick="removeProofFile()">Remove / Change</button>
             </div>
 
-            <p class="err-msg" id="errProof" style="margin-top:6px;"></p>
+            <p class="err-msg" id="errProof" style="margin-top:6px;font-weight:700;color:#ff5c77;"></p>
           </div>
 
           <div class="f full" id="waiverContainer">
@@ -3619,15 +3636,18 @@
             </div>
           </div>
 
-          <div class="sidebar-panel">
-            <h3>Verification Note</h3>
-            <p style="color:var(--mut);font-size:13px;margin-bottom:8px;">
-              This community long run series is exclusively organized for runners registered in the <strong>Cebu
-                Marathon 2027</strong>.
+          <div class="sidebar-panel"
+            style="border:1.5px solid #ff3366;background:linear-gradient(135deg,rgba(255,51,102,0.12) 0%,rgba(6,18,70,0.9) 100%);box-shadow:0 0 16px rgba(255,51,102,0.18);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <span style="font-size:20px;">📸</span>
+              <h3 style="color:#ff5c77;font-size:16px;margin:0;letter-spacing:0.5px;">PHOTO PROOF REQUIRED</h3>
+            </div>
+            <p style="color:#ffffff;font-size:13px;line-height:1.45;margin-bottom:8px;">
+              All participants <strong>MUST attach proof of registration</strong> for Cebu Marathon 2027 (confirmation email, e-ticket, or portal receipt).
             </p>
-            <p style="color:var(--mut);font-size:13px;">
-              Marshals will review your uploaded proof upon check-in.
-            </p>
+            <div style="font-size:11.5px;color:#cbd5e1;line-height:1.4;">
+              ⚠️ Registrations without authentic photo proof cannot be submitted and will be rejected.
+            </div>
           </div>
         </aside>
       </div>
@@ -4309,7 +4329,12 @@
 
             proofDropZone.style.display = 'none';
             proofDropZone.style.opacity = '1';
+            proofDropZone.classList.remove('error-state');
             proofPreviewArea.style.display = 'flex';
+            errProof.textContent = '';
+            if (document.getElementById('errGeneral') && document.getElementById('errGeneral').textContent.toLowerCase().includes('proof')) {
+              document.getElementById('errGeneral').textContent = '';
+            }
           };
 
           img.onerror = function () {
@@ -4320,7 +4345,9 @@
             proofFileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
             proofDropZone.style.display = 'none';
             proofDropZone.style.opacity = '1';
+            proofDropZone.classList.remove('error-state');
             proofPreviewArea.style.display = 'flex';
+            errProof.textContent = '';
           };
 
           img.src = rawDataUrl;
@@ -4363,8 +4390,12 @@
       window.removeProofFile = function () {
         cebuProofBase64 = '';
         if (proofFileInput) proofFileInput.value = '';
-        if (proofDropZone) proofDropZone.style.display = 'block';
+        if (proofDropZone) {
+          proofDropZone.style.display = 'block';
+          proofDropZone.classList.add('error-state');
+        }
         if (proofPreviewArea) proofPreviewArea.style.display = 'none';
+        errProof.textContent = '⚠️ Photo proof of Cebu Marathon 2027 registration is strictly required. Please attach your photo before submitting.';
       };
 
       window.viewProofEnlarged = function () {
@@ -4536,12 +4567,20 @@
         var paceEl = document.getElementById('pace');
         var selectedPace = paceEl ? paceEl.value : '6:30 minutes per KM';
 
-        if (!cebuProofBase64) {
-          errProof.textContent = 'Photo proof of Cebu Marathon 2027 registration is required. Please upload your verification screenshot/photo.';
-          proofDropZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (!cebuProofBase64 || typeof cebuProofBase64 !== 'string' || !cebuProofBase64.startsWith('data:image/')) {
+          errProof.textContent = '⚠️ Photo proof of Cebu Marathon 2027 registration is strictly required. Please upload your verification screenshot/photo.';
+          if (proofDropZone) {
+            proofDropZone.style.display = 'block';
+            proofDropZone.classList.add('error-state');
+            proofDropZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          if (document.getElementById('errGeneral')) {
+            document.getElementById('errGeneral').textContent = 'Photo proof of Cebu Marathon 2027 registration is required. Please upload your verification photo.';
+          }
           return;
         }
         errProof.textContent = '';
+        if (proofDropZone) proofDropZone.classList.remove('error-state');
 
         if (!agCheckbox.checked) {
           document.getElementById('errGeneral').textContent = 'Please read and accept the Training Run Waiver & Participant Agreement before submitting.';
@@ -4623,6 +4662,14 @@
 
         } catch (err) {
           document.getElementById('errGeneral').textContent = 'Error: ' + err.message;
+          if (err.message && err.message.toLowerCase().includes('proof')) {
+            if (proofDropZone) {
+              proofDropZone.style.display = 'block';
+              proofDropZone.classList.add('error-state');
+              proofDropZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            if (errProof) errProof.textContent = err.message;
+          }
         } finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = '<span>Submit Registration &amp; Get Digital Pass &gt;</span>';

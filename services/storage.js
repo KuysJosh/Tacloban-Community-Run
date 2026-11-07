@@ -82,6 +82,10 @@ async function generateBibNumber(category) {
 
 // Save a new registration
 async function createRegistration(data) {
+  if (!data.cebuProofImage || typeof data.cebuProofImage !== 'string' || !data.cebuProofImage.trim()) {
+    throw new Error('Photo proof of Cebu Marathon 2027 registration is strictly required.');
+  }
+
   // If no bibNumber provided, generate one
   if (!data.bibNumber) {
     data.bibNumber = await generateBibNumber(data.category);
