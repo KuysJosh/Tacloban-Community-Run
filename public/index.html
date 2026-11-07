@@ -219,7 +219,7 @@
       min-height: calc(100vh - 72px);
       display: flex;
       align-items: center;
-      background: 
+      background:
         linear-gradient(135deg, rgba(2, 10, 42, 0.74) 0%, rgba(4, 18, 70, 0.58) 45%, rgba(2, 9, 36, 0.82) 100%),
         url('hero-runners-bg.jpg') center 30% / cover no-repeat;
     }
@@ -2386,6 +2386,7 @@
         0% {
           transform: translate3d(0, 0, 0);
         }
+
         100% {
           transform: translate3d(-50%, 0, 0);
         }
@@ -2655,8 +2656,17 @@
     }
 
     @keyframes wakeDotPulse {
-      0%, 100% { transform: scale(0.85); opacity: 0.6; }
-      50% { transform: scale(1.35); opacity: 1; }
+
+      0%,
+      100% {
+        transform: scale(0.85);
+        opacity: 0.6;
+      }
+
+      50% {
+        transform: scale(1.35);
+        opacity: 1;
+      }
     }
 
     .wake-track-scene {
@@ -2678,8 +2688,13 @@
     }
 
     @keyframes runnerBounce {
-      0% { transform: translateY(0) rotate(-2deg); }
-      100% { transform: translateY(-8px) rotate(4deg); }
+      0% {
+        transform: translateY(0) rotate(-2deg);
+      }
+
+      100% {
+        transform: translateY(-8px) rotate(4deg);
+      }
     }
 
     .wake-speed-lines {
@@ -2698,14 +2713,39 @@
       border-radius: 2px;
       animation: speedLineRush 0.9s infinite linear;
     }
-    .wake-speed-lines span:nth-child(1) { top: -14px; width: 45px; animation-delay: 0s; }
-    .wake-speed-lines span:nth-child(2) { top: 0px; width: 65px; animation-delay: 0.3s; }
-    .wake-speed-lines span:nth-child(3) { top: 14px; width: 35px; animation-delay: 0.6s; }
+
+    .wake-speed-lines span:nth-child(1) {
+      top: -14px;
+      width: 45px;
+      animation-delay: 0s;
+    }
+
+    .wake-speed-lines span:nth-child(2) {
+      top: 0px;
+      width: 65px;
+      animation-delay: 0.3s;
+    }
+
+    .wake-speed-lines span:nth-child(3) {
+      top: 14px;
+      width: 35px;
+      animation-delay: 0.6s;
+    }
 
     @keyframes speedLineRush {
-      0% { right: -60px; opacity: 0; }
-      50% { opacity: 1; }
-      100% { right: 140px; opacity: 0; }
+      0% {
+        right: -60px;
+        opacity: 0;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        right: 140px;
+        opacity: 0;
+      }
     }
 
     .wake-track-glow {
@@ -2755,8 +2795,13 @@
     }
 
     @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 200% 50%; }
+      0% {
+        background-position: 0% 50%;
+      }
+
+      100% {
+        background-position: 200% 50%;
+      }
     }
 
     .wake-meta-row {
@@ -2835,17 +2880,22 @@
         <div class="wake-runner-svg-wrap">
           <svg class="wake-runner-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="44" cy="12" r="6" fill="#38f8b8" />
-            <path d="M38 22 L28 32 L34 38 L26 56" stroke="#38f8b8" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M28 32 L20 28 L14 36" stroke="#38f8b8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M34 38 L46 36 L52 46" stroke="#00f0ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M38 22 L48 26 L56 22" stroke="#ffb800" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M38 22 L28 32 L34 38 L26 56" stroke="#38f8b8" stroke-width="4.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M28 32 L20 28 L14 36" stroke="#38f8b8" stroke-width="4" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M34 38 L46 36 L52 46" stroke="#00f0ff" stroke-width="4" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M38 22 L48 26 L56 22" stroke="#ffb800" stroke-width="4" stroke-linecap="round"
+              stroke-linejoin="round" />
           </svg>
         </div>
       </div>
 
       <h3 class="wake-title" id="wakeTitle">Waking Up Community Server</h3>
       <p class="wake-subtitle" id="wakeSubtitle">
-        Our free-tier cloud server spins down after inactivity. Hang tight while it boots up and connects to MongoDB Atlas!
+        Our free-tier cloud server spins down after inactivity. Hang tight while it boots up and connects to MongoDB
+        Atlas!
       </p>
 
       <!-- Progress Track -->
@@ -2866,7 +2916,8 @@
       </div>
 
       <div class="wake-tip-box">
-        💡 <strong>First visit?</strong> Render cold starts take ~20–45 seconds. Once active, the entire portal is lightning fast!
+        💡 <strong>First visit?</strong> Render cold starts take ~20–45 seconds. Once active, the entire portal is
+        lightning fast!
       </div>
     </div>
   </div>
@@ -3111,13 +3162,16 @@
       <div class="clubs-banner-highlight-frame">
         <div class="clubs-marquee-track">
           <div class="clubs-banner-logos-row">
-            <div class="banner-club-item" onclick="preselectClub('Tacloban Bypass Running Club')" title="Tacloban Bypass Running Club">
+            <div class="banner-club-item" onclick="preselectClub('Tacloban Bypass Running Club')"
+              title="Tacloban Bypass Running Club">
               <img src="clubs/club_tbrc.png" alt="TBRC Logo">
             </div>
-            <div class="banner-club-item" onclick="preselectClub('Tacloban Grandstand Runners')" title="Tacloban Grandstand Runners">
+            <div class="banner-club-item" onclick="preselectClub('Tacloban Grandstand Runners')"
+              title="Tacloban Grandstand Runners">
               <img src="clubs/club_tgr.png" alt="TGR Logo">
             </div>
-            <div class="banner-club-item" onclick="preselectClub('Tacloban Runners Club')" title="Tacloban Runners Club">
+            <div class="banner-club-item" onclick="preselectClub('Tacloban Runners Club')"
+              title="Tacloban Runners Club">
               <img src="clubs/club_trc.png" alt="TRC Logo">
             </div>
             <div class="banner-club-item" onclick="preselectClub('Motion Runners')" title="Motion Runners">
@@ -3126,7 +3180,8 @@
             <div class="banner-club-item" onclick="preselectClub('One Stride Tacloban')" title="One Stride Tacloban">
               <img src="clubs/club_ost.png" alt="OST Logo">
             </div>
-            <div class="banner-club-item" onclick="preselectClub('Alangalang Runners Club')" title="Alangalang Runners Club">
+            <div class="banner-club-item" onclick="preselectClub('Alangalang Runners Club')"
+              title="Alangalang Runners Club">
               <img src="clubs/club_alangalang.png" alt="Alangalang Runners Logo">
             </div>
             <div class="banner-club-item" onclick="preselectClub('Santa Fe Runners')" title="Santa Fe Runners">
@@ -3135,13 +3190,16 @@
           </div>
           <!-- Cloned Row for Seamless Infinite Mobile Auto-Slide -->
           <div class="clubs-banner-logos-row clubs-clone-row" aria-hidden="true">
-            <div class="banner-club-item" onclick="preselectClub('Tacloban Bypass Running Club')" title="Tacloban Bypass Running Club">
+            <div class="banner-club-item" onclick="preselectClub('Tacloban Bypass Running Club')"
+              title="Tacloban Bypass Running Club">
               <img src="clubs/club_tbrc.png" alt="TBRC Logo">
             </div>
-            <div class="banner-club-item" onclick="preselectClub('Tacloban Grandstand Runners')" title="Tacloban Grandstand Runners">
+            <div class="banner-club-item" onclick="preselectClub('Tacloban Grandstand Runners')"
+              title="Tacloban Grandstand Runners">
               <img src="clubs/club_tgr.png" alt="TGR Logo">
             </div>
-            <div class="banner-club-item" onclick="preselectClub('Tacloban Runners Club')" title="Tacloban Runners Club">
+            <div class="banner-club-item" onclick="preselectClub('Tacloban Runners Club')"
+              title="Tacloban Runners Club">
               <img src="clubs/club_trc.png" alt="TRC Logo">
             </div>
             <div class="banner-club-item" onclick="preselectClub('Motion Runners')" title="Motion Runners">
@@ -3150,7 +3208,8 @@
             <div class="banner-club-item" onclick="preselectClub('One Stride Tacloban')" title="One Stride Tacloban">
               <img src="clubs/club_ost.png" alt="OST Logo">
             </div>
-            <div class="banner-club-item" onclick="preselectClub('Alangalang Runners Club')" title="Alangalang Runners Club">
+            <div class="banner-club-item" onclick="preselectClub('Alangalang Runners Club')"
+              title="Alangalang Runners Club">
               <img src="clubs/club_alangalang.png" alt="Alangalang Runners Logo">
             </div>
             <div class="banner-club-item" onclick="preselectClub('Santa Fe Runners')" title="Santa Fe Runners">
@@ -3216,7 +3275,9 @@
               ⚠️ MUST BRING <span class="highlight-id">1 OR MORE VALID IDs</span> FOR VERIFICATION
             </div>
             <p class="id-instruction-body">
-              To verify runner identity and release your official community run entry, all registered participants <strong>MUST bring at least 1 valid physical or government-issued photo ID</strong> during check-in on event day.
+              To verify runner identity and release your official community run entry, all registered participants
+              <strong>MUST bring at least 1 valid physical or government-issued photo ID</strong> during check-in on
+              event day.
             </p>
           </div>
 
@@ -3226,21 +3287,24 @@
               <div class="checkin-step-num">1</div>
               <div class="checkin-step-content">
                 <span class="step-title">⏱️ Arrive Early at Check-In Desk</span>
-                Check-in desks open <b>30 to 45 minutes before Gun Start</b> (03:30 AM for 16KM). Proceed directly to the <b>Official Marshal Check-in Station</b>.
+                Check-in desks open <b>30 to 45 minutes before Gun Start</b> (03:30 AM for 16KM). Proceed directly to
+                the <b>Official Marshal Check-in Station</b>.
               </div>
             </div>
             <div class="checkin-step-item">
               <div class="checkin-step-num">2</div>
               <div class="checkin-step-content">
                 <span class="step-title">🪪 Present 1 or More Valid IDs</span>
-                Bring at least <b>1 physical government, school, company, or other valid photo ID</b>. The full name on your ID must match your registration.
+                Bring at least <b>1 physical government, school, company, or other valid photo ID</b>. The full name on
+                your ID must match your registration.
               </div>
             </div>
             <div class="checkin-step-item">
               <div class="checkin-step-num">3</div>
               <div class="checkin-step-content">
                 <span class="step-title">📱 Present Your Digital Run Pass</span>
-                Show your <b>Digital Run Pass QR Code</b> (downloaded or printed below) to event marshals to verify and approve your race check-in.
+                Show your <b>Digital Run Pass QR Code</b> (downloaded or printed below) to event marshals to verify and
+                approve your race check-in.
               </div>
             </div>
           </div>
@@ -3262,7 +3326,8 @@
           <div class="checkin-warning-box">
             <span style="font-size:18px;">⛔</span>
             <div>
-              <strong>Strict Check-in Policy:</strong> Runners without a valid photo ID will <strong>NOT</strong> be permitted to check in or participate in the run. This is strictly enforced for safety and verification.
+              <strong>Strict Check-in Policy:</strong> Runners without a valid photo ID will <strong>NOT</strong> be
+              permitted to check in or participate in the run. This is strictly enforced for safety and verification.
             </div>
           </div>
         </div>
@@ -3498,7 +3563,8 @@
               <div style="flex:1;">
                 <span id="waiverText" style="line-height:1.45;color:var(--mut);font-size:13.5px;display:block;">
                   I certify that I am registered for the Cebu Marathon 2027 and that the attached photo proof is
-                  authentic. I accept the <strong style="color:var(--mint);text-decoration:underline;">Training Run Waiver &amp; Participant Agreement</strong>.
+                  authentic. I accept the <strong style="color:var(--mint);text-decoration:underline;">Training Run
+                    Waiver &amp; Participant Agreement</strong>.
                 </span>
                 <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
                   <span
@@ -3530,21 +3596,25 @@
             <h3>Your Selected Leg</h3>
             <div class="sum-dist" id="sidebarDist">16 KM</div>
             <p id="sidebarDate" style="color:#cbd5e1;margin-top:6px;font-weight:600;">Sunday, November 15, 2026</p>
-            <p id="sidebarGun" style="color:var(--gold);font-size:13px;margin-top:4px;">Check-in: 03:30 AM &bull; Run Start: 04:00 AM</p>
+            <p id="sidebarGun" style="color:var(--gold);font-size:13px;margin-top:4px;">Check-in: 03:30 AM &bull; Run
+              Start: 04:00 AM</p>
           </div>
 
-          <div class="sidebar-panel" style="border:1.5px solid #ffbe1a;background:linear-gradient(135deg,rgba(255,190,26,0.15) 0%,rgba(6,18,70,0.9) 100%);box-shadow:0 0 18px rgba(255,190,26,0.2);">
+          <div class="sidebar-panel"
+            style="border:1.5px solid #ffbe1a;background:linear-gradient(135deg,rgba(255,190,26,0.15) 0%,rgba(6,18,70,0.9) 100%);box-shadow:0 0 18px rgba(255,190,26,0.2);">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
               <span style="font-size:20px;">🪪</span>
               <h3 style="color:#ffbe1a;font-size:16px;margin:0;letter-spacing:0.5px;">CHECK-IN &amp; ID REQUIREMENT</h3>
             </div>
             <p style="color:#ffffff;font-size:13px;line-height:1.45;margin-bottom:8px;">
-              ⚠️ <strong>MANDATORY:</strong> All runners <strong>MUST bring 1 or more valid IDs</strong> on event morning for marshal verification during check-in.
+              ⚠️ <strong>MANDATORY:</strong> All runners <strong>MUST bring 1 or more valid IDs</strong> on event
+              morning for marshal verification during check-in.
             </p>
             <div style="font-size:11.5px;color:#cbd5e1;line-height:1.4;">
               Accepted: National ID, Driver's License, Passport, Company ID, Student ID, or UMID.
             </div>
-            <div style="margin-top:8px;padding-top:8px;border-top:1px dashed rgba(255,190,26,0.3);font-size:11.5px;color:var(--mint);font-weight:700;">
+            <div
+              style="margin-top:8px;padding-top:8px;border-top:1px dashed rgba(255,190,26,0.3);font-size:11.5px;color:var(--mint);font-weight:700;">
               ⏱️ Arrive 30-45 mins before gun start to complete check-in.
             </div>
           </div>
@@ -3641,8 +3711,10 @@
       </div>
 
       <div class="waiver-scroll-body" id="waiverScrollBody">
-        <div style="margin-bottom:14px;font-size:13.5px;color:#cbd5e1;line-height:1.55;background:rgba(255,255,255,0.04);padding:10px 14px;border-radius:6px;border-left:3px solid var(--mint);">
-          By registering for and participating in the Training Run, I confirm that I have read, understood, and voluntarily agree to the following terms and conditions:
+        <div
+          style="margin-bottom:14px;font-size:13.5px;color:#cbd5e1;line-height:1.55;background:rgba(255,255,255,0.04);padding:10px 14px;border-radius:6px;border-left:3px solid var(--mint);">
+          By registering for and participating in the Training Run, I confirm that I have read, understood, and
+          voluntarily agree to the following terms and conditions:
         </div>
 
         <!-- 1. CRITICAL SAFETY NOTICE -->
@@ -3652,7 +3724,10 @@
             <span>1. CRITICAL SAFETY NOTICE: OPEN PUBLIC HIGHWAYS</span>
           </h4>
           <p style="margin:0;font-size:13.5px;color:#f8fafc;line-height:1.55;">
-            <strong>This is a community-driven training run, NOT a closed-course race.</strong> The roads, coastal bypass, and city thoroughfares remain <strong>FULLY OPEN TO VEHICULAR TRAFFIC</strong> (cars, motorcycles, buses, trucks, and public utility vehicles) at all times. <strong>Your personal safety is your top priority.</strong>
+            <strong>This is a community-driven training run, NOT a closed-course race.</strong> The roads, coastal
+            bypass, and city thoroughfares remain <strong>FULLY OPEN TO VEHICULAR TRAFFIC</strong> (cars, motorcycles,
+            buses, trucks, and public utility vehicles) at all times. <strong>Your personal safety is your top
+              priority.</strong>
           </p>
         </div>
 
@@ -3661,17 +3736,24 @@
           <span>🛡️</span> 2. Acknowledgment of Physical Activity and Road Risks
         </div>
         <p style="margin:0 0 6px;font-size:13px;">
-          I understand that participation in a running or training event involves inherent risks, including but not limited to:
+          I understand that participation in a running or training event involves inherent risks, including but not
+          limited to:
         </p>
         <ul class="waiver-list" style="margin-bottom:8px;">
-          <li>Muscle strains, sprains, cramps, fatigue, dehydration, heat-related illness, and other physical conditions;</li>
-          <li>Falls, trips, slips, collisions with other participants, pedestrians, bicycles, motorcycles, or vehicles;</li>
-          <li>Uneven or slippery surfaces, potholes, road obstructions, weather conditions, and other environmental hazards;</li>
-          <li>Risks associated with running on or near public roads and areas where normal vehicular and pedestrian traffic may be present; and</li>
-          <li>Accidents, injuries, illness, property damage, or other incidents arising from circumstances beyond the reasonable control of the organizers.</li>
+          <li>Muscle strains, sprains, cramps, fatigue, dehydration, heat-related illness, and other physical
+            conditions;</li>
+          <li>Falls, trips, slips, collisions with other participants, pedestrians, bicycles, motorcycles, or vehicles;
+          </li>
+          <li>Uneven or slippery surfaces, potholes, road obstructions, weather conditions, and other environmental
+            hazards;</li>
+          <li>Risks associated with running on or near public roads and areas where normal vehicular and pedestrian
+            traffic may be present; and</li>
+          <li>Accidents, injuries, illness, property damage, or other incidents arising from circumstances beyond the
+            reasonable control of the organizers.</li>
         </ul>
         <p style="margin:0 0 6px;font-size:13px;">
-          I understand that the Training Run may take place on or near roads that are not completely closed to vehicular traffic, and that vehicles, motorcycles, bicycles, pedestrians, and other road users may be present.
+          I understand that the Training Run may take place on or near roads that are not completely closed to vehicular
+          traffic, and that vehicles, motorcycles, bicycles, pedestrians, and other road users may be present.
         </p>
         <p style="margin:0 0 14px;font-size:13px;font-weight:600;color:#f8fafc;">
           I voluntarily assume the inherent risks associated with participating in the Training Run.
@@ -3682,13 +3764,17 @@
           <span>❤️</span> 3. Participant Fitness and Health Declaration
         </div>
         <p style="margin:0 0 6px;font-size:13px;">
-          I confirm that I am physically capable of participating in the Training Run and that I have considered any health or physical conditions that may affect my ability to safely participate.
+          I confirm that I am physically capable of participating in the Training Run and that I have considered any
+          health or physical conditions that may affect my ability to safely participate.
         </p>
         <p style="margin:0 0 6px;font-size:13px;">
-          I understand that participation is voluntary and that I am responsible for determining whether I am fit to participate. If I have any concerns regarding my health or physical condition, I understand that I should consult an appropriate medical professional before participating.
+          I understand that participation is voluntary and that I am responsible for determining whether I am fit to
+          participate. If I have any concerns regarding my health or physical condition, I understand that I should
+          consult an appropriate medical professional before participating.
         </p>
         <p style="margin:0 0 14px;font-size:13px;">
-          I agree not to participate if I am experiencing symptoms, illness, injury, or any condition that may make participation unsafe for myself or others.
+          I agree not to participate if I am experiencing symptoms, illness, injury, or any condition that may make
+          participation unsafe for myself or others.
         </p>
 
         <!-- 4. PARTICIPANT RESPONSIBILITY AND ROAD SAFETY -->
@@ -3696,14 +3782,16 @@
           <span>🚦</span> 4. Participant Responsibility and Road Safety
         </div>
         <p style="margin:0 0 6px;font-size:13px;">
-          I agree to exercise reasonable care at all times and to follow all safety instructions issued by the organizers and pacers / coaches.
+          I agree to exercise reasonable care at all times and to follow all safety instructions issued by the
+          organizers and pacers / coaches.
         </p>
         <p style="margin:0 0 6px;font-size:13px;">
           I agree to:
         </p>
         <ul class="waiver-list" style="margin-bottom:8px;">
           <li>Follow the designated training route;</li>
-          <li>Obey traffic lights, road signs, traffic rules, and instructions from authorized traffic personnel and marshals;</li>
+          <li>Obey traffic lights, road signs, traffic rules, and instructions from authorized traffic personnel and
+            marshals;</li>
           <li>Use designated pedestrian crossings and crossing points where provided;</li>
           <li>Exercise caution before crossing or entering any roadway;</li>
           <li>Remain alert to surrounding vehicles, motorcycles, bicycles, pedestrians, and other hazards;</li>
@@ -3713,7 +3801,8 @@
           <li>Conduct myself in a manner that does not knowingly endanger myself or another participant.</li>
         </ul>
         <p style="margin:0 0 14px;font-size:13px;">
-          I understand that organizers cannot control the actions of independent third parties, including motorists and other road users, and that I must remain alert and exercise caution even when following the designated route.
+          I understand that organizers cannot control the actions of independent third parties, including motorists and
+          other road users, and that I must remain alert and exercise caution even when following the designated route.
         </p>
 
         <!-- 5. COMPLIANCE WITH SAFETY INSTRUCTIONS -->
@@ -3721,10 +3810,13 @@
           <span>📋</span> 5. Compliance With Safety Instructions
         </div>
         <p style="margin:0 0 6px;font-size:13px;">
-          I understand that the organizers may modify, suspend, delay, reroute, or stop the Training Run, in whole or in part, when reasonably necessary for participant safety, including due to traffic conditions, weather, road conditions, emergencies, or other unforeseen circumstances.
+          I understand that the organizers may modify, suspend, delay, reroute, or stop the Training Run, in whole or in
+          part, when reasonably necessary for participant safety, including due to traffic conditions, weather, road
+          conditions, emergencies, or other unforeseen circumstances.
         </p>
         <p style="margin:0 0 6px;font-size:13px;">
-          The organizers may also require a participant to stop or leave the activity if, in the reasonable judgment of event personnel, the participant’s continued participation presents a safety risk.
+          The organizers may also require a participant to stop or leave the activity if, in the reasonable judgment of
+          event personnel, the participant’s continued participation presents a safety risk.
         </p>
         <p style="margin:0 0 14px;font-size:13px;">
           I agree to comply promptly with reasonable safety instructions.
@@ -3735,10 +3827,13 @@
           <span>⚠️</span> 6. Assumption of Risk
         </div>
         <p style="margin:0 0 6px;font-size:13px;">
-          I acknowledge that not all risks associated with a training run can be eliminated, even when reasonable safety precautions are taken.
+          I acknowledge that not all risks associated with a training run can be eliminated, even when reasonable safety
+          precautions are taken.
         </p>
         <p style="margin:0 0 14px;font-size:13px;">
-          I voluntarily assume the inherent and reasonably foreseeable risks associated with my participation, including risks arising from physical activity, road conditions, weather, other participants, pedestrians, and third-party road users.
+          I voluntarily assume the inherent and reasonably foreseeable risks associated with my participation, including
+          risks arising from physical activity, road conditions, weather, other participants, pedestrians, and
+          third-party road users.
         </p>
 
         <!-- 7. WAIVER AND RELEASE -->
@@ -3746,7 +3841,10 @@
           <span>⚖️</span> 7. Waiver and Release
         </div>
         <p style="margin:0 0 14px;font-size:13px;">
-          To the fullest extent permitted by applicable law, I release and agree to hold harmless the event organizers, pacers, coaches, volunteers, sponsors, venue owners, and their respective officers, employees, and representatives from claims arising from my participation in the Training Run to the extent such claims result from the inherent risks of participation or circumstances beyond their reasonable control.
+          To the fullest extent permitted by applicable law, I release and agree to hold harmless the event organizers,
+          pacers, coaches, volunteers, sponsors, venue owners, and their respective officers, employees, and
+          representatives from claims arising from my participation in the Training Run to the extent such claims result
+          from the inherent risks of participation or circumstances beyond their reasonable control.
         </p>
 
         <!-- 8. THIRD-PARTY VEHICLES AND ROAD USERS -->
@@ -3754,13 +3852,16 @@
           <span>🚗</span> 8. Third-Party Vehicles and Road Users
         </div>
         <p style="margin:0 0 6px;font-size:13px;">
-          I specifically acknowledge that the Training Run may occur in areas where third-party vehicles, motorcycles, bicycles, pedestrians, and other road users are present.
+          I specifically acknowledge that the Training Run may occur in areas where third-party vehicles, motorcycles,
+          bicycles, pedestrians, and other road users are present.
         </p>
         <p style="margin:0 0 6px;font-size:13px;">
-          I understand that the organizers do not own or control such third parties and cannot guarantee their conduct, attention, compliance with traffic laws, or reaction to runners.
+          I understand that the organizers do not own or control such third parties and cannot guarantee their conduct,
+          attention, compliance with traffic laws, or reaction to runners.
         </p>
         <p style="margin:0 0 14px;font-size:13px;">
-          I agree to remain vigilant and exercise reasonable caution around traffic at all times, including at intersections, crossings, driveways, entrances, exits, and other areas where vehicles may be present.
+          I agree to remain vigilant and exercise reasonable caution around traffic at all times, including at
+          intersections, crossings, driveways, entrances, exits, and other areas where vehicles may be present.
         </p>
 
         <!-- 9. EMERGENCY MEDICAL ASSISTANCE -->
@@ -3768,13 +3869,17 @@
           <span>🚑</span> 9. Emergency Medical Assistance
         </div>
         <p style="margin:0 0 6px;font-size:13px;">
-          In the event of an injury, medical emergency, or other situation requiring assistance, I authorize the organizers and their designated personnel, to the extent reasonably necessary, to arrange or request emergency medical assistance for me.
+          In the event of an injury, medical emergency, or other situation requiring assistance, I authorize the
+          organizers and their designated personnel, to the extent reasonably necessary, to arrange or request emergency
+          medical assistance for me.
         </p>
         <p style="margin:0 0 6px;font-size:13px;">
-          I understand that any medical, hospital, transportation, medication, or other expenses incurred on my behalf may be my responsibility, subject to applicable law and any insurance coverage that may apply.
+          I understand that any medical, hospital, transportation, medication, or other expenses incurred on my behalf
+          may be my responsibility, subject to applicable law and any insurance coverage that may apply.
         </p>
         <p style="margin:0 0 14px;font-size:13px;">
-          I agree to provide accurate emergency contact and relevant medical information when requested during registration.
+          I agree to provide accurate emergency contact and relevant medical information when requested during
+          registration.
         </p>
 
         <!-- 10. EVENT CHANGES, SUSPENSION, OR CANCELLATION -->
@@ -3782,10 +3887,13 @@
           <span>🔄</span> 10. Event Changes, Suspension, or Cancellation
         </div>
         <p style="margin:0 0 6px;font-size:13px;">
-          The organizers reserve the right to modify the schedule, route, venue, format, or other event details when reasonably necessary due to safety concerns, weather, traffic conditions, government directives, force majeure, or other unforeseen circumstances.
+          The organizers reserve the right to modify the schedule, route, venue, format, or other event details when
+          reasonably necessary due to safety concerns, weather, traffic conditions, government directives, force
+          majeure, or other unforeseen circumstances.
         </p>
         <p style="margin:0 0 14px;font-size:13px;">
-          The organizers may postpone, suspend, or cancel the Training Run when necessary for the safety and welfare of participants, staff, volunteers, or the public.
+          The organizers may postpone, suspend, or cancel the Training Run when necessary for the safety and welfare of
+          participants, staff, volunteers, or the public.
         </p>
 
         <!-- 11. PERSONAL BELONGINGS -->
@@ -3796,7 +3904,8 @@
           I acknowledge that I am responsible for my personal belongings brought to the Training Run.
         </p>
         <p style="margin:0 0 14px;font-size:13px;">
-          The organizers shall not be responsible for loss, theft, or damage to personal property except to the extent liability cannot lawfully be excluded.
+          The organizers shall not be responsible for loss, theft, or damage to personal property except to the extent
+          liability cannot lawfully be excluded.
         </p>
 
         <!-- 12. PHOTOGRAPHY, VIDEO, AND MEDIA RELEASE -->
@@ -3804,10 +3913,13 @@
           <span>📸</span> 12. Photography, Video, and Media Release
         </div>
         <p style="margin:0 0 6px;font-size:13px;">
-          I understand that photography, video recording, and other forms of media coverage may take place during the Training Run.
+          I understand that photography, video recording, and other forms of media coverage may take place during the
+          Training Run.
         </p>
         <p style="margin:0 0 14px;font-size:13px;">
-          I grant the organizers and their authorized partners permission to use photographs, videos, and recordings in which I may appear for legitimate event documentation, promotional, marketing, social media, advertising, and related purposes without additional compensation.
+          I grant the organizers and their authorized partners permission to use photographs, videos, and recordings in
+          which I may appear for legitimate event documentation, promotional, marketing, social media, advertising, and
+          related purposes without additional compensation.
         </p>
 
         <!-- 13. ACCURACY OF REGISTRATION INFORMATION -->
@@ -3818,10 +3930,12 @@
           I certify that the information I provide during registration is true and accurate to the best of my knowledge.
         </p>
         <p style="margin:0 0 10px;font-size:13px;">
-          I understand that providing inaccurate or incomplete information, particularly emergency contact or relevant health information, may affect the organizers’ ability to assist me in an emergency.
+          I understand that providing inaccurate or incomplete information, particularly emergency contact or relevant
+          health information, may affect the organizers’ ability to assist me in an emergency.
         </p>
 
-        <div style="padding:10px 14px;text-align:center;color:var(--mint);font-size:12px;font-weight:700;background:rgba(56,248,184,0.08);border:1px solid rgba(56,248,184,0.25);border-radius:6px;margin-top:14px;">
+        <div
+          style="padding:10px 14px;text-align:center;color:var(--mint);font-size:12px;font-weight:700;background:rgba(56,248,184,0.08);border:1px solid rgba(56,248,184,0.25);border-radius:6px;margin-top:14px;">
           ✓ You have reached the end of the Training Run Waiver &amp; Participant Agreement.
         </div>
       </div>
@@ -4137,25 +4251,86 @@
 
       function handleProofFile(file) {
         if (!file) return;
-        if (!file.type.match(/^image\//)) {
-          errProof.textContent = 'Please upload an image file (PNG, JPG, or WEBP).';
+        if (!file.type || !file.type.match(/^image\//i)) {
+          errProof.textContent = 'Please upload a valid image file (PNG, JPG, or WEBP).';
           return;
         }
-        if (file.size > 8 * 1024 * 1024) {
-          errProof.textContent = 'Image file exceeds 8MB limit. Please upload a smaller image.';
+        if (file.size > 25 * 1024 * 1024) {
+          errProof.textContent = 'Image file exceeds 25MB limit. Please upload a smaller photo.';
           return;
         }
         errProof.textContent = '';
+        if (proofDropZone) proofDropZone.style.opacity = '0.6';
 
         var reader = new FileReader();
         reader.onload = function (e) {
-          cebuProofBase64 = e.target.result;
-          proofThumbImg.src = cebuProofBase64;
-          proofFileName.textContent = file.name;
-          proofFileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
-          proofDropZone.style.display = 'none';
-          proofPreviewArea.style.display = 'flex';
+          var rawDataUrl = e.target.result;
+
+          // Use Image/Canvas to safely downscale huge camera photos while keeping all text sharp
+          var img = new Image();
+          img.onload = function () {
+            var maxDim = 1600;
+            var w = img.width;
+            var h = img.height;
+            var needsResize = (w > maxDim || h > maxDim || file.size > 800 * 1024);
+
+            var finalDataUrl = rawDataUrl;
+            if (needsResize) {
+              if (w > maxDim || h > maxDim) {
+                if (w > h) {
+                  h = Math.round((h * maxDim) / w);
+                  w = maxDim;
+                } else {
+                  w = Math.round((w * maxDim) / h);
+                  h = maxDim;
+                }
+              }
+              var canvas = document.createElement('canvas');
+              canvas.width = w;
+              canvas.height = h;
+              var ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, w, h);
+
+              var outputMime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+              finalDataUrl = canvas.toDataURL(outputMime, 0.86);
+              // If PNG is larger than 1.5MB, convert to high-quality JPEG
+              if (finalDataUrl.length > 2 * 1024 * 1024) {
+                finalDataUrl = canvas.toDataURL('image/jpeg', 0.86);
+              }
+            }
+
+            cebuProofBase64 = finalDataUrl;
+            proofThumbImg.src = cebuProofBase64;
+            proofFileName.textContent = file.name;
+            var estimatedBytes = Math.round(finalDataUrl.length * 0.75);
+            proofFileSize.textContent = (estimatedBytes / (1024 * 1024) >= 1)
+              ? (estimatedBytes / (1024 * 1024)).toFixed(2) + ' MB'
+              : Math.round(estimatedBytes / 1024) + ' KB';
+
+            proofDropZone.style.display = 'none';
+            proofDropZone.style.opacity = '1';
+            proofPreviewArea.style.display = 'flex';
+          };
+
+          img.onerror = function () {
+            // Fallback to raw data url if browser canvas failed
+            cebuProofBase64 = rawDataUrl;
+            proofThumbImg.src = cebuProofBase64;
+            proofFileName.textContent = file.name;
+            proofFileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+            proofDropZone.style.display = 'none';
+            proofDropZone.style.opacity = '1';
+            proofPreviewArea.style.display = 'flex';
+          };
+
+          img.src = rawDataUrl;
         };
+
+        reader.onerror = function () {
+          if (proofDropZone) proofDropZone.style.opacity = '1';
+          errProof.textContent = 'Could not read the selected photo file. Please try another image.';
+        };
+
         reader.readAsDataURL(file);
       }
 
@@ -4440,11 +4615,6 @@
 
           if (regRecord.qrCodeDataUrl) {
             document.getElementById('resQrImage').src = regRecord.qrCodeDataUrl;
-          }
-
-          var btnTrack = document.getElementById('btnTrackSubmittedPass');
-          if (btnTrack && regRecord.bibNumber) {
-            btnTrack.href = '/track?bib=' + encodeURIComponent(regRecord.bibNumber);
           }
 
           document.getElementById('formLayout').style.display = 'none';

@@ -93,6 +93,10 @@ const registrationSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  cebuProofDataUrl: {
+    type: String,
+    default: ''
+  },
   cebuProofVerified: {
     type: Boolean,
     default: false,

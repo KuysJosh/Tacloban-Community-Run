@@ -56,6 +56,40 @@ function requireAdminAuth(req, res, next) {
   next();
 }
 
+// Safely extract and parse base64 image data URLs (supports any size/type/whitespace)
+function extractBase64Image(dataString) {
+  if (!dataString || typeof dataString !== 'string') return null;
+  const commaIdx = dataString.indexOf(',');
+  if (commaIdx === -1) return null;
+  const header = dataString.substring(0, commaIdx);
+  const data = dataString.substring(commaIdx + 1).replace(/\s/g, '');
+  if (!data) return null;
+
+  let ext = 'jpg';
+  let mime = 'image/jpeg';
+  const mimeMatch = header.match(/data:image\/([a-zA-Z0-9+.-]+)/i);
+  if (mimeMatch) {
+    const rawExt = mimeMatch[1].toLowerCase();
+    mime = `image/${rawExt}`;
+    if (rawExt.includes('png')) ext = 'png';
+    else if (rawExt.includes('webp')) ext = 'webp';
+    else if (rawExt.includes('gif')) ext = 'gif';
+    else ext = 'jpg';
+  }
+  try {
+    const buffer = Buffer.from(data, 'base64');
+    return {
+      ext,
+      mime,
+      buffer,
+      dataUrl: `data:${mime};base64,${data}`
+    };
+  } catch (err) {
+    console.warn('extractBase64Image decoding error:', err.message);
+    return null;
+  }
+}
+
 // Ensure upload directory exists
 const UPLOADS_DIR = path.join(__dirname, 'public', 'uploads', 'proofs');
 if (!fs.existsSync(UPLOADS_DIR)) {
@@ -67,8 +101,8 @@ connectDB();
 
 // Middleware
 app.use(cors());
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Admin Login Endpoint
 app.post('/api/admin/login', (req, res) => {
@@ -507,21 +541,22 @@ app.post('/api/register', async (req, res) => {
 
     // Process and save proof image to uploads directory if provided as base64
     let savedProofPath = cebuProofImage;
+    let proofDataUrlToStore = '';
     if (cebuProofImage.startsWith('data:image/')) {
       try {
-        const matches = cebuProofImage.match(/^data:image\/([a-zA-Z0-9+]+);base64,(.+)$/);
-        if (matches) {
-          let ext = matches[1].toLowerCase();
-          if (ext === 'jpeg') ext = 'jpg';
-          const fileData = Buffer.from(matches[2], 'base64');
+        const parsed = extractBase64Image(cebuProofImage);
+        if (parsed && parsed.buffer && parsed.buffer.length > 0) {
           const safeBib = bibNumber.replace(/[^a-zA-Z0-9_-]/g, '_');
-          const fileName = `${safeBib}_cebu_proof_${Date.now()}.${ext}`;
+          const fileName = `${safeBib}_cebu_proof_${Date.now()}.${parsed.ext}`;
           const filePath = path.join(UPLOADS_DIR, fileName);
-          fs.writeFileSync(filePath, fileData);
+          fs.writeFileSync(filePath, parsed.buffer);
           savedProofPath = `/uploads/proofs/${fileName}`;
+          proofDataUrlToStore = parsed.dataUrl;
+          console.log(`✅ Saved proof image to disk: ${fileName} (${parsed.buffer.length} bytes)`);
         }
       } catch (saveErr) {
         console.warn('Could not write proof image file, retaining data URL:', saveErr.message);
+        proofDataUrlToStore = cebuProofImage;
       }
     }
 
@@ -544,7 +579,7 @@ app.post('/api/register', async (req, res) => {
       }
     });
 
-    // Save Registration
+    // Save Registration with both static path and persistent image data
     const registrationData = {
       bibNumber,
       fullName,
@@ -566,7 +601,10 @@ app.post('/api/register', async (req, res) => {
       emergencyRelation,
       medicalNotes,
       cebuProofImage: savedProofPath,
+      cebuProofDataUrl: proofDataUrlToStore || (cebuProofImage.startsWith('data:image/') ? cebuProofImage : ''),
       cebuProofVerified: false,
+      verificationStatus: 'PENDING',
+      disapprovalReason: '',
       qrCodeDataUrl
     };
 
@@ -668,6 +706,65 @@ app.get('/api/registrations/:idOrBib', async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
+});
+
+// Direct Proof Image Retrieval Endpoint (Serves disk file or recovers from database)
+app.get('/api/registrations/:idOrBib/proof', async (req, res) => {
+  try {
+    const record = await storage.getRegistrationByIdOrBib(req.params.idOrBib);
+    if (!record) {
+      return res.status(404).send('Runner registration not found');
+    }
+
+    // Try serving disk file first
+    if (record.cebuProofImage && !record.cebuProofImage.startsWith('data:image/')) {
+      const cleanPath = record.cebuProofImage.replace(/^\/+/, '');
+      const localFile = path.join(__dirname, 'public', cleanPath);
+      if (fs.existsSync(localFile)) {
+        return res.sendFile(localFile);
+      }
+    }
+
+    // Fallback to stored base64 data URL
+    const rawData = record.cebuProofDataUrl || (record.cebuProofImage && record.cebuProofImage.startsWith('data:image/') ? record.cebuProofImage : '');
+    if (rawData) {
+      const parsed = extractBase64Image(rawData);
+      if (parsed) {
+        res.setHeader('Content-Type', parsed.mime);
+        return res.send(parsed.buffer);
+      }
+    }
+
+    return res.status(404).send('No proof photo on file for this runner');
+  } catch (error) {
+    res.status(500).send('Error loading proof: ' + error.message);
+  }
+});
+
+// Automatic recovery for static /uploads/proofs/:fileName if Render disk restarted
+app.get('/uploads/proofs/:fileName', async (req, res, next) => {
+  const localFile = path.join(UPLOADS_DIR, req.params.fileName);
+  if (fs.existsSync(localFile)) {
+    return res.sendFile(localFile);
+  }
+
+  try {
+    const rawBib = req.params.fileName.split('_cebu_proof_')[0].replace(/_/g, '-');
+    const record = await storage.getRegistrationByIdOrBib(rawBib);
+    const rawData = (record && (record.cebuProofDataUrl || record.cebuProofImage)) || '';
+    if (rawData && rawData.startsWith('data:image/')) {
+      const parsed = extractBase64Image(rawData);
+      if (parsed) {
+        // Restore file on disk for instant subsequent access
+        try { fs.writeFileSync(localFile, parsed.buffer); } catch (_) {}
+        res.setHeader('Content-Type', parsed.mime);
+        return res.send(parsed.buffer);
+      }
+    }
+  } catch (err) {
+    console.warn('Fallback proof retrieval note:', err.message);
+  }
+  next();
 });
 
 // Toggle Bib Claim / Check-In Status (Protected - Only allowed for verified runners)
