@@ -1,4 +1,13 @@
 require('dotenv').config();
+
+// Ensure unhandled promise rejections or exceptions do not crash cloud instances
+process.on('unhandledRejection', (reason) => {
+  console.error('⚠️ Unhandled Rejection:', reason);
+});
+process.on('uncaughtException', (err) => {
+  console.error('⚠️ Uncaught Exception:', err);
+});
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -104,6 +113,17 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
+// Lightweight Health-Check endpoint for Render uptime monitoring & wake-up detection
+app.get('/api/health', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.json({
+    status: 'ok',
+    uptime: Math.round(process.uptime()),
+    database: storage.getIsConnected() ? 'connected' : 'offline_fallback',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Admin Login Endpoint
 app.post('/api/admin/login', (req, res) => {
   const { username, password } = req.body || {};
@@ -147,16 +167,6 @@ app.use('/assets', express.static(path.join(__dirname, 'public', 'assets')));
 // Serve the poster image
 app.get('/poster.png', (req, res) => {
   res.sendFile(path.join(__dirname, 'poster.png'));
-});
-
-// Lightweight Health-Check endpoint for wake-up detection & uptime monitoring
-app.get('/api/health', (req, res) => {
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-  res.json({
-    status: 'ok',
-    uptime: Math.round(process.uptime()),
-    timestamp: new Date().toISOString()
-  });
 });
 
 // Event Configuration Data based on the official poster
@@ -997,9 +1007,10 @@ app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Start Server with automatic port fallback if port is in use
+// Start Server with explicit 0.0.0.0 host binding for cloud platforms (Render, Docker, etc.)
 function startServer(portToTry) {
-  const server = app.listen(portToTry);
+  const HOST = '0.0.0.0';
+  const server = app.listen(portToTry, HOST);
 
   server.on('listening', async () => {
     const address = server.address();
@@ -1011,10 +1022,10 @@ function startServer(portToTry) {
 
     console.log(`\n=============================================================`);
     console.log(`🏃 Cebu Marathon 2027 - Tacloban Community Leg Server Running`);
-    console.log(`🔌 Actual Port:    ${actualPort}`);
-    console.log(`📍 Web App:        http://localhost:${actualPort}`);
-    console.log(`📊 Admin Portal:   http://localhost:${actualPort}/admin`);
-    console.log(`📸 Poster View:    http://localhost:${actualPort}/poster.png`);
+    console.log(`🔌 Host & Port:    ${HOST}:${actualPort}`);
+    console.log(`📍 Web App:        http://${HOST}:${actualPort}`);
+    console.log(`📊 Admin Portal:   http://${HOST}:${actualPort}/admin`);
+    console.log(`📸 Poster View:    http://${HOST}:${actualPort}/poster.png`);
     console.log(`=============================================================\n`);
 
     // Seed sample data only if explicitly enabled via SEED_DEMO_DATA=true
@@ -1024,7 +1035,8 @@ function startServer(portToTry) {
   });
 
   server.on('error', (err) => {
-    if (err.code === 'EADDRINUSE') {
+    // Only attempt port increment in local dev when PORT is not provided by host environment
+    if (err.code === 'EADDRINUSE' && !process.env.PORT) {
       const nextPort = Number(portToTry) + 1;
       console.log(`⚠️  Port ${portToTry} is in use. Automatically trying port ${nextPort}...`);
       startServer(nextPort);

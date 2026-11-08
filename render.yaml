@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: tacloban-community-run
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: EVENT_NAME
+        value: Cebulandmasters Cebu Marathon 2027 - Tacloban Leg
+      - key: EVENT_LOCATION
+        value: Tacloban City, Leyte, Philippines
+      - key: ADMIN_USERNAME
+        value: TaclobanComRun@2031
+      - key: ADMIN_PASSWORD
+        value: cebumarathon2027
+      - key: ADMIN_SECRET
+        value: cebu_marathon_tacloban_secret_key_2027
+      - key: MONGODB_URI
+        value: mongodb+srv://runnerAdmin:dhYTa5PU9gsG4CuI@cluster0.mbtvqqj.mongodb.net/cebu_marathon_tacloban?retryWrites=true&w=majority

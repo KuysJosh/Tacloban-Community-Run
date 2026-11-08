@@ -416,6 +416,7 @@ module.exports = {
   toggleClaimStatus,
   deleteRegistration,
   getStats,
-  generateBibNumber
+  generateBibNumber,
+  getIsConnected
 };
 

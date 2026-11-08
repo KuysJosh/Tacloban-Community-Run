@@ -1,41 +1,52 @@
 const dns = require('dns');
 const mongoose = require('mongoose');
 
-// Ensure SRV DNS records resolve reliably on Windows / diverse networks
-try {
-  dns.setServers(['8.8.8.8', '1.1.1.1']);
-} catch (e) {
-  // Ignore if custom dns setServers is restricted
+// Only customize DNS on Windows if needed (SRV records on some local Windows networks)
+// Do NOT override /etc/resolv.conf on Linux / cloud containers (Render, Docker, AWS)
+if (process.platform === 'win32') {
+  try {
+    dns.setServers(['8.8.8.8', '1.1.1.1']);
+  } catch (e) {
+    // Ignore if custom dns setServers is restricted
+  }
 }
 
 let isConnected = false;
 
+const DEFAULT_ATLAS_SRV = 'mongodb+srv://runnerAdmin:dhYTa5PU9gsG4CuI@cluster0.mbtvqqj.mongodb.net/cebu_marathon_tacloban?retryWrites=true&w=majority';
+const DEFAULT_ATLAS_DIRECT = 'mongodb://runnerAdmin:dhYTa5PU9gsG4CuI@ac-ef21ygi-shard-00-00.mbtvqqj.mongodb.net:27017,ac-ef21ygi-shard-00-01.mbtvqqj.mongodb.net:27017,ac-ef21ygi-shard-00-02.mbtvqqj.mongodb.net:27017/cebu_marathon_tacloban?ssl=true&authSource=admin&replicaSet=atlas-vmun6j-shard-0&retryWrites=true&w=majority';
+
 async function connectDB() {
-  const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/cebu_marathon_tacloban';
+  const uri = process.env.MONGODB_URI || DEFAULT_ATLAS_SRV;
   const isAtlas = uri.includes('mongodb+srv://') || uri.includes('mongodb.net');
 
   try {
     mongoose.set('strictQuery', false);
     await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 10000,
+      serverSelectionTimeoutMS: 6000,
     });
     isConnected = true;
-    if (isAtlas) {
-      console.log('☁️ Connected to MongoDB Atlas successfully!');
-    } else {
-      console.log('✅ Connected to local MongoDB successfully.');
-    }
+    console.log(isAtlas ? '☁️ Connected to MongoDB Atlas successfully!' : '✅ Connected to local MongoDB successfully.');
+    return true;
   } catch (err) {
-    isConnected = false;
-    if (isAtlas) {
-      console.warn('⚠️ MongoDB Atlas connection failed. Please check:');
-      console.warn('   1. IP Access List in Atlas Network Access (ensure 0.0.0.0/0 or your current IP is allowed)');
-      console.warn('   2. Database username and password are correct');
-      console.warn('   3. Internet connection / cluster status');
-      console.warn('   Falling back to local storage. Error:', err.message);
-    } else {
-      console.warn('⚠️ MongoDB connection failed, falling back to local JSON file storage (data/registrations.json). Error:', err.message);
+    // If SRV connection failed on cloud/container, automatically try direct standard replica set URI
+    if (uri.includes('cluster0.mbtvqqj.mongodb.net')) {
+      console.warn(`⚠️ SRV DNS lookup failed (${err.message}). Attempting direct replica-set connection...`);
+      try {
+        await mongoose.connect(DEFAULT_ATLAS_DIRECT, {
+          serverSelectionTimeoutMS: 6000,
+        });
+        isConnected = true;
+        console.log('☁️ Connected to MongoDB Atlas successfully via direct replica-set URI!');
+        return true;
+      } catch (directErr) {
+        console.warn('⚠️ Direct Atlas replica connection also failed:', directErr.message);
+      }
     }
+
+    isConnected = false;
+    console.warn(`⚠️ MongoDB connection offline, falling back to local JSON storage (data/registrations.json). Error: ${err.message}`);
+    return false;
   }
 }
 
