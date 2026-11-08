@@ -1149,6 +1149,17 @@ function escapeHtml(str) {
 
 // ── INITIALIZATION ──
 document.addEventListener('DOMContentLoaded', async () => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(regs => {
+      for (const r of regs) r.unregister();
+    });
+  }
+  if ('caches' in window) {
+    caches.keys().then(names => {
+      for (const n of names) caches.delete(n);
+    });
+  }
+
   const isAuthed = await checkAdminAuth();
   if (isAuthed) {
     loadStats();

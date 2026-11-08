@@ -166,8 +166,30 @@ app.get('/api/admin/verify', (req, res) => {
   res.json({ success: true, user });
 });
 
-// Static files
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve self-unregistration script for sw.js to cleanly purge old Service Worker caches
+app.get('/sw.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.send(`
+    self.addEventListener('install', () => self.skipWaiting());
+    self.addEventListener('activate', (e) => {
+      e.waitUntil(
+        caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))))
+          .then(() => self.registration.unregister())
+          .then(() => self.clients.claim())
+      );
+    });
+  `);
+});
+
+// Static files with no-cache on HTML documents
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+  }
+}));
 app.use('/assets', express.static(path.join(__dirname, 'public', 'assets')));
 
 // Serve the poster image
