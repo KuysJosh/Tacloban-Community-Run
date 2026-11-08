@@ -99,10 +99,14 @@ function extractBase64Image(dataString) {
   }
 }
 
-// Ensure upload directory exists
+// Ensure upload directory exists (with error guarding for read-only serverless platforms like Vercel)
 const UPLOADS_DIR = path.join(__dirname, 'public', 'uploads', 'proofs');
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+try {
+  if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+  }
+} catch (e) {
+  // Read-only filesystem in serverless environments
 }
 
 // Connect to MongoDB (with auto fallback to JSON storage)
@@ -112,6 +116,21 @@ connectDB();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// Ensure MongoDB is connected for API requests in serverless environments (Vercel)
+app.use(async (req, res, next) => {
+  if (req.path.startsWith('/api') && req.path !== '/api/health') {
+    const { getIsConnected } = require('./config/db');
+    if (!getIsConnected()) {
+      try {
+        await connectDB();
+      } catch (err) {
+        // Fall back gracefully
+      }
+    }
+  }
+  next();
+});
 
 // Ultra-fast health and ping endpoints for cloud load-balancers & keep-alive monitors
 app.get(['/health', '/ping'], (req, res) => {

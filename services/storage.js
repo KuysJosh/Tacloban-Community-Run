@@ -7,13 +7,21 @@ const Registration = require('../models/Registration');
 const DATA_DIR = path.join(__dirname, '..', 'data');
 const DATA_FILE = path.join(DATA_DIR, 'registrations.json');
 
-// Ensure data directory and fallback JSON file exist
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+// Ensure data directory and fallback JSON file exist (with error guarding for read-only serverless platforms like Vercel)
+try {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+} catch (e) {
+  // Read-only filesystem in serverless environments
 }
 
-if (!fs.existsSync(DATA_FILE)) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
+try {
+  if (!fs.existsSync(DATA_FILE)) {
+    fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
+  }
+} catch (e) {
+  // Read-only filesystem in serverless environments
 }
 
 function readLocalData() {
