@@ -113,6 +113,12 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
+// Ultra-fast health and ping endpoints for cloud load-balancers & keep-alive monitors
+app.get(['/health', '/ping'], (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.status(200).send('OK');
+});
+
 // Lightweight Health-Check endpoint for Render uptime monitoring & wake-up detection
 app.get('/api/health', (req, res) => {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -1048,3 +1054,12 @@ function startServer(portToTry) {
 }
 
 startServer(PORT);
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received. Gracefully exiting...');
+  process.exit(0);
+});
+process.on('SIGINT', () => {
+  console.log('SIGINT received. Gracefully exiting...');
+  process.exit(0);
+});
