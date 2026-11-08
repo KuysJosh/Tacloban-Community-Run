@@ -21,4 +21,5 @@ services:
       - key: ADMIN_SECRET
         value: cebu_marathon_tacloban_secret_key_2027
       - key: MONGODB_URI
-        value: mongodb+srv://runnerAdmin:dhYTa5PU9gsG4CuI@cluster0.mbtvqqj.mongodb.net/cebu_marathon_tacloban?retryWrites=true&w=majority
+        value: mongodb://runnerAdmin:dhYTa5PU9gsG4CuI@ac-ef21ygi-shard-00-00.mbtvqqj.mongodb.net:27017,ac-ef21ygi-shard-00-01.mbtvqqj.mongodb.net:27017,ac-ef21ygi-shard-00-02.mbtvqqj.mongodb.net:27017/cebu_marathon_tacloban?ssl=true&authSource=admin&replicaSet=atlas-vmun6j-shard-0&retryWrites=true&w=majority
+

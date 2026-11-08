@@ -97,6 +97,7 @@
       align-items: center;
       justify-content: space-between;
       height: 100%;
+      gap: 12px;
     }
 
     .brand {
@@ -104,35 +105,48 @@
       align-items: center;
       gap: 12px;
       text-decoration: none;
+      flex-shrink: 0;
+      min-width: 0;
     }
 
     .nav-brand-img {
-      height: 48px;
+      height: 46px;
+      max-width: 170px;
       width: auto;
       object-fit: contain;
       filter: none;
       outline: none;
       border: none;
       transition: transform .2s;
+      flex-shrink: 0;
     }
 
     .nav-brand-img:hover {
       transform: scale(1.02);
     }
 
+    /* Status badge hidden on mobile & tablets to prevent crowding and wrapping */
     .nav-tracker-badge {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: var(--mint);
-      background: rgba(56, 248, 184, 0.12);
-      border: 1px solid rgba(56, 248, 184, 0.35);
-      border-radius: 999px;
-      padding: 3px 10px;
-      text-transform: uppercase;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+      display: none !important;
+    }
+
+    @media (min-width: 992px) {
+      .nav-tracker-badge {
+        display: inline-flex !important;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        color: var(--mint);
+        background: rgba(56, 248, 184, 0.12);
+        border: 1px solid rgba(56, 248, 184, 0.35);
+        border-radius: 999px;
+        padding: 3px 10px;
+        text-transform: uppercase;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap !important;
+        flex-shrink: 0;
+      }
     }
 
     .desktop-only {
@@ -145,9 +159,10 @@
 
     .nav-links {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       align-items: center;
       flex-shrink: 0;
+      white-space: nowrap !important;
     }
 
     .btn-nav-home {
@@ -156,18 +171,23 @@
       font-weight: 600;
       padding: 8px 14px;
       border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.18);
       transition: all .2s;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      white-space: nowrap;
-      flex-shrink: 0;
+      white-space: nowrap !important;
+      word-break: keep-all !important;
+      flex-shrink: 0 !important;
       text-decoration: none;
     }
 
     .btn-nav-home:hover {
       color: var(--cyan);
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--cyan);
     }
 
     .btn-nav-reg {
@@ -183,15 +203,23 @@
       transition: all .2s;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      white-space: nowrap;
-      flex-shrink: 0;
+      white-space: nowrap !important;
+      word-break: keep-all !important;
+      flex-shrink: 0 !important;
       text-decoration: none;
     }
 
     .btn-nav-reg:hover {
       transform: translateY(-1px);
       box-shadow: 0 4px 14px rgba(0, 210, 255, 0.4);
+    }
+
+    .btn-nav-home *,
+    .btn-nav-reg * {
+      white-space: nowrap !important;
+      word-break: keep-all !important;
     }
 
     /* ── TRACKER HERO / SEARCH SECTION ── */
@@ -1086,6 +1114,20 @@
     }
 
     /* ── RESPONSIVE MEDIA QUERIES (ORGANIZED & ULTRA-CLEAN MOBILE VIEW) ── */
+    @media (max-width: 880px) {
+      .desktop-only {
+        display: none !important;
+      }
+
+      .mobile-only {
+        display: inline !important;
+      }
+
+      .nav-tracker-badge {
+        display: none !important;
+      }
+    }
+
     @media (max-width: 768px) {
       .desktop-only {
         display: none !important;
@@ -1114,14 +1156,15 @@
 
       .brand {
         gap: 6px;
-        flex-shrink: 1;
+        flex-shrink: 0;
         min-width: 0;
       }
 
       .nav-brand-img {
         height: 32px;
-        max-width: 130px;
+        max-width: 125px;
         object-fit: contain;
+        flex-shrink: 0;
       }
 
       .nav-tracker-badge {
@@ -1133,31 +1176,34 @@
         align-items: center;
         gap: 6px;
         flex-shrink: 0;
+        white-space: nowrap !important;
       }
 
       .btn-nav-home {
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 700;
-        padding: 7px 11px;
+        padding: 6px 10px;
         background: rgba(255, 255, 255, 0.08);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 6px;
         gap: 4px;
         line-height: 1;
         white-space: nowrap !important;
-        flex-shrink: 0;
+        word-break: keep-all !important;
+        flex-shrink: 0 !important;
       }
 
       .btn-nav-reg {
-        font-size: 13px;
+        font-size: 12.5px;
         font-weight: 800;
-        padding: 7px 12px;
+        padding: 6px 11px;
         letter-spacing: 0.3px;
         border-radius: 6px;
         gap: 4px;
         line-height: 1;
         white-space: nowrap !important;
-        flex-shrink: 0;
+        word-break: keep-all !important;
+        flex-shrink: 0 !important;
       }
 
       /* Hero & Search */
@@ -1559,21 +1605,36 @@
 
     /* Extra Small Screen Adjustments (< 380px) */
     @media (max-width: 380px) {
+      nav {
+        height: 52px;
+      }
       nav .wrap {
         padding: 0 8px;
         gap: 6px;
       }
       .nav-brand-img {
-        height: 28px;
-        max-width: 110px;
+        height: 26px;
+        max-width: 100px;
+        flex-shrink: 0;
+      }
+      .nav-links {
+        gap: 4px;
+        flex-shrink: 0;
+        white-space: nowrap !important;
       }
       .btn-nav-home {
-        font-size: 11.5px;
-        padding: 6px 8px;
+        font-size: 11px;
+        padding: 5px 8px;
+        white-space: nowrap !important;
+        word-break: keep-all !important;
+        flex-shrink: 0 !important;
       }
       .btn-nav-reg {
-        font-size: 12px;
-        padding: 6px 9px;
+        font-size: 11.5px;
+        padding: 5px 9px;
+        white-space: nowrap !important;
+        word-break: keep-all !important;
+        flex-shrink: 0 !important;
       }
       .track-hero h1 {
         font-size: 24px;

@@ -17,30 +17,42 @@ const DEFAULT_ATLAS_SRV = 'mongodb+srv://runnerAdmin:dhYTa5PU9gsG4CuI@cluster0.m
 const DEFAULT_ATLAS_DIRECT = 'mongodb://runnerAdmin:dhYTa5PU9gsG4CuI@ac-ef21ygi-shard-00-00.mbtvqqj.mongodb.net:27017,ac-ef21ygi-shard-00-01.mbtvqqj.mongodb.net:27017,ac-ef21ygi-shard-00-02.mbtvqqj.mongodb.net:27017/cebu_marathon_tacloban?ssl=true&authSource=admin&replicaSet=atlas-vmun6j-shard-0&retryWrites=true&w=majority';
 
 async function connectDB() {
-  const uri = process.env.MONGODB_URI || DEFAULT_ATLAS_SRV;
-  const isAtlas = uri.includes('mongodb+srv://') || uri.includes('mongodb.net');
+  const customUri = process.env.MONGODB_URI;
+  // If no custom URI or if using cluster0, prioritize direct replica set URI
+  // to avoid SRV DNS query hangs/timeouts in cloud containers (Render, Docker)
+  let primaryUri = DEFAULT_ATLAS_DIRECT;
+  let fallbackUri = DEFAULT_ATLAS_SRV;
+
+  if (customUri) {
+    if (customUri.includes('cluster0.mbtvqqj.mongodb.net')) {
+      primaryUri = DEFAULT_ATLAS_DIRECT;
+      fallbackUri = customUri;
+    } else {
+      primaryUri = customUri;
+      fallbackUri = null;
+    }
+  }
 
   try {
     mongoose.set('strictQuery', false);
-    await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 6000,
+    await mongoose.connect(primaryUri, {
+      serverSelectionTimeoutMS: 5000,
     });
     isConnected = true;
-    console.log(isAtlas ? '☁️ Connected to MongoDB Atlas successfully!' : '✅ Connected to local MongoDB successfully.');
+    console.log('☁️ Connected to MongoDB Atlas successfully!');
     return true;
   } catch (err) {
-    // If SRV connection failed on cloud/container, automatically try direct standard replica set URI
-    if (uri.includes('cluster0.mbtvqqj.mongodb.net')) {
-      console.warn(`⚠️ SRV DNS lookup failed (${err.message}). Attempting direct replica-set connection...`);
+    console.warn(`⚠️ Primary MongoDB connection failed (${err.message}). Trying fallback...`);
+    if (fallbackUri) {
       try {
-        await mongoose.connect(DEFAULT_ATLAS_DIRECT, {
-          serverSelectionTimeoutMS: 6000,
+        await mongoose.connect(fallbackUri, {
+          serverSelectionTimeoutMS: 5000,
         });
         isConnected = true;
-        console.log('☁️ Connected to MongoDB Atlas successfully via direct replica-set URI!');
+        console.log('☁️ Connected to MongoDB Atlas successfully via fallback URI!');
         return true;
-      } catch (directErr) {
-        console.warn('⚠️ Direct Atlas replica connection also failed:', directErr.message);
+      } catch (fallbackErr) {
+        console.warn('⚠️ Fallback MongoDB connection also failed:', fallbackErr.message);
       }
     }
 
