@@ -1053,7 +1053,11 @@ function startServer(portToTry) {
   });
 }
 
-startServer(PORT);
+if (require.main === module) {
+  startServer(PORT);
+}
+
+module.exports = app;
 
 process.on('SIGTERM', () => {
   console.log('SIGTERM received. Gracefully exiting...');
