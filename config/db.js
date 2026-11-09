@@ -46,20 +46,22 @@ async function connectDB() {
     try {
       mongoose.set('strictQuery', false);
       await mongoose.connect(primaryUri, {
+        dbName: 'cebu_marathon_tacloban',
         serverSelectionTimeoutMS: 5000,
       });
       isConnected = true;
-      console.log('☁️ Connected to MongoDB Atlas successfully!');
+      console.log('☁️ Connected to MongoDB Atlas successfully [db: cebu_marathon_tacloban]!');
       return true;
     } catch (err) {
       console.warn(`⚠️ Primary MongoDB connection failed (${err.message}). Trying fallback...`);
       if (fallbackUri) {
         try {
           await mongoose.connect(fallbackUri, {
+            dbName: 'cebu_marathon_tacloban',
             serverSelectionTimeoutMS: 5000,
           });
           isConnected = true;
-          console.log('☁️ Connected to MongoDB Atlas successfully via fallback URI!');
+          console.log('☁️ Connected to MongoDB Atlas successfully via fallback URI [db: cebu_marathon_tacloban]!');
           return true;
         } catch (fallbackErr) {
           console.warn('⚠️ Fallback MongoDB connection also failed:', fallbackErr.message);

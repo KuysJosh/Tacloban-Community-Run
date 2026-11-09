@@ -619,6 +619,14 @@ async function handleAdminLogin(e) {
       updateAdminUserUI();
       loadStats();
       loadActiveTabData();
+
+      if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+      autoRefreshTimer = setInterval(() => {
+        if (currentAuthToken && !document.hidden) {
+          loadStats();
+          loadActiveTabData();
+        }
+      }, 15000);
     } else {
       errEl.textContent = data.message || 'Invalid username or password.';
       errEl.style.display = 'block';
@@ -1148,6 +1156,8 @@ function escapeHtml(str) {
 }
 
 // ── INITIALIZATION ──
+let autoRefreshTimer = null;
+
 document.addEventListener('DOMContentLoaded', async () => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations().then(regs => {
@@ -1164,6 +1174,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (isAuthed) {
     loadStats();
     loadActiveTabData();
+
+    // Auto-refresh stats and tab data every 15 seconds so new registrations appear in real-time
+    if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+    autoRefreshTimer = setInterval(() => {
+      if (currentAuthToken && !document.hidden) {
+        loadStats();
+        loadActiveTabData();
+      }
+    }, 15000);
   }
 });
 </script>

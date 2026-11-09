@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
-const { getIsConnected } = require('../config/db');
+const { connectDB, getIsConnected } = require('../config/db');
 const Registration = require('../models/Registration');
 
 const DATA_DIR = path.join(__dirname, '..', 'data');
@@ -53,6 +53,13 @@ async function generateBibNumber(category) {
   };
   const prefix = prefixMap[category] || 'TBN-RUN';
 
+  // Always ensure connection to MongoDB Atlas database
+  if (!getIsConnected()) {
+    try {
+      await connectDB();
+    } catch (e) {}
+  }
+
   // Count existing registrations in this category
   let count = 0;
   if (getIsConnected()) {
@@ -89,10 +96,19 @@ async function generateBibNumber(category) {
   return bib;
 }
 
-// Save a new registration
+// Save a new registration directly into MongoDB Atlas cebu_marathon_tacloban.registrations
 async function createRegistration(data) {
   if (!data.cebuProofImage || typeof data.cebuProofImage !== 'string' || !data.cebuProofImage.trim()) {
     throw new Error('Photo proof of Cebu Marathon 2027 registration is strictly required.');
+  }
+
+  // Always ensure MongoDB Atlas connection is active
+  if (!getIsConnected()) {
+    try {
+      await connectDB();
+    } catch (dbErr) {
+      console.warn('⚠️ Atlas reconnect in createRegistration:', dbErr.message);
+    }
   }
 
   // If no bibNumber provided, generate one
@@ -114,8 +130,22 @@ async function createRegistration(data) {
       const reg = new Registration(data);
       savedRecord = await reg.save();
       savedRecord = savedRecord.toObject();
+      console.log(`☁️ [Atlas] Successfully saved registration ${savedRecord.bibNumber} (${savedRecord.fullName}) into cebu_marathon_tacloban.registrations`);
     } catch (err) {
-      console.warn('MongoDB insert failed, using fallback:', err.message);
+      console.error('❌ MongoDB insert error:', err.message);
+      // If error is caused by document size (large base64 image), trim the duplicate base64 cache and retry
+      if (err.message && (err.message.includes('large') || err.message.includes('BSON') || err.message.includes('maximum allowed document size'))) {
+        try {
+          console.log('⚠️ Retrying insert with stripped data URL cache...');
+          data.cebuProofDataUrl = '';
+          const retryReg = new Registration(data);
+          savedRecord = await retryReg.save();
+          savedRecord = savedRecord.toObject();
+          console.log(`☁️ [Atlas] Successfully saved registration ${savedRecord.bibNumber} on retry!`);
+        } catch (retryErr) {
+          console.error('❌ Retry insert also failed:', retryErr.message);
+        }
+      }
     }
   }
 
@@ -143,6 +173,12 @@ async function createRegistration(data) {
 // Get all registrations with filtering and search
 async function getRegistrations(query = {}) {
   const { category, club, search, claimed, verified, verificationStatus } = query;
+
+  if (!getIsConnected()) {
+    try {
+      await connectDB();
+    } catch (e) {}
+  }
 
   if (getIsConnected()) {
     try {
