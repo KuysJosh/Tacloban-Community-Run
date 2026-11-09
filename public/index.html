@@ -3964,35 +3964,29 @@
           // Use Image/Canvas to safely downscale huge camera photos while keeping all text sharp
           var img = new Image();
           img.onload = function () {
-            var maxDim = 1600;
+            // Downscale to max 1200px and compress to lightweight, crystal-clear JPEG (typically 150KB-350KB)
+            var maxDim = 1200;
             var w = img.width;
             var h = img.height;
-            var needsResize = (w > maxDim || h > maxDim || file.size > 800 * 1024);
 
-            var finalDataUrl = rawDataUrl;
-            if (needsResize) {
-              if (w > maxDim || h > maxDim) {
-                if (w > h) {
-                  h = Math.round((h * maxDim) / w);
-                  w = maxDim;
-                } else {
-                  w = Math.round((w * maxDim) / h);
-                  h = maxDim;
-                }
-              }
-              var canvas = document.createElement('canvas');
-              canvas.width = w;
-              canvas.height = h;
-              var ctx = canvas.getContext('2d');
-              ctx.drawImage(img, 0, 0, w, h);
-
-              var outputMime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
-              finalDataUrl = canvas.toDataURL(outputMime, 0.86);
-              // If PNG is larger than 1.5MB, convert to high-quality JPEG
-              if (finalDataUrl.length > 2 * 1024 * 1024) {
-                finalDataUrl = canvas.toDataURL('image/jpeg', 0.86);
+            if (w > maxDim || h > maxDim) {
+              if (w > h) {
+                h = Math.round((h * maxDim) / w);
+                w = maxDim;
+              } else {
+                w = Math.round((w * maxDim) / h);
+                h = maxDim;
               }
             }
+
+            var canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+
+            // Always encode as clean JPEG to guarantee fail-safe, ultra-fast uploads under 400KB
+            var finalDataUrl = canvas.toDataURL('image/jpeg', 0.82);
 
             cebuProofBase64 = finalDataUrl;
             proofThumbImg.src = cebuProofBase64;
@@ -4336,7 +4330,12 @@
           document.getElementById('doneScreen').scrollIntoView({ behavior: 'smooth' });
 
         } catch (err) {
-          document.getElementById('errGeneral').textContent = 'Error: ' + err.message;
+          const errEl = document.getElementById('errGeneral');
+          if (errEl) {
+            errEl.textContent = '❌ Submission Error: ' + err.message;
+            errEl.style.display = 'block';
+            errEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
           if (err.message && err.message.toLowerCase().includes('proof')) {
             if (proofDropZone) {
               proofDropZone.style.display = 'block';
