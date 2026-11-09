@@ -704,7 +704,7 @@ app.post('/api/register', async (req, res) => {
       emergencyRelation,
       medicalNotes,
       cebuProofImage: savedProofPath,
-      cebuProofDataUrl: proofDataUrlToStore || (cebuProofImage.startsWith('data:image/') ? cebuProofImage : ''),
+      cebuProofDataUrl: savedProofPath.startsWith('data:image/') ? '' : (proofDataUrlToStore || ''),
       cebuProofVerified: false,
       verificationStatus: 'PENDING',
       disapprovalReason: '',

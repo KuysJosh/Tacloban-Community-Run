@@ -25,7 +25,6 @@ const registrationSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
-    enum: ['Male', 'Female', 'Non-Binary', 'Prefer not to say'],
     default: 'Male'
   },
   birthDate: {
@@ -34,8 +33,7 @@ const registrationSchema = new mongoose.Schema({
   },
   age: {
     type: Number,
-    min: 12,
-    max: 100
+    default: 25
   },
   bloodType: {
     type: String,
@@ -43,21 +41,20 @@ const registrationSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['16KM', '21KM', '26KM', '32KM', 'ALL_LEGS'],
+    default: '16KM',
     required: true
   },
   categoryTitle: {
     type: String,
-    required: true
+    default: '16 KM Community Run'
   },
   categoryDate: {
     type: String,
-    required: true
+    default: ''
   },
   runningClub: {
     type: String,
-    required: true,
-    default: 'Individual / No Affiliation'
+    default: 'No group (individual)'
   },
   customClub: {
     type: String,
@@ -73,12 +70,12 @@ const registrationSchema = new mongoose.Schema({
   },
   emergencyName: {
     type: String,
-    required: true,
+    default: 'N/A',
     trim: true
   },
   emergencyPhone: {
     type: String,
-    required: true,
+    default: 'N/A',
     trim: true
   },
   emergencyRelation: {
@@ -91,7 +88,7 @@ const registrationSchema = new mongoose.Schema({
   },
   cebuProofImage: {
     type: String,
-    required: [true, 'Photo proof of Cebu Marathon 2027 registration is required'],
+    default: '',
     trim: true
   },
   cebuProofDataUrl: {

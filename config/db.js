@@ -25,6 +25,12 @@ async function connectDB() {
   if (connPromise) {
     return connPromise;
   }
+  if (mongoose.connection.readyState === 2) {
+    return new Promise((resolve) => {
+      mongoose.connection.once('connected', () => { isConnected = true; resolve(true); });
+      mongoose.connection.once('error', () => { resolve(false); });
+    });
+  }
 
   connPromise = (async () => {
     const customUri = process.env.MONGODB_URI;
@@ -47,7 +53,8 @@ async function connectDB() {
       mongoose.set('strictQuery', false);
       await mongoose.connect(primaryUri, {
         dbName: 'cebu_marathon_tacloban',
-        serverSelectionTimeoutMS: 5000,
+        serverSelectionTimeoutMS: 15000,
+        socketTimeoutMS: 30000,
       });
       isConnected = true;
       console.log('☁️ Connected to MongoDB Atlas successfully [db: cebu_marathon_tacloban]!');
@@ -58,7 +65,8 @@ async function connectDB() {
         try {
           await mongoose.connect(fallbackUri, {
             dbName: 'cebu_marathon_tacloban',
-            serverSelectionTimeoutMS: 5000,
+            serverSelectionTimeoutMS: 15000,
+            socketTimeoutMS: 30000,
           });
           isConnected = true;
           console.log('☁️ Connected to MongoDB Atlas successfully via fallback URI [db: cebu_marathon_tacloban]!');

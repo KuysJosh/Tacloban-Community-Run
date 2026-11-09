@@ -124,6 +124,7 @@ async function createRegistration(data) {
   data.disapprovalReason = data.disapprovalReason || '';
 
   let savedRecord = null;
+  let lastInsertError = '';
 
   if (getIsConnected()) {
     try {
@@ -132,6 +133,7 @@ async function createRegistration(data) {
       savedRecord = savedRecord.toObject();
       console.log(`☁️ [Atlas] Successfully saved registration ${savedRecord.bibNumber} (${savedRecord.fullName}) into cebu_marathon_tacloban.registrations`);
     } catch (err) {
+      lastInsertError = err.message;
       console.error('❌ MongoDB insert error:', err.message);
       // If error is caused by document size (large base64 image), trim the duplicate base64 cache and retry
       if (err.message && (err.message.includes('large') || err.message.includes('BSON') || err.message.includes('maximum allowed document size'))) {
@@ -143,20 +145,21 @@ async function createRegistration(data) {
           savedRecord = savedRecord.toObject();
           console.log(`☁️ [Atlas] Successfully saved registration ${savedRecord.bibNumber} on retry!`);
         } catch (retryErr) {
+          lastInsertError = retryErr.message;
           console.error('❌ Retry insert also failed:', retryErr.message);
         }
       }
     }
   }
 
+  // Enforce cloud database persistence: NEVER fake success if not saved in MongoDB Atlas!
   if (!savedRecord) {
-    const localList = readLocalData();
-    data._id = 'local_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
-    localList.unshift(data);
-    writeLocalData(localList);
-    savedRecord = data;
-  } else {
-    // Also mirror to local file for offline access
+    console.error('❌ Registration save aborted: MongoDB Atlas insert failed. Reason:', lastInsertError);
+    throw new Error('Database save failed: ' + (lastInsertError || 'Could not connect to MongoDB Atlas database.'));
+  }
+
+  // Also mirror to local file for offline access
+  try {
     const localList = readLocalData();
     const existingIdx = localList.findIndex(r => r.bibNumber === savedRecord.bibNumber);
     if (existingIdx >= 0) {
@@ -165,7 +168,7 @@ async function createRegistration(data) {
       localList.unshift(savedRecord);
     }
     writeLocalData(localList);
-  }
+  } catch (e) {}
 
   return savedRecord;
 }
@@ -265,6 +268,12 @@ async function findMongoDoc(idOrBib) {
 
 // Find single registration by ID or Bib
 async function getRegistrationByIdOrBib(idOrBib) {
+  if (!getIsConnected()) {
+    try {
+      await connectDB();
+    } catch (e) {}
+  }
+
   if (getIsConnected()) {
     try {
       const reg = await findMongoDoc(idOrBib);
