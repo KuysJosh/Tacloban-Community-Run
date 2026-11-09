@@ -201,11 +201,202 @@ tr:hover td{background:rgba(255,255,255,.04)}
 }
 .login-hint{margin-top:18px;font-size:11.5px;color:#94a3b8;line-height:1.45;border-top:1px dashed rgba(255,255,255,.15);padding-top:12px;}
 
+/* PACE STATS SMALL CARDS */
+.pace-section {
+  background: rgba(13, 31, 107, 0.45);
+  border: 1px solid rgba(127, 245, 200, 0.22);
+  border-radius: 10px;
+  padding: 14px 18px 16px;
+  margin: 0 0 24px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+.pace-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.pace-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Barlow Condensed", sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.8px;
+  color: #e2e8f0;
+  text-transform: uppercase;
+}
+.pace-total-badge {
+  font-family: Barlow, sans-serif;
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(56, 248, 184, 0.18);
+  border: 1px solid rgba(56, 248, 184, 0.4);
+  color: var(--mint);
+  letter-spacing: 0.5px;
+}
+.pace-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+.pace-clear-btn {
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.pace-clear-btn:hover {
+  background: rgba(239, 68, 68, 0.35);
+  color: #fff;
+}
+.pace-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+.pace-card {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+.pace-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+.pace-badge-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.pace-tag {
+  font-family: "Barlow Condensed", sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 12.5px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+.pace-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.pace-card-val {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+  font-size: 28px;
+  line-height: 1;
+  margin: 2px 0 2px;
+}
+.pace-card-sub {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Card Themes & Active States */
+.pace-card.pace-card-all {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.pace-card.pace-card-all:hover, .pace-card.pace-card-all.active {
+  border-color: #ffffff;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), var(--card));
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+}
+.dot-white { background: #ffffff; box-shadow: 0 0 6px rgba(255, 255, 255, 0.6); }
+
+.pace-card.pace-card-530 {
+  border-color: rgba(56, 189, 248, 0.3);
+}
+.pace-card.pace-card-530:hover, .pace-card.pace-card-530.active {
+  border-color: #38bdf8;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.14), var(--card));
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+}
+.tag-cyan { color: #7dd3fc; }
+.dot-cyan { background: #38bdf8; box-shadow: 0 0 6px #38bdf8; }
+
+.pace-card.pace-card-630 {
+  border-color: rgba(16, 185, 129, 0.3);
+}
+.pace-card.pace-card-630:hover, .pace-card.pace-card-630.active {
+  border-color: #34d399;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.14), var(--card));
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.35);
+}
+.tag-mint { color: #6ee7b7; }
+.dot-mint { background: #10b981; box-shadow: 0 0 6px #10b981; }
+
+.pace-card.pace-card-730 {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+.pace-card.pace-card-730:hover, .pace-card.pace-card-730.active {
+  border-color: #fbbf24;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.14), var(--card));
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
+}
+.tag-gold { color: #fde047; }
+.dot-gold { background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
+
+.pace-card.pace-card-runwalk {
+  border-color: rgba(192, 132, 252, 0.3);
+}
+.pace-card.pace-card-runwalk:hover, .pace-card.pace-card-runwalk.active {
+  border-color: #c084fc;
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.15), var(--card));
+  box-shadow: 0 0 14px rgba(192, 132, 252, 0.35);
+}
+.tag-purple { color: #d8b4fe; }
+.dot-purple { background: #c084fc; box-shadow: 0 0 6px #c084fc; }
+.val-purple { color: #c084fc; text-shadow: 0 0 12px rgba(192, 132, 252, 0.35); }
+
+.pace-card.pace-card-other {
+  border-color: rgba(148, 163, 184, 0.3);
+}
+.pace-card.pace-card-other:hover, .pace-card.pace-card-other.active {
+  border-color: #cbd5e1;
+  background: linear-gradient(135deg, rgba(148, 163, 184, 0.15), var(--card));
+  box-shadow: 0 0 12px rgba(148, 163, 184, 0.3);
+}
+.tag-slate { color: #cbd5e1; }
+.dot-slate { background: #94a3b8; box-shadow: 0 0 6px #94a3b8; }
+.val-slate { color: #cbd5e1; }
+
 @media(max-width:768px){
   .toolbar{flex-direction:column;align-items:stretch}
   .filters{flex-direction:column}
   .admin-tabs{gap:6px;}
   .tab-btn{font-size:17px;padding:8px 12px;}
+  .pace-cards-grid{grid-template-columns:repeat(2, 1fr);}
 }
 </style>
 </head>
@@ -304,6 +495,82 @@ tr:hover td{background:rgba(255,255,255,.04)}
     </div>
   </div>
 
+  <!-- APPROVED RUNNERS BY DESIRED PACE (Small Stat Cards) -->
+  <div class="pace-section">
+    <div class="pace-section-header">
+      <div class="pace-section-title">
+        <span class="pace-icon">⚡</span>
+        <span>Approved Runners by Desired Pace</span>
+        <span class="pace-total-badge" id="paceApprovedTotalBadge">0 Verified Runners</span>
+      </div>
+      <div class="pace-hint">
+        <span>Click card to filter verified list:</span>
+        <button type="button" class="pace-clear-btn" id="paceClearBtn" onclick="setPaceFilter('ALL')" style="display:none;">Clear Filter ✕</button>
+      </div>
+    </div>
+    <div class="pace-cards-grid">
+      <!-- ALL APPROVED PACES -->
+      <div class="pace-card pace-card-all active" id="paceCard-ALL" onclick="setPaceFilter('ALL')" title="Show all approved runners">
+        <div class="pace-badge-row">
+          <span class="pace-tag">ALL PACES</span>
+          <span class="pace-dot dot-white"></span>
+        </div>
+        <div class="pace-card-val val-white" id="statPaceAll">0</div>
+        <div class="pace-card-sub">All Approved Runners</div>
+      </div>
+
+      <!-- 5:30 MIN/KM -->
+      <div class="pace-card pace-card-530" id="paceCard-530" onclick="setPaceFilter('5:30')" title="Filter by 5:30 min/KM (Fast Pace)">
+        <div class="pace-badge-row">
+          <span class="pace-tag tag-cyan">5:30 MIN/KM</span>
+          <span class="pace-dot dot-cyan"></span>
+        </div>
+        <div class="pace-card-val val-cyan" id="statPace530">0</div>
+        <div class="pace-card-sub">Fast Pace Group</div>
+      </div>
+
+      <!-- 6:30 MIN/KM -->
+      <div class="pace-card pace-card-630" id="paceCard-630" onclick="setPaceFilter('6:30')" title="Filter by 6:30 min/KM (Target Pace)">
+        <div class="pace-badge-row">
+          <span class="pace-tag tag-mint">6:30 MIN/KM</span>
+          <span class="pace-dot dot-mint"></span>
+        </div>
+        <div class="pace-card-val val-mint" id="statPace630">0</div>
+        <div class="pace-card-sub">Target Pace Group</div>
+      </div>
+
+      <!-- 7:30 MIN/KM -->
+      <div class="pace-card pace-card-730" id="paceCard-730" onclick="setPaceFilter('7:30')" title="Filter by 7:30 min/KM (Steady Pace)">
+        <div class="pace-badge-row">
+          <span class="pace-tag tag-gold">7:30 MIN/KM</span>
+          <span class="pace-dot dot-gold"></span>
+        </div>
+        <div class="pace-card-val val-gold" id="statPace730">0</div>
+        <div class="pace-card-sub">Steady Pace Group</div>
+      </div>
+
+      <!-- RUN-WALK 8:30 -->
+      <div class="pace-card pace-card-runwalk" id="paceCard-runwalk" onclick="setPaceFilter('runwalk')" title="Filter by Run-Walk 8:30 (4m Run / 1m Walk)">
+        <div class="pace-badge-row">
+          <span class="pace-tag tag-purple">RUN-WALK 8:30</span>
+          <span class="pace-dot dot-purple"></span>
+        </div>
+        <div class="pace-card-val val-purple" id="statPaceRunWalk">0</div>
+        <div class="pace-card-sub">4m Run / 1m Walk</div>
+      </div>
+
+      <!-- OTHER PACES (Dynamically shown if non-zero) -->
+      <div class="pace-card pace-card-other" id="paceCard-other" onclick="setPaceFilter('other')" title="Filter by Other custom paces" style="display:none;">
+        <div class="pace-badge-row">
+          <span class="pace-tag tag-slate">OTHER PACES</span>
+          <span class="pace-dot dot-slate"></span>
+        </div>
+        <div class="pace-card-val val-slate" id="statPaceOther">0</div>
+        <div class="pace-card-sub">Custom Paces</div>
+      </div>
+    </div>
+  </div>
+
   <!-- TABS NAVIGATION -->
   <div class="admin-tabs">
     <button type="button" class="tab-btn active" id="tabBtnVerified" onclick="switchAdminTab('verified')">
@@ -333,6 +600,14 @@ tr:hover td{background:rgba(255,255,255,.04)}
           <option value="26KM">26 KM</option>
           <option value="32KM">32 KM</option>
           <option value="ALL_LEGS">All 4 Legs (VIP)</option>
+        </select>
+        <select id="paceVerified" onchange="syncPaceFilterFromSelect()">
+          <option value="ALL">All Desired Paces</option>
+          <option value="5:30">5:30 min/KM (Fast)</option>
+          <option value="6:30">6:30 min/KM (Target)</option>
+          <option value="7:30">7:30 min/KM (Steady)</option>
+          <option value="runwalk">Run-Walk 8:30</option>
+          <option value="other">Other Paces</option>
         </select>
         <select id="clubVerified" onchange="loadVerifiedRunners()">
           <option value="ALL">All Running Clubs</option>
@@ -524,6 +799,7 @@ tr:hover td{background:rgba(255,255,255,.04)}
 let currentAuthToken = localStorage.getItem('marathon_admin_token') || sessionStorage.getItem('marathon_admin_token') || '';
 let currentAdminUser = localStorage.getItem('marathon_admin_user') || 'Admin';
 let activeTab = 'verified';
+let currentPaceFilter = 'ALL';
 
 let currentModalBib = null;
 let currentModalRunnerName = '';
@@ -533,6 +809,45 @@ let disapproveTargetBib = null;
 
 let debounceTimerVerified = null;
 let debounceTimerUnverified = null;
+
+// ── DESIRED PACE FILTER HANDLERS ──
+function setPaceFilter(pace) {
+  currentPaceFilter = pace || 'ALL';
+
+  // Update card active classes
+  document.querySelectorAll('.pace-card').forEach(el => el.classList.remove('active'));
+  const cardId = pace === '5:30' ? 'paceCard-530' :
+                 pace === '6:30' ? 'paceCard-630' :
+                 pace === '7:30' ? 'paceCard-730' :
+                 pace === 'runwalk' ? 'paceCard-runwalk' :
+                 pace === 'other' ? 'paceCard-other' : 'paceCard-ALL';
+  const targetCard = document.getElementById(cardId);
+  if (targetCard) targetCard.classList.add('active');
+
+  // Sync toolbar dropdown in Tab 1
+  const sel = document.getElementById('paceVerified');
+  if (sel) sel.value = pace;
+
+  // Show or hide clear filter button
+  const clearBtn = document.getElementById('paceClearBtn');
+  if (clearBtn) {
+    clearBtn.style.display = (pace && pace !== 'ALL') ? 'inline-block' : 'none';
+  }
+
+  // If currently viewing another tab, auto-switch to verified desk
+  if (activeTab !== 'verified') {
+    switchAdminTab('verified');
+  } else {
+    loadVerifiedRunners();
+  }
+}
+
+function syncPaceFilterFromSelect() {
+  const sel = document.getElementById('paceVerified');
+  if (sel) {
+    setPaceFilter(sel.value);
+  }
+}
 
 // ── AUTHENTICATION HELPERS ──
 function getAuthHeaders() {
@@ -708,6 +1023,43 @@ async function loadStats() {
       document.getElementById('badgeVerifiedCount').textContent = s.totalVerified || 0;
       document.getElementById('badgePendingCount').textContent = s.pendingReviewCount || 0;
       document.getElementById('badgeDisapprovedCount').textContent = s.disapprovedCount || 0;
+
+      // Update small pace cards for approved runners
+      if (s.verifiedPaces) {
+        const p530 = s.verifiedPaces['5:30'] || 0;
+        const p630 = s.verifiedPaces['6:30'] || 0;
+        const p730 = s.verifiedPaces['7:30'] || 0;
+        const prw = s.verifiedPaces['runwalk'] || 0;
+        const pother = s.verifiedPaces['other'] || 0;
+
+        const elAll = document.getElementById('statPaceAll');
+        if (elAll) elAll.textContent = s.totalVerified || 0;
+
+        const el530 = document.getElementById('statPace530');
+        if (el530) el530.textContent = p530;
+
+        const el630 = document.getElementById('statPace630');
+        if (el630) el630.textContent = p630;
+
+        const el730 = document.getElementById('statPace730');
+        if (el730) el730.textContent = p730;
+
+        const elRw = document.getElementById('statPaceRunWalk');
+        if (elRw) elRw.textContent = prw;
+
+        const elOther = document.getElementById('statPaceOther');
+        if (elOther) elOther.textContent = pother;
+
+        const otherWrapper = document.getElementById('paceCard-other');
+        if (otherWrapper) {
+          otherWrapper.style.display = pother > 0 ? 'block' : 'none';
+        }
+      }
+
+      const paceBadge = document.getElementById('paceApprovedTotalBadge');
+      if (paceBadge) {
+        paceBadge.textContent = `${s.totalVerified || 0} Verified Runners`;
+      }
     }
   } catch (err) {
     console.error('Error loading stats:', err);
@@ -722,6 +1074,7 @@ async function loadVerifiedRunners() {
   const category = document.getElementById('catVerified').value;
   const club = document.getElementById('clubVerified').value;
   const claimed = document.getElementById('checkinFilter').value;
+  const pace = currentPaceFilter;
 
   const params = new URLSearchParams();
   params.append('verified', 'true'); // Only verified runners!
@@ -729,6 +1082,7 @@ async function loadVerifiedRunners() {
   if (category && category !== 'ALL') params.append('category', category);
   if (club && club !== 'ALL') params.append('club', club);
   if (claimed !== '') params.append('claimed', claimed);
+  if (pace && pace !== 'ALL') params.append('pace', pace);
 
   const tbody = document.getElementById('tbodyVerified');
 

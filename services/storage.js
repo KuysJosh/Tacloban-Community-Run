@@ -175,7 +175,7 @@ async function createRegistration(data) {
 
 // Get all registrations with filtering and search
 async function getRegistrations(query = {}) {
-  const { category, club, search, claimed, verified, verificationStatus } = query;
+  const { category, club, search, claimed, verified, verificationStatus, pace } = query;
 
   if (!getIsConnected()) {
     try {
@@ -199,6 +199,15 @@ async function getRegistrations(query = {}) {
           filter.cebuProofVerified = false;
         } else {
           filter.verificationStatus = verificationStatus;
+        }
+      }
+      if (pace && pace !== 'ALL') {
+        if (pace === 'runwalk' || pace.toLowerCase().includes('walk') || pace.includes('8:30')) {
+          filter.desiredPace = { $regex: /(runwalk|run-walk|8:30|walk)/i };
+        } else if (pace === 'other') {
+          filter.desiredPace = { $not: /(5:30|6:30|7:30|8:30|runwalk)/i };
+        } else {
+          filter.desiredPace = { $regex: new RegExp(pace.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') };
         }
       }
       if (search) {
@@ -239,6 +248,22 @@ async function getRegistrations(query = {}) {
       records = records.filter(r => !r.cebuProofVerified);
     } else {
       records = records.filter(r => (r.verificationStatus || (r.cebuProofVerified ? 'VERIFIED' : 'PENDING')) === verificationStatus);
+    }
+  }
+  if (pace && pace !== 'ALL') {
+    if (pace === 'runwalk' || pace.toLowerCase().includes('walk') || pace.includes('8:30')) {
+      records = records.filter(r => {
+        const p = (r.desiredPace || '').toLowerCase();
+        return p.includes('runwalk') || p.includes('run-walk') || p.includes('8:30') || p.includes('walk');
+      });
+    } else if (pace === 'other') {
+      records = records.filter(r => {
+        const p = (r.desiredPace || '').toLowerCase();
+        return !p.includes('5:30') && !p.includes('6:30') && !p.includes('7:30') && !p.includes('8:30') && !p.includes('runwalk');
+      });
+    } else {
+      const pLow = pace.toLowerCase();
+      records = records.filter(r => (r.desiredPace || '').toLowerCase().includes(pLow));
     }
   }
   if (search) {
@@ -445,6 +470,30 @@ async function getStats() {
     clubs[c] = (clubs[c] || 0) + 1;
   });
 
+  // Approved / Verified runners categorized by desired pace
+  const verifiedPaces = {
+    '5:30': 0,
+    '6:30': 0,
+    '7:30': 0,
+    'runwalk': 0,
+    'other': 0
+  };
+
+  verifiedRunners.forEach(r => {
+    const p = (r.desiredPace || '').toLowerCase();
+    if (p.includes('5:30')) {
+      verifiedPaces['5:30']++;
+    } else if (p.includes('6:30')) {
+      verifiedPaces['6:30']++;
+    } else if (p.includes('7:30')) {
+      verifiedPaces['7:30']++;
+    } else if (p.includes('runwalk') || p.includes('run-walk') || p.includes('8:30') || p.includes('walk')) {
+      verifiedPaces['runwalk']++;
+    } else {
+      verifiedPaces['other']++;
+    }
+  });
+
   return {
     totalRunners,
     totalVerified,
@@ -456,7 +505,8 @@ async function getStats() {
     claimedCount: verifiedCheckedIn,
     unclaimedCount: verifiedNotCheckedIn,
     categories,
-    clubs
+    clubs,
+    verifiedPaces
   };
 }
 
