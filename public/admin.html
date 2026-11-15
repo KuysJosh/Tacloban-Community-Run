@@ -1524,9 +1524,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  // Eagerly load global stats & pace cards immediately
+  loadStats();
+
   const isAuthed = await checkAdminAuth();
   if (isAuthed) {
-    loadStats();
     loadActiveTabData();
 
     // Auto-refresh stats and tab data every 15 seconds so new registrations appear in real-time

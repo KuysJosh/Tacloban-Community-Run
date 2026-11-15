@@ -132,7 +132,8 @@ const registrationSchema = new mongoose.Schema({
   },
   claimed: {
     type: Boolean,
-    default: false
+    default: false,
+    index: true
   },
   claimedAt: {
     type: Date,
@@ -140,7 +141,8 @@ const registrationSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
+    index: true
   }
 });
 

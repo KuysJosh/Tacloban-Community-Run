@@ -220,8 +220,17 @@ async function getRegistrations(query = {}) {
         ];
       }
 
-      const list = await Registration.find(filter).sort({ createdAt: -1 });
-      return list.map(item => item.toObject());
+      const list = await Registration.find(filter, {
+        cebuProofImage: 0,
+        cebuProofDataUrl: 0,
+        qrCodeDataUrl: 0
+      }).sort({ createdAt: -1, _id: -1 }).lean();
+
+      return list.map(item => ({
+        ...item,
+        hasProof: true,
+        cebuProofImage: `/api/registrations/${encodeURIComponent(item.bibNumber)}/proof`
+      }));
     } catch (err) {
       console.warn('MongoDB query failed, falling back to JSON:', err.message);
     }
@@ -436,7 +445,30 @@ async function deleteRegistration(idOrBib) {
 
 // Get statistics
 async function getStats() {
-  const all = await getRegistrations();
+  if (!getIsConnected()) {
+    try {
+      await connectDB();
+    } catch (e) {}
+  }
+
+  let all = [];
+  if (getIsConnected()) {
+    try {
+      all = await Registration.find({}, {
+        category: 1,
+        runningClub: 1,
+        cebuProofVerified: 1,
+        verificationStatus: 1,
+        claimed: 1,
+        desiredPace: 1
+      }).lean();
+    } catch (err) {
+      console.warn('MongoDB getStats query failed, falling back to JSON:', err.message);
+      all = readLocalData();
+    }
+  } else {
+    all = readLocalData();
+  }
 
   const totalRunners = all.length;
 
