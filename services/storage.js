@@ -175,7 +175,7 @@ async function createRegistration(data) {
 
 // Get all registrations with filtering and search
 async function getRegistrations(query = {}) {
-  const { category, club, search, claimed, verified, verificationStatus, pace } = query;
+  const { category, club, search, claimed, verified, verificationStatus, pace, regDate, eventDate, date } = query;
 
   if (!getIsConnected()) {
     try {
@@ -210,6 +210,28 @@ async function getRegistrations(query = {}) {
           filter.desiredPace = { $regex: new RegExp(pace.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') };
         }
       }
+
+      // Specific Registration Submission Date (YYYY-MM-DD)
+      const targetRegDate = regDate || (date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null);
+      if (targetRegDate && targetRegDate !== 'ALL') {
+        const parts = targetRegDate.split('-');
+        if (parts.length === 3) {
+          const y = parseInt(parts[0], 10);
+          const m = parseInt(parts[1], 10) - 1;
+          const d = parseInt(parts[2], 10);
+          // Philippine Standard Time (UTC+8): 00:00:00 PHT = 16:00:00 UTC previous day
+          const startPHT = new Date(Date.UTC(y, m, d - 1, 16, 0, 0));
+          const endPHT = new Date(Date.UTC(y, m, d, 23, 59, 59, 999));
+          filter.createdAt = { $gte: startPHT, $lte: endPHT };
+        }
+      }
+
+      // Event Run Date / Race Leg Date (e.g. November 15, November 28, December 5, December 19)
+      const targetEventDate = eventDate || (date && !/^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null);
+      if (targetEventDate && targetEventDate !== 'ALL') {
+        filter.categoryDate = { $regex: new RegExp(targetEventDate.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') };
+      }
+
       if (search) {
         const regex = new RegExp(search.trim(), 'i');
         filter.$or = [
@@ -274,6 +296,23 @@ async function getRegistrations(query = {}) {
       const pLow = pace.toLowerCase();
       records = records.filter(r => (r.desiredPace || '').toLowerCase().includes(pLow));
     }
+  }
+
+  const targetRegDate = regDate || (date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null);
+  if (targetRegDate && targetRegDate !== 'ALL') {
+    records = records.filter(r => {
+      if (!r.createdAt) return false;
+      const d = new Date(r.createdAt);
+      const localYmd = d.toLocaleDateString('en-CA');
+      const utcYmd = d.toISOString().slice(0, 10);
+      return localYmd === targetRegDate || utcYmd === targetRegDate;
+    });
+  }
+
+  const targetEventDate = eventDate || (date && !/^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null);
+  if (targetEventDate && targetEventDate !== 'ALL') {
+    const eLow = targetEventDate.toLowerCase();
+    records = records.filter(r => (r.categoryDate || '').toLowerCase().includes(eLow));
   }
   if (search) {
     const s = search.trim().toLowerCase();

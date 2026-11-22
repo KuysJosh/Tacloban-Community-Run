@@ -138,6 +138,62 @@ input:focus,select:focus{border-color:var(--mint);background:rgba(255,255,255,.1
 select option{color:#000}
 input::placeholder{color:#8fa0dd}
 
+/* DATE FILTERS */
+.date-filter-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+  padding: 0 10px;
+  min-height: 42px;
+  transition: border-color 0.2s;
+}
+.date-filter-box:focus-within {
+  border-color: var(--mint);
+  background: rgba(255, 255, 255, 0.12);
+}
+.date-filter-box label {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--mint);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.date-filter-box input[type="date"] {
+  border: none;
+  background: transparent;
+  padding: 0 4px;
+  min-height: auto;
+  color: #fff;
+  font-size: 13.5px;
+  outline: none;
+  color-scheme: dark;
+}
+.btn-clear-date {
+  background: rgba(239, 68, 68, 0.25);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  color: #fca5a5;
+  font-size: 11px;
+  font-weight: 800;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  transition: all 0.2s;
+}
+.btn-clear-date:hover {
+  background: rgba(239, 68, 68, 0.5);
+  color: #fff;
+}
+
 /* table */
 .table-card{background:var(--card);border:1px solid var(--line);overflow:hidden;margin-bottom:50px;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
 .tbl-wrap{overflow-x:auto}
@@ -601,6 +657,18 @@ tr:hover td{background:rgba(255,255,255,.04)}
           <option value="32KM">32 KM</option>
           <option value="ALL_LEGS">All 4 Legs (VIP)</option>
         </select>
+        <select id="eventDateVerified" onchange="loadVerifiedRunners()" title="Filter by event leg run date">
+          <option value="ALL">All Event Dates</option>
+          <option value="November 15">Nov 15, 2026 (16KM)</option>
+          <option value="November 28">Nov 28, 2026 (21KM)</option>
+          <option value="December 5">Dec 5, 2026 (26KM)</option>
+          <option value="December 19">Dec 19, 2026 (32KM)</option>
+        </select>
+        <div class="date-filter-box" title="Filter by specific registration date">
+          <label for="dateVerified">📅 Reg Date:</label>
+          <input type="date" id="dateVerified" onchange="loadVerifiedRunners()" title="Filter by specific registration date">
+          <button type="button" class="btn-clear-date" id="clearDateVerified" onclick="clearDateFilter('verified')" title="Clear date filter" style="display:none;">✕</button>
+        </div>
         <select id="paceVerified" onchange="syncPaceFilterFromSelect()">
           <option value="ALL">All Desired Paces</option>
           <option value="5:30">5:30 min/KM (Fast)</option>
@@ -671,6 +739,18 @@ tr:hover td{background:rgba(255,255,255,.04)}
           <option value="26KM">26 KM</option>
           <option value="32KM">32 KM</option>
         </select>
+        <select id="eventDatePending" onchange="loadPendingRunners()" title="Filter by event leg run date">
+          <option value="ALL">All Event Dates</option>
+          <option value="November 15">Nov 15, 2026 (16KM)</option>
+          <option value="November 28">Nov 28, 2026 (21KM)</option>
+          <option value="December 5">Dec 5, 2026 (26KM)</option>
+          <option value="December 19">Dec 19, 2026 (32KM)</option>
+        </select>
+        <div class="date-filter-box" title="Filter by registration submission date">
+          <label for="datePending">📅 Reg Date:</label>
+          <input type="date" id="datePending" onchange="loadPendingRunners()" title="Filter by specific registration date">
+          <button type="button" class="btn-clear-date" id="clearDatePending" onclick="clearDateFilter('pending')" title="Clear date filter" style="display:none;">✕</button>
+        </div>
       </div>
       <div style="display:flex;gap:8px;">
         <button type="button" class="btn sm ghost" onclick="loadPendingRunners()"><span>🔄 Refresh</span></button>
@@ -714,6 +794,18 @@ tr:hover td{background:rgba(255,255,255,.04)}
           <option value="26KM">26 KM</option>
           <option value="32KM">32 KM</option>
         </select>
+        <select id="eventDateDisapproved" onchange="loadDisapprovedRunners()" title="Filter by event leg run date">
+          <option value="ALL">All Event Dates</option>
+          <option value="November 15">Nov 15, 2026 (16KM)</option>
+          <option value="November 28">Nov 28, 2026 (21KM)</option>
+          <option value="December 5">Dec 5, 2026 (26KM)</option>
+          <option value="December 19">Dec 19, 2026 (32KM)</option>
+        </select>
+        <div class="date-filter-box" title="Filter by registration submission date">
+          <label for="dateDisapproved">📅 Reg Date:</label>
+          <input type="date" id="dateDisapproved" onchange="loadDisapprovedRunners()" title="Filter by specific registration date">
+          <button type="button" class="btn-clear-date" id="clearDateDisapproved" onclick="clearDateFilter('disapproved')" title="Clear date filter" style="display:none;">✕</button>
+        </div>
       </div>
       <div style="display:flex;gap:8px;">
         <button type="button" class="btn sm ghost" onclick="loadDisapprovedRunners()"><span>🔄 Refresh</span></button>
@@ -846,6 +938,41 @@ function syncPaceFilterFromSelect() {
   const sel = document.getElementById('paceVerified');
   if (sel) {
     setPaceFilter(sel.value);
+  }
+}
+
+// ── DATE FILTER HELPERS ──
+function clearDateFilter(tab) {
+  if (tab === 'verified') {
+    const el = document.getElementById('dateVerified');
+    if (el) el.value = '';
+    const btn = document.getElementById('clearDateVerified');
+    if (btn) btn.style.display = 'none';
+    loadVerifiedRunners();
+  } else if (tab === 'pending') {
+    const el = document.getElementById('datePending');
+    if (el) el.value = '';
+    const btn = document.getElementById('clearDatePending');
+    if (btn) btn.style.display = 'none';
+    loadPendingRunners();
+  } else if (tab === 'disapproved') {
+    const el = document.getElementById('dateDisapproved');
+    if (el) el.value = '';
+    const btn = document.getElementById('clearDateDisapproved');
+    if (btn) btn.style.display = 'none';
+    loadDisapprovedRunners();
+  }
+}
+
+function formatDateTime(dateStr) {
+  if (!dateStr) return '';
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + 
+           ' • ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  } catch {
+    return dateStr;
   }
 }
 
@@ -1075,6 +1202,11 @@ async function loadVerifiedRunners() {
   const club = document.getElementById('clubVerified').value;
   const claimed = document.getElementById('checkinFilter').value;
   const pace = currentPaceFilter;
+  const regDate = document.getElementById('dateVerified') ? document.getElementById('dateVerified').value : '';
+  const eventDate = document.getElementById('eventDateVerified') ? document.getElementById('eventDateVerified').value : '';
+
+  const clearBtn = document.getElementById('clearDateVerified');
+  if (clearBtn) clearBtn.style.display = regDate ? 'inline-flex' : 'none';
 
   const params = new URLSearchParams();
   params.append('verified', 'true'); // Only verified runners!
@@ -1083,6 +1215,8 @@ async function loadVerifiedRunners() {
   if (club && club !== 'ALL') params.append('club', club);
   if (claimed !== '') params.append('claimed', claimed);
   if (pace && pace !== 'ALL') params.append('pace', pace);
+  if (regDate) params.append('regDate', regDate);
+  if (eventDate && eventDate !== 'ALL') params.append('eventDate', eventDate);
 
   const tbody = document.getElementById('tbodyVerified');
 
@@ -1112,8 +1246,12 @@ async function loadVerifiedRunners() {
           <td>
             <strong style="color:#fff;font-size:16px;">${escapeHtml(r.fullName)}</strong>
             <div style="font-size:12px;color:var(--mut);">${escapeHtml(r.gender || '')} &bull; Age: ${r.age || 'N/A'} &bull; Blood: ${r.bloodType || 'N/A'}</div>
+            <div style="font-size:11.5px;color:#cbd5e1;margin-top:2px;">📅 Registered: ${formatDateTime(r.createdAt)}</div>
           </td>
-          <td><b style="color:var(--mint);font-family:'Barlow Condensed';font-style:italic;font-size:18px;">${r.category}</b></td>
+          <td>
+            <b style="color:var(--mint);font-family:'Barlow Condensed';font-style:italic;font-size:18px;">${r.category}</b>
+            <div style="font-size:11px;color:#94a3b8;">${escapeHtml(r.categoryDate || '')}</div>
+          </td>
           <td><span style="font-size:12.5px;color:var(--gold);background:rgba(255,190,26,.12);padding:2px 7px;border-radius:3px;font-weight:700;">${escapeHtml(r.desiredPace || '6:30 min/KM')}</span></td>
           <td style="font-size:14px;color:#cbd5e1;">${escapeHtml(r.runningClub)}</td>
           <td style="font-size:13px;">
@@ -1166,12 +1304,19 @@ async function loadPendingRunners() {
 
   const search = document.getElementById('searchPending') ? document.getElementById('searchPending').value.trim() : '';
   const category = document.getElementById('catPending') ? document.getElementById('catPending').value : 'ALL';
+  const regDate = document.getElementById('datePending') ? document.getElementById('datePending').value : '';
+  const eventDate = document.getElementById('eventDatePending') ? document.getElementById('eventDatePending').value : '';
+
+  const clearBtn = document.getElementById('clearDatePending');
+  if (clearBtn) clearBtn.style.display = regDate ? 'inline-flex' : 'none';
 
   const params = new URLSearchParams();
   params.append('verified', 'false');
   params.append('verificationStatus', 'PENDING');
   if (category && category !== 'ALL') params.append('category', category);
   if (search) params.append('search', search);
+  if (regDate) params.append('regDate', regDate);
+  if (eventDate && eventDate !== 'ALL') params.append('eventDate', eventDate);
 
   const tbody = document.getElementById('tbodyPending');
   if (!tbody) return;
@@ -1201,8 +1346,12 @@ async function loadPendingRunners() {
           <td>
             <strong style="color:#fff;font-size:16px;">${escapeHtml(r.fullName)}</strong>
             <div style="font-size:12px;color:var(--mut);">${escapeHtml(r.gender || '')} &bull; Age: ${r.age || 'N/A'}</div>
+            <div style="font-size:11.5px;color:#cbd5e1;margin-top:2px;">📅 Registered: ${formatDateTime(r.createdAt)}</div>
           </td>
-          <td><b style="color:var(--cyan);font-family:'Barlow Condensed';font-style:italic;font-size:18px;">${r.category}</b></td>
+          <td>
+            <b style="color:var(--cyan);font-family:'Barlow Condensed';font-style:italic;font-size:18px;">${r.category}</b>
+            <div style="font-size:11px;color:#94a3b8;">${escapeHtml(r.categoryDate || '')}</div>
+          </td>
           <td style="font-size:14px;color:#cbd5e1;">${escapeHtml(r.runningClub)}</td>
           <td style="font-size:13px;">
             <div>${escapeHtml(r.mobile)}</div>
@@ -1253,12 +1402,19 @@ async function loadDisapprovedRunners() {
 
   const search = document.getElementById('searchDisapproved') ? document.getElementById('searchDisapproved').value.trim() : '';
   const category = document.getElementById('catDisapproved') ? document.getElementById('catDisapproved').value : 'ALL';
+  const regDate = document.getElementById('dateDisapproved') ? document.getElementById('dateDisapproved').value : '';
+  const eventDate = document.getElementById('eventDateDisapproved') ? document.getElementById('eventDateDisapproved').value : '';
+
+  const clearBtn = document.getElementById('clearDateDisapproved');
+  if (clearBtn) clearBtn.style.display = regDate ? 'inline-flex' : 'none';
 
   const params = new URLSearchParams();
   params.append('verified', 'false');
   params.append('verificationStatus', 'DISAPPROVED');
   if (category && category !== 'ALL') params.append('category', category);
   if (search) params.append('search', search);
+  if (regDate) params.append('regDate', regDate);
+  if (eventDate && eventDate !== 'ALL') params.append('eventDate', eventDate);
 
   const tbody = document.getElementById('tbodyDisapproved');
   if (!tbody) return;
@@ -1288,8 +1444,12 @@ async function loadDisapprovedRunners() {
           <td>
             <strong style="color:#fff;font-size:16px;">${escapeHtml(r.fullName)}</strong>
             <div style="font-size:12px;color:var(--mut);">${escapeHtml(r.gender || '')} &bull; Age: ${r.age || 'N/A'}</div>
+            <div style="font-size:11.5px;color:#cbd5e1;margin-top:2px;">📅 Registered: ${formatDateTime(r.createdAt)}</div>
           </td>
-          <td><b style="color:var(--cyan);font-family:'Barlow Condensed';font-style:italic;font-size:18px;">${r.category}</b></td>
+          <td>
+            <b style="color:var(--cyan);font-family:'Barlow Condensed';font-style:italic;font-size:18px;">${r.category}</b>
+            <div style="font-size:11px;color:#94a3b8;">${escapeHtml(r.categoryDate || '')}</div>
+          </td>
           <td style="font-size:14px;color:#cbd5e1;">${escapeHtml(r.runningClub)}</td>
           <td style="font-size:13px;">
             <div>${escapeHtml(r.mobile)}</div>
