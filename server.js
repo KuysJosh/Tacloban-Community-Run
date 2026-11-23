@@ -1001,10 +1001,10 @@ app.delete('/api/registrations/:idOrBib', requireAdminAuth, async (req, res) => 
   }
 });
 
-// Get Live Statistics & Leaderboard (Public / Admin)
+// Get Live Statistics & Leaderboard (Public / Admin - supports category & date filters)
 app.get('/api/stats', async (req, res) => {
   try {
-    const stats = await storage.getStats();
+    const stats = await storage.getStats(req.query);
     res.json({ success: true, stats });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

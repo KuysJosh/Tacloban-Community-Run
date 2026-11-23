@@ -512,7 +512,7 @@ tr:hover td{background:rgba(255,255,255,.04)}
     <div class="stat-card highlight-verified">
       <div class="stat-label">Total Registered (Verified)</div>
       <div class="stat-val val-mint" id="statVerifiedTotal">0</div>
-      <div class="stat-sub">Approved Cebu Marathon Entries</div>
+      <div class="stat-sub" id="statVerifiedSub">Approved Cebu Marathon Entries</div>
     </div>
 
     <!-- Checked-In Runners -->
@@ -547,7 +547,7 @@ tr:hover td{background:rgba(255,255,255,.04)}
     <div class="stat-card">
       <div class="stat-label">All Submissions</div>
       <div class="stat-val val-white" id="statGrandTotal">0</div>
-      <div class="stat-sub">Total Database Records</div>
+      <div class="stat-sub" id="statGrandTotalSub">Total Database Records</div>
     </div>
   </div>
 
@@ -649,7 +649,7 @@ tr:hover td{background:rgba(255,255,255,.04)}
     <div class="toolbar">
       <div class="filters">
         <input type="text" id="searchVerified" placeholder="Search verified runner name, pass ID, phone..." oninput="debounceLoadVerified()">
-        <select id="catVerified" onchange="loadVerifiedRunners()">
+        <select id="catVerified" onchange="onCategoryFilterChange('verified', this.value)">
           <option value="ALL">All Distances</option>
           <option value="16KM">16 KM</option>
           <option value="21KM">21 KM</option>
@@ -657,7 +657,7 @@ tr:hover td{background:rgba(255,255,255,.04)}
           <option value="32KM">32 KM</option>
           <option value="ALL_LEGS">All 4 Legs (VIP)</option>
         </select>
-        <select id="eventDateVerified" onchange="loadVerifiedRunners()" title="Filter by event leg run date">
+        <select id="eventDateVerified" onchange="onFilterChange('verified')" title="Filter by event leg run date">
           <option value="ALL">All Event Dates</option>
           <option value="November 15">Nov 15, 2026 (16KM)</option>
           <option value="November 28">Nov 28, 2026 (21KM)</option>
@@ -666,7 +666,7 @@ tr:hover td{background:rgba(255,255,255,.04)}
         </select>
         <div class="date-filter-box" title="Filter by specific registration date">
           <label for="dateVerified">📅 Reg Date:</label>
-          <input type="date" id="dateVerified" onchange="loadVerifiedRunners()" title="Filter by specific registration date">
+          <input type="date" id="dateVerified" onchange="onFilterChange('verified')" title="Filter by specific registration date">
           <button type="button" class="btn-clear-date" id="clearDateVerified" onclick="clearDateFilter('verified')" title="Clear date filter" style="display:none;">✕</button>
         </div>
         <select id="paceVerified" onchange="syncPaceFilterFromSelect()">
@@ -732,14 +732,15 @@ tr:hover td{background:rgba(255,255,255,.04)}
     <div class="toolbar">
       <div class="filters">
         <input type="text" id="searchPending" placeholder="Search pending runner name, pass ID, mobile..." oninput="debounceLoadPending()">
-        <select id="catPending" onchange="loadPendingRunners()">
+        <select id="catPending" onchange="onCategoryFilterChange('pending', this.value)">
           <option value="ALL">All Distances</option>
           <option value="16KM">16 KM</option>
           <option value="21KM">21 KM</option>
           <option value="26KM">26 KM</option>
           <option value="32KM">32 KM</option>
+          <option value="ALL_LEGS">All 4 Legs (VIP)</option>
         </select>
-        <select id="eventDatePending" onchange="loadPendingRunners()" title="Filter by event leg run date">
+        <select id="eventDatePending" onchange="onFilterChange('pending')" title="Filter by event leg run date">
           <option value="ALL">All Event Dates</option>
           <option value="November 15">Nov 15, 2026 (16KM)</option>
           <option value="November 28">Nov 28, 2026 (21KM)</option>
@@ -748,7 +749,7 @@ tr:hover td{background:rgba(255,255,255,.04)}
         </select>
         <div class="date-filter-box" title="Filter by registration submission date">
           <label for="datePending">📅 Reg Date:</label>
-          <input type="date" id="datePending" onchange="loadPendingRunners()" title="Filter by specific registration date">
+          <input type="date" id="datePending" onchange="onFilterChange('pending')" title="Filter by specific registration date">
           <button type="button" class="btn-clear-date" id="clearDatePending" onclick="clearDateFilter('pending')" title="Clear date filter" style="display:none;">✕</button>
         </div>
       </div>
@@ -787,14 +788,15 @@ tr:hover td{background:rgba(255,255,255,.04)}
     <div class="toolbar">
       <div class="filters">
         <input type="text" id="searchDisapproved" placeholder="Search declined runner name, pass ID, mobile..." oninput="debounceLoadDisapproved()">
-        <select id="catDisapproved" onchange="loadDisapprovedRunners()">
+        <select id="catDisapproved" onchange="onCategoryFilterChange('disapproved', this.value)">
           <option value="ALL">All Distances</option>
           <option value="16KM">16 KM</option>
           <option value="21KM">21 KM</option>
           <option value="26KM">26 KM</option>
           <option value="32KM">32 KM</option>
+          <option value="ALL_LEGS">All 4 Legs (VIP)</option>
         </select>
-        <select id="eventDateDisapproved" onchange="loadDisapprovedRunners()" title="Filter by event leg run date">
+        <select id="eventDateDisapproved" onchange="onFilterChange('disapproved')" title="Filter by event leg run date">
           <option value="ALL">All Event Dates</option>
           <option value="November 15">Nov 15, 2026 (16KM)</option>
           <option value="November 28">Nov 28, 2026 (21KM)</option>
@@ -803,7 +805,7 @@ tr:hover td{background:rgba(255,255,255,.04)}
         </select>
         <div class="date-filter-box" title="Filter by registration submission date">
           <label for="dateDisapproved">📅 Reg Date:</label>
-          <input type="date" id="dateDisapproved" onchange="loadDisapprovedRunners()" title="Filter by specific registration date">
+          <input type="date" id="dateDisapproved" onchange="onFilterChange('disapproved')" title="Filter by specific registration date">
           <button type="button" class="btn-clear-date" id="clearDateDisapproved" onclick="clearDateFilter('disapproved')" title="Clear date filter" style="display:none;">✕</button>
         </div>
       </div>
@@ -941,27 +943,86 @@ function syncPaceFilterFromSelect() {
   }
 }
 
-// ── DATE FILTER HELPERS ──
+// ── DATE & CATEGORY FILTER HELPERS ──
 function clearDateFilter(tab) {
-  if (tab === 'verified') {
-    const el = document.getElementById('dateVerified');
-    if (el) el.value = '';
-    const btn = document.getElementById('clearDateVerified');
-    if (btn) btn.style.display = 'none';
-    loadVerifiedRunners();
-  } else if (tab === 'pending') {
-    const el = document.getElementById('datePending');
-    if (el) el.value = '';
-    const btn = document.getElementById('clearDatePending');
-    if (btn) btn.style.display = 'none';
-    loadPendingRunners();
-  } else if (tab === 'disapproved') {
-    const el = document.getElementById('dateDisapproved');
-    if (el) el.value = '';
-    const btn = document.getElementById('clearDateDisapproved');
-    if (btn) btn.style.display = 'none';
-    loadDisapprovedRunners();
+  const elV = document.getElementById('dateVerified');
+  const elP = document.getElementById('datePending');
+  const elD = document.getElementById('dateDisapproved');
+  if (elV) elV.value = '';
+  if (elP) elP.value = '';
+  if (elD) elD.value = '';
+
+  const btnV = document.getElementById('clearDateVerified');
+  const btnP = document.getElementById('clearDatePending');
+  const btnD = document.getElementById('clearDateDisapproved');
+  if (btnV) btnV.style.display = 'none';
+  if (btnP) btnP.style.display = 'none';
+  if (btnD) btnD.style.display = 'none';
+
+  loadActiveTabData();
+}
+
+function onCategoryFilterChange(sourceTab, val) {
+  // Synchronize category dropdowns across all tabs so the marshal has a consistent view
+  const catVerified = document.getElementById('catVerified');
+  const catPending = document.getElementById('catPending');
+  const catDisapproved = document.getElementById('catDisapproved');
+  if (catVerified) catVerified.value = val;
+  if (catPending) catPending.value = val;
+  if (catDisapproved) catDisapproved.value = val;
+
+  loadActiveTabData();
+}
+
+function onFilterChange(tab) {
+  // Synchronize event dates across tabs if changed
+  const edSource = document.getElementById(tab === 'verified' ? 'eventDateVerified' : (tab === 'pending' ? 'eventDatePending' : 'eventDateDisapproved'));
+  const rdSource = document.getElementById(tab === 'verified' ? 'dateVerified' : (tab === 'pending' ? 'datePending' : 'dateDisapproved'));
+
+  if (edSource) {
+    const val = edSource.value;
+    const edV = document.getElementById('eventDateVerified');
+    const edP = document.getElementById('eventDatePending');
+    const edD = document.getElementById('eventDateDisapproved');
+    if (edV) edV.value = val;
+    if (edP) edP.value = val;
+    if (edD) edD.value = val;
   }
+
+  if (rdSource) {
+    const val = rdSource.value;
+    const rdV = document.getElementById('dateVerified');
+    const rdP = document.getElementById('datePending');
+    const rdD = document.getElementById('dateDisapproved');
+    if (rdV) rdV.value = val;
+    if (rdP) rdP.value = val;
+    if (rdD) rdD.value = val;
+
+    const btnV = document.getElementById('clearDateVerified');
+    const btnP = document.getElementById('clearDatePending');
+    const btnD = document.getElementById('clearDateDisapproved');
+    if (btnV) btnV.style.display = val ? 'inline-flex' : 'none';
+    if (btnP) btnP.style.display = val ? 'inline-flex' : 'none';
+    if (btnD) btnD.style.display = val ? 'inline-flex' : 'none';
+  }
+
+  loadActiveTabData();
+}
+
+function getActiveFilters() {
+  let category = 'ALL';
+  let eventDate = 'ALL';
+  let regDate = '';
+
+  const catEl = document.getElementById(activeTab === 'verified' ? 'catVerified' : (activeTab === 'pending' ? 'catPending' : 'catDisapproved'));
+  const edEl = document.getElementById(activeTab === 'verified' ? 'eventDateVerified' : (activeTab === 'pending' ? 'eventDatePending' : 'eventDateDisapproved'));
+  const rdEl = document.getElementById(activeTab === 'verified' ? 'dateVerified' : (activeTab === 'pending' ? 'datePending' : 'dateDisapproved'));
+
+  if (catEl && catEl.value) category = catEl.value;
+  if (edEl && edEl.value) eventDate = edEl.value;
+  if (rdEl && rdEl.value) regDate = rdEl.value;
+
+  return { category, eventDate, regDate };
 }
 
 function formatDateTime(dateStr) {
@@ -1132,10 +1193,24 @@ function debounceLoadDisapproved() {
   debounceTimerDisapproved = setTimeout(loadDisapprovedRunners, 300);
 }
 
-// ── LOAD STATS (Requirement 3) ──
-async function loadStats() {
+// ── LOAD STATS (Dynamic by Distance & Date Filters) ──
+async function loadStats(filterParams) {
   try {
-    const res = await fetch('/api/stats');
+    const filters = filterParams || getActiveFilters();
+    const params = new URLSearchParams();
+    if (filters.category && filters.category !== 'ALL') {
+      params.append('category', filters.category);
+    }
+    if (filters.eventDate && filters.eventDate !== 'ALL') {
+      params.append('eventDate', filters.eventDate);
+    }
+    if (filters.regDate && filters.regDate !== 'ALL') {
+      params.append('regDate', filters.regDate);
+    }
+
+    const qs = params.toString();
+    const url = qs ? `/api/stats?${qs}` : '/api/stats';
+    const res = await fetch(url, { headers: getAuthHeaders() });
     const data = await res.json();
     if (data.success && data.stats) {
       const s = data.stats;
@@ -1183,9 +1258,21 @@ async function loadStats() {
         }
       }
 
+      // Dynamic descriptive subtitles for the stat cards
+      const catName = filters.category && filters.category !== 'ALL' ? filters.category : '';
+      const subVerified = document.getElementById('statVerifiedSub');
+      if (subVerified) {
+        subVerified.textContent = catName ? `Approved ${catName} Entries` : 'Approved Cebu Marathon Entries';
+      }
+      const subGrand = document.getElementById('statGrandTotalSub');
+      if (subGrand) {
+        subGrand.textContent = catName ? `${catName} Submissions` : 'Total Database Records';
+      }
+
       const paceBadge = document.getElementById('paceApprovedTotalBadge');
       if (paceBadge) {
-        paceBadge.textContent = `${s.totalVerified || 0} Verified Runners`;
+        const catSuffix = catName ? ` • ${catName}` : '';
+        paceBadge.textContent = `${s.totalVerified || 0} Verified Runners${catSuffix}`;
       }
     }
   } catch (err) {

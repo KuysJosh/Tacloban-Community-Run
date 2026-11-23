@@ -482,31 +482,90 @@ async function deleteRegistration(idOrBib) {
   return true;
 }
 
-// Get statistics
-async function getStats() {
+// Get statistics (dynamically filtered by category, leg date, and registration date)
+async function getStats(query = {}) {
+  const { category, club, regDate, eventDate, date } = query;
+
   if (!getIsConnected()) {
     try {
       await connectDB();
     } catch (e) {}
   }
 
+  const filter = {};
+  if (category && category !== 'ALL') {
+    filter.category = category;
+  }
+  if (club && club !== 'ALL') {
+    filter.runningClub = club;
+  }
+
+  // Specific Registration Submission Date (YYYY-MM-DD)
+  const targetRegDate = regDate || (date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null);
+  if (targetRegDate && targetRegDate !== 'ALL') {
+    const parts = targetRegDate.split('-');
+    if (parts.length === 3) {
+      const y = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10) - 1;
+      const d = parseInt(parts[2], 10);
+      // Philippine Standard Time (UTC+8): 00:00:00 PHT = 16:00:00 UTC previous day
+      const startPHT = new Date(Date.UTC(y, m, d - 1, 16, 0, 0));
+      const endPHT = new Date(Date.UTC(y, m, d, 23, 59, 59, 999));
+      filter.createdAt = { $gte: startPHT, $lte: endPHT };
+    }
+  }
+
+  // Event Run Date / Race Leg Date (e.g. November 15, November 28, December 5, December 19)
+  const targetEventDate = eventDate || (date && !/^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null);
+  if (targetEventDate && targetEventDate !== 'ALL') {
+    filter.categoryDate = { $regex: new RegExp(targetEventDate.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') };
+  }
+
   let all = [];
+  let isFromMongo = false;
   if (getIsConnected()) {
     try {
-      all = await Registration.find({}, {
+      all = await Registration.find(filter, {
         category: 1,
         runningClub: 1,
         cebuProofVerified: 1,
         verificationStatus: 1,
         claimed: 1,
-        desiredPace: 1
+        desiredPace: 1,
+        categoryDate: 1,
+        createdAt: 1
       }).lean();
+      isFromMongo = true;
     } catch (err) {
       console.warn('MongoDB getStats query failed, falling back to JSON:', err.message);
       all = readLocalData();
     }
   } else {
     all = readLocalData();
+  }
+
+  // Apply filters if we loaded from local JSON fallback
+  if (!isFromMongo) {
+    if (category && category !== 'ALL') {
+      all = all.filter(r => r.category === category);
+    }
+    if (club && club !== 'ALL') {
+      all = all.filter(r => r.runningClub === club);
+    }
+    if (targetRegDate && targetRegDate !== 'ALL') {
+      all = all.filter(r => {
+        if (!r.createdAt) return false;
+        try {
+          const recDate = new Date(r.createdAt);
+          const phtDateStr = new Date(recDate.getTime() + 8 * 3600 * 1000).toISOString().slice(0, 10);
+          return phtDateStr === targetRegDate;
+        } catch(e) { return false; }
+      });
+    }
+    if (targetEventDate && targetEventDate !== 'ALL') {
+      const regx = new RegExp(targetEventDate, 'i');
+      all = all.filter(r => regx.test(r.categoryDate || ''));
+    }
   }
 
   const totalRunners = all.length;
@@ -577,7 +636,12 @@ async function getStats() {
     unclaimedCount: verifiedNotCheckedIn,
     categories,
     clubs,
-    verifiedPaces
+    verifiedPaces,
+    activeFilter: {
+      category: category && category !== 'ALL' ? category : 'ALL',
+      eventDate: targetEventDate && targetEventDate !== 'ALL' ? targetEventDate : 'ALL',
+      regDate: targetRegDate && targetRegDate !== 'ALL' ? targetRegDate : ''
+    }
   };
 }
 
